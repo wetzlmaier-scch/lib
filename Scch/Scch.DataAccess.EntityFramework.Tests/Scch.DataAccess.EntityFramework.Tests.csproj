@@ -111,13 +111,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework">
-      <Version>6.5.1</Version>
+      <Version>6.5.2</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestAdapter">
-      <Version>4.2.1</Version>
+      <Version>4.5.3</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestFramework">
-      <Version>4.2.1</Version>
+      <Version>4.5.3</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

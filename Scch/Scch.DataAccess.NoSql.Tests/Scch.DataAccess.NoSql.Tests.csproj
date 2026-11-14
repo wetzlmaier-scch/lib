@@ -91,7 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MongoDB.Bson">
-      <Version>3.7.1</Version>
+      <Version>3.14.0</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
