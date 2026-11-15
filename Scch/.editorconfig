@@ -1,0 +1,30 @@
+# Code-style preferences used by `dotnet format style` to modernize the Scch sources.
+# Only language/code-style options are declared here; formatting (whitespace, charset,
+# line endings) is intentionally left alone.
+root = true
+
+[*.cs]
+
+# C# 10: file-scoped namespaces
+csharp_style_namespace_declarations = file_scoped:suggestion
+
+# C# 9: target-typed new
+csharp_style_implicit_object_creation_when_type_is_apparent = true:suggestion
+
+# C# 12: collection expressions (only where the target type is matched exactly)
+dotnet_style_prefer_collection_expression = when_types_exactly_match:suggestion
+
+# C# 8/9 pattern matching and switch expressions
+csharp_style_prefer_switch_expression = true:suggestion
+csharp_style_prefer_pattern_matching = true:suggestion
+csharp_style_prefer_not_pattern = true:suggestion
+
+# Null handling
+dotnet_style_null_propagation = true:suggestion
+dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_prefer_compound_assignment = true:suggestion
+csharp_style_conditional_delegate_call = true:suggestion
+
+# C# 8: index and range operators
+csharp_style_prefer_index_operator = true:suggestion
+csharp_style_prefer_range_operator = true:suggestion
