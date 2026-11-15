@@ -16,7 +16,7 @@
     <PackageReference Include="MongoDB.Driver" Version="3.14.0" />
     <PackageReference Include="MongoDB.Driver.Core" Version="2.30.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="System.ComponentModel.Composition" Version="10.0.15" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="11.0.0" />
   </ItemGroup>
 
   <ItemGroup>
