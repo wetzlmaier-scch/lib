@@ -1,0 +1,15 @@
+<Project>
+
+  <!--
+    ConfigurationManager reads the configuration file of the entry assembly. When tests run on .NET that is
+    testhost.dll rather than the test assembly, so a test project's App.config is also copied to testhost.dll.config.
+  -->
+  <Target Name="CopyAppConfigForTestHost"
+          AfterTargets="Build"
+          Condition="'$(IsTestProject)' == 'true' and Exists('$(OutDir)$(TargetFileName).config')">
+    <Copy SourceFiles="$(OutDir)$(TargetFileName).config"
+          DestinationFiles="$(OutDir)testhost.dll.config"
+          SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>
