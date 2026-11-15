@@ -22,8 +22,19 @@ namespace Scch.DataAccess.NoSql.Xml.Tests
 
         public Address Address { get; set; }
 
-        [XmlElement(typeof(ImageSerializer))]
+        [XmlIgnore]
         public Image Image { get; set; }
+
+        /// <summary>
+        /// Serialized form of <see cref="Image"/>. The XmlSerializer of .NET does not apply the implicit conversion
+        /// operators of <see cref="ImageSerializer"/>, so the surrogate needs a property of its own.
+        /// </summary>
+        [XmlElement("Image")]
+        public ImageSerializer ImageXml
+        {
+            get { return Image; }
+            set { Image = value; }
+        }
 
         public List<Person> Children { get; set; }
     }

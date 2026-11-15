@@ -17,20 +17,20 @@ namespace Scch.ModelBasedTesting.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void TestActionNotFound()
         {
-            _wrapper.PerformAction("NotFound");
+            ThrowsExactly<InvalidOperationException>(() => _wrapper.PerformAction("NotFound"));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void TestActionNotEnabled()
         {
-            _wrapper.PerformAction("Action1");
-            _wrapper.PerformAction("Action2");
-
-            _wrapper.PerformAction("Action2");
+            ThrowsExactly<InvalidOperationException>(() =>
+            {
+                _wrapper.PerformAction("Action1");
+                _wrapper.PerformAction("Action2");
+                _wrapper.PerformAction("Action2");
+            });
         }
 
         [TestMethod]

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
-using System.Text;
+using Scch.Common.Text;
 
 namespace Scch.Common.Security.Cryptography
 {
@@ -19,7 +19,7 @@ namespace Scch.Common.Security.Cryptography
 
         public static string CalculateMD5(string content)
         {
-            using (var stream = new MemoryStream(Encoding.Default.GetBytes(content)))
+            using (var stream = new MemoryStream(EncodingHelper.Ansi.GetBytes(content)))
             {
                 return CalculateMD5(stream);
             }

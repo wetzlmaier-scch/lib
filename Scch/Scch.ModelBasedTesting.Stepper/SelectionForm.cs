@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Windows.Forms;
 
@@ -18,6 +19,7 @@ namespace Scch.ModelBasedTesting.Stepper
 
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public DataTable DataTable
         {
             get { return _dataTable; }
@@ -60,6 +62,7 @@ namespace Scch.ModelBasedTesting.Stepper
             lvCombinations.Select();
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int SelectedIndex
         {
             get

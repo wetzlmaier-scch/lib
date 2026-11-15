@@ -31,8 +31,6 @@ namespace Scch.Controls
                 throw new ArgumentNullException("table");
             if (borderBrush == null)
                 throw new ArgumentNullException("borderBrush");
-            if (borderThickness == null)
-                throw new ArgumentNullException("borderThickness");
 
             table.Tag = tableType;
             table.CellSpacing = 2;
@@ -86,8 +84,6 @@ namespace Scch.Controls
         {
             if (borderBrush == null)
                 throw new ArgumentNullException("borderBrush");
-            if (borderThickness == null)
-                throw new ArgumentNullException("borderThickness");
 
             var table = new Table
                             {
@@ -239,8 +235,6 @@ namespace Scch.Controls
         {
             if (borderBrush == null)
                 throw new ArgumentNullException("borderBrush");
-            if (borderThickness == null)
-                throw new ArgumentNullException("borderThickness");
 
             var row = new TableRow();
 
@@ -264,8 +258,6 @@ namespace Scch.Controls
         {
             if (borderBrush == null)
                 throw new ArgumentNullException("borderBrush");
-            if (borderThickness == null)
-                throw new ArgumentNullException("borderThickness");
 
             var cell = new TableCell(new Paragraph()) { BorderBrush = borderBrush, BorderThickness = borderThickness };
 

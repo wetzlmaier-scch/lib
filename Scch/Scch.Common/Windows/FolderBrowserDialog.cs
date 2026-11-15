@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Security.Permissions;
 using Microsoft.Win32;
 
 namespace Scch.Common.Windows
@@ -39,8 +38,6 @@ namespace Scch.Common.Windows
         [SecurityCritical]
         public override void Reset()
         {
-            new FileIOPermission(PermissionState.Unrestricted).Demand();
-
             Initialize();
         }
 

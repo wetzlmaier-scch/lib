@@ -19,6 +19,7 @@ namespace Scch.ModelBasedTesting
         {
         }
 
+        [Obsolete("Formatter-based serialization is obsolete on .NET and is kept for API compatibility only.", DiagnosticId = "SYSLIB0051")]
         protected AssertionException(SerializationInfo info, StreamingContext context)
         : base(info, context)
         {

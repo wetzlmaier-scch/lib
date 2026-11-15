@@ -37,7 +37,7 @@ namespace Scch.DataAccess.EntityFramework
 
             _cnStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
 
-            _factory = DbProviderFactories.GetFactory(_cnStringSettings.ProviderName);
+            _factory = DbProviderFactoryResolver.GetFactory(_cnStringSettings.ProviderName);
             _lazyLoadingEnabled = lazyLoadingEnabled;
             _auditingEnabled = auditingEnabled;
             _saveSqlScript = saveSqlScript;
@@ -144,9 +144,16 @@ namespace Scch.DataAccess.EntityFramework
         {
             Assembly assembly = null;
 
+            // The .NET Framework passed the requested string ("X.dll"); .NET passes the parsed display name
+            // ("X.dll, Culture=neutral, PublicKeyToken=null"). Only the file name part is of interest here.
+            string name = args.Name;
+            int separator = name.IndexOf(',');
+            if (separator >= 0)
+                name = name.Substring(0, separator);
+
             try
             {
-                assembly = Assembly.LoadFrom(args.Name);
+                assembly = Assembly.LoadFrom(name);
             }
             catch (FileNotFoundException)
             {
@@ -158,8 +165,12 @@ namespace Scch.DataAccess.EntityFramework
             if (assembly == null)
             {
                 string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                string fullname = (directory != null) ? Path.Combine(directory, args.Name) : args.Name;
-                assembly = Assembly.LoadFrom(fullname);
+                string fullname = (directory != null) ? Path.Combine(directory, name) : name;
+
+                // On .NET this handler is also asked for assemblies that legitimately do not exist (e.g. satellite
+                // resource assemblies). Returning null leaves the decision to the runtime instead of failing here.
+                if (File.Exists(fullname))
+                    assembly = Assembly.LoadFrom(fullname);
             }
 
             return assembly;

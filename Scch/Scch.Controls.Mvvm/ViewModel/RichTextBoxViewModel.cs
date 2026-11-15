@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -11,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.Input;
+using Scch.Common.Text;
 using Scch.Common.Windows;
 using Scch.Mvvm.ViewModel;
 
@@ -309,7 +309,7 @@ namespace Scch.Controls.Mvvm.ViewModel
                 using (var stream = new MemoryStream())
                 {
                     XamlWriter.Save(Document, stream);
-                    Text = Encoding.Default.GetString(stream.ToArray());
+                    Text = EncodingHelper.Ansi.GetString(stream.ToArray());
                 }
             }
             finally
@@ -329,7 +329,7 @@ namespace Scch.Controls.Mvvm.ViewModel
                     Document = CreateEmptyDocument();
                 else
                 {
-                    using (var stream = new MemoryStream(Encoding.Default.GetBytes(Text)))
+                    using (var stream = new MemoryStream(EncodingHelper.Ansi.GetBytes(Text)))
                     {
                         Document = (FlowDocument) XamlReader.Load(stream);
                     }

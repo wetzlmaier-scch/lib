@@ -9,7 +9,7 @@ namespace Scch.Controls.Tests
     /// <summary>
     /// Summary description for CollectionEditorTest
     /// </summary>
-    [TestClass]
+    [STATestClass] // WPF controls must be created on an STA thread
     public class CollectionEditorTest
     {
         public CollectionEditorTest()

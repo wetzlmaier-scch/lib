@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Scch.ModelBasedTesting.Tests
 {
@@ -17,10 +18,9 @@ namespace Scch.ModelBasedTesting.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void TestDomainMissing()
         {
-            var w = new ModelWrapper(typeof(DomainMissingModel));
+            ThrowsExactly<InvalidOperationException>(() => new ModelWrapper(typeof(DomainMissingModel)));
         }
 
         private static class DomainMissingModel
@@ -42,14 +42,15 @@ namespace Scch.ModelBasedTesting.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestDomainNamesException()
         {
-            var domainNames = _wrapper.DomainNames("x");
-
-            Assert.AreEqual(2, domainNames.Count);
-            Assert.IsTrue(domainNames.Contains("number"));
-            Assert.IsTrue(domainNames.Contains("color"));
+            ThrowsExactly<ArgumentException>(() =>
+            {
+                var domainNames = _wrapper.DomainNames("x");
+                Assert.AreEqual(2, domainNames.Count);
+                Assert.IsTrue(domainNames.Contains("number"));
+                Assert.IsTrue(domainNames.Contains("color"));
+            });
         }
 
         [TestMethod]
@@ -60,17 +61,15 @@ namespace Scch.ModelBasedTesting.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void TestDomainNameException()
         {
-            _wrapper.DomainName("DomainAction", -1);
+            ThrowsExactly<ArgumentOutOfRangeException>(() => _wrapper.DomainName("DomainAction", -1));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void TestDomainNameException2()
         {
-            _wrapper.DomainName("DomainAction", 2);
+            ThrowsExactly<ArgumentOutOfRangeException>(() => _wrapper.DomainName("DomainAction", 2));
         }
 
         [TestMethod]
@@ -89,24 +88,21 @@ namespace Scch.ModelBasedTesting.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void TestDomainValueException()
         {
-            _wrapper.DomainValue("DomainAction", 0, -1);
+            ThrowsExactly<ArgumentOutOfRangeException>(() => _wrapper.DomainValue("DomainAction", 0, -1));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void TestDomainValueException2()
         {
-            _wrapper.DomainValue("DomainAction", 0, 4);
+            ThrowsExactly<ArgumentOutOfRangeException>(() => _wrapper.DomainValue("DomainAction", 0, 4));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void TestPerformActionException()
         {
-            _wrapper.PerformAction("DomainAction");
+            ThrowsExactly<InvalidOperationException>(() => _wrapper.PerformAction("DomainAction"));
         }
 
         [TestMethod]

@@ -21,6 +21,7 @@ namespace Scch.Logging.UdpLogger
 
         Thread _udpThread;
         UdpClient _udpSock;
+        volatile bool _closing;
         #endregion Members
 
         #region Constructors
@@ -54,7 +55,7 @@ namespace Scch.Logging.UdpLogger
             {
                 var sender = new IPEndPoint(IPAddress.Any, 0);
 
-                while (true)
+                while (!_closing)
                 {
                     try
                     {
@@ -83,6 +84,10 @@ namespace Scch.Logging.UdpLogger
                     }
                     catch (SocketException se)
                     {
+                        // closing the socket is how OnClosed stops this thread
+                        if (_closing)
+                            break;
+
                         BeginInvoke((ThreadStart)delegate
                                                      {
                                                          stripStatus.Text = "Socketfehler: " + se.Message;
@@ -90,32 +95,33 @@ namespace Scch.Logging.UdpLogger
                     }
                 }
             }
-            catch (ThreadAbortException)
+            catch (ObjectDisposedException)
             {
-                Thread.ResetAbort();
+                // the socket has been closed by OnClosed
             }
         }
         #endregion Methods
 
         #region EventHandler
         /// <summary>
-        /// <see cref="Form.OnClosed"/>
+        /// <see cref="Form.OnFormClosed"/>
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnClosed(EventArgs e)
+        protected override void OnFormClosed(FormClosedEventArgs e)
         {
             try
             {
                 if (_udpThread.IsAlive)
                 {
-                    _udpThread.Abort();
+                    // Thread.Abort is not supported on .NET; closing the socket ends the blocking Receive.
+                    _closing = true;
                     _udpSock.Close();
                     _udpThread.Join(5000);
                 }
             }
             finally
             {
-                base.OnClosed(e);
+                base.OnFormClosed(e);
             }
         }
 

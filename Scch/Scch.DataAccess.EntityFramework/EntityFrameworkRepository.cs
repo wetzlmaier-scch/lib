@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Design.PluralizationServices;
-using System.Globalization;
+using System.Data.Entity.Infrastructure.Pluralization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
@@ -23,7 +22,7 @@ namespace Scch.DataAccess.EntityFramework
     public class EntityFrameworkRepository<TKey> : Disposable, IEntityFrameworkRepository<TKey> 
         where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        private readonly PluralizationService _pluralizer = PluralizationService.CreateService(CultureInfo.GetCultureInfo("en"));
+        private readonly IPluralizationService _pluralizer = new EnglishPluralizationService();
         private bool _disposed;
         readonly ExtendedDbContext<TKey> _context;
         private IEntityFrameworkUnitOfWork _unitOfWork;

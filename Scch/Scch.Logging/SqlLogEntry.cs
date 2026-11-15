@@ -4,6 +4,10 @@ using System.Diagnostics;
 using System.Text;
 using Scch.Common.Reflecton;
 
+// System.Data.SqlClient is deprecated in favour of Microsoft.Data.SqlClient, but it is the provider that
+// Entity Framework 6 and the Enterprise Library Data block hand out, so its command type is logged here.
+#pragma warning disable CS0618
+
 namespace Scch.Logging
 {
     /// <summary>

@@ -74,6 +74,7 @@ namespace Scch.Common.Collections.Generic
         /// </summary>
         /// <param name="si"></param>
         /// <param name="sc"></param>
+        [Obsolete("Formatter-based serialization is obsolete on .NET and is kept for API compatibility only.", DiagnosticId = "SYSLIB0051")]
         protected SerializableDictionary(SerializationInfo si, StreamingContext sc)
             : base(si, sc)
         {

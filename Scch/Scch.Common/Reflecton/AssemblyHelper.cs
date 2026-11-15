@@ -23,7 +23,7 @@ namespace Scch.Common.Reflecton
         /// <returns>The file name of the specified assembly.</returns>
         public static string GetAssemblyFileName(Assembly assembly)
         {
-            return new Uri(assembly.GetName().CodeBase).LocalPath;
+            return assembly.Location;
         }
 
         public static string GetApplicationDirectory()
@@ -149,7 +149,46 @@ namespace Scch.Common.Reflecton
 
         public static string GetProcessorArchitecture(Assembly assembly)
         {
-            return assembly.GetName().ProcessorArchitecture.ToString();
+            // AssemblyName.ProcessorArchitecture is no longer populated on .NET, so derive it from the PE header
+            // the same way the .NET Framework did.
+            PortableExecutableKinds peKind;
+            ImageFileMachine machine;
+            assembly.ManifestModule.GetPEKind(out peKind, out machine);
+
+            return GetProcessorArchitecture(peKind, machine).ToString();
+        }
+
+        private static ProcessorArchitecture GetProcessorArchitecture(PortableExecutableKinds peKind, ImageFileMachine machine)
+        {
+            if ((peKind & PortableExecutableKinds.PE32Plus) == PortableExecutableKinds.PE32Plus)
+            {
+                switch (machine)
+                {
+                    case ImageFileMachine.IA64:
+                        return ProcessorArchitecture.IA64;
+                    case ImageFileMachine.AMD64:
+                        return ProcessorArchitecture.Amd64;
+                    case ImageFileMachine.I386:
+                        if ((peKind & PortableExecutableKinds.ILOnly) == PortableExecutableKinds.ILOnly)
+                            return ProcessorArchitecture.MSIL;
+                        break;
+                }
+            }
+            else if (machine == ImageFileMachine.I386)
+            {
+                if ((peKind & PortableExecutableKinds.Required32Bit) == PortableExecutableKinds.Required32Bit)
+                    return ProcessorArchitecture.X86;
+
+                return (peKind & PortableExecutableKinds.ILOnly) == PortableExecutableKinds.ILOnly
+                    ? ProcessorArchitecture.MSIL
+                    : ProcessorArchitecture.X86;
+            }
+            else if (machine == ImageFileMachine.ARM)
+            {
+                return ProcessorArchitecture.Arm;
+            }
+
+            return ProcessorArchitecture.None;
         }
     }
 }

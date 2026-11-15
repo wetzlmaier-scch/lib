@@ -82,6 +82,7 @@ namespace Scch.Common.Data
         /// <summary>
         /// <see cref="TypeConverter"/> for this column.
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public TypeConverter Converter { get; set; }
 
         #endregion Properties

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
-using System.IO;
+using System.Reflection;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Soap;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Scch.Common.Collections.Generic;
 
@@ -78,24 +77,22 @@ namespace Scch.Common.Tests.Runtime.Serialization
         [TestMethod]
         public void TestSerialization()
         {
-            SoapFormatter formatter = new SoapFormatter();
-
             _list.Add("string1");
             _list.Add("string2");
             _list.Add("string3");
             _list.Add("string4");
 
-            using (var stream = File.OpenWrite("obj.xml"))
-            {
-                formatter.Serialize(stream, _list);
-            }
+            // SoapFormatter does not exist on .NET, so the ISerializable contract is exercised directly:
+            // GetObjectData fills a SerializationInfo and the serialization constructor rebuilds the list from it.
+#pragma warning disable SYSLIB0050 // formatter-based serialization infrastructure is obsolete
+            var info = new SerializationInfo(typeof(StringList), new FormatterConverter());
+#pragma warning restore SYSLIB0050
+            var context = default(StreamingContext);
 
-            StringList list;
+            _list.GetObjectData(info, context);
 
-            using (var stream = File.OpenRead("obj.xml"))
-            {
-                list = (StringList)formatter.Deserialize(stream);
-            }
+            var list = (StringList)Activator.CreateInstance(typeof(StringList),
+                BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { info, context }, null);
 
             Assert.AreEqual(_list.Count, list.Count);
 

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Security.Permissions;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
@@ -24,7 +23,6 @@ namespace Scch.Common.Diagnostics
         /// Returns true, if the program is started once. Otherwise false.
         /// </summary>
         /// <returns>True, if the program is started once. Otherwise false.</returns>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public static bool IsSingleInstance()
         {
             // ReSharper disable PossibleNullReferenceException
@@ -427,7 +425,9 @@ namespace Scch.Common.Diagnostics
             {
                 var process = Process.GetCurrentProcess();
 
-                ProcessStartInfo startInfo = new ProcessStartInfo(process.MainModule.FileName, process.StartInfo.Arguments)
+                // Process.StartInfo throws on .NET for a process that was not started through Process.Start;
+                // on the .NET Framework it returned empty arguments for the current process.
+                ProcessStartInfo startInfo = new ProcessStartInfo(process.MainModule.FileName, string.Empty)
                 {
                     WorkingDirectory = Environment.CurrentDirectory,
                     UseShellExecute = true,

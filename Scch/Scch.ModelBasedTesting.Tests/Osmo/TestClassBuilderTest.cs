@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 using Scch.ModelBasedTesting.Osmo;
 
 namespace Scch.ModelBasedTesting.Tests.Osmo
@@ -9,24 +10,21 @@ namespace Scch.ModelBasedTesting.Tests.Osmo
     public class TestClassBuilderTest
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestBeforeTestException()
         {
-            TestClassBuilder.Build(typeof(Model), true, "package", "name", "beforeTest", "Action2");
+            ThrowsExactly<ArgumentException>(() => TestClassBuilder.Build(typeof(Model), true, "package", "name", "beforeTest", "Action2"));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestAfterTestException()
         {
-            TestClassBuilder.Build(typeof(Model), true, "package", "name", "Action1", "afterTest");
+            ThrowsExactly<ArgumentException>(() => TestClassBuilder.Build(typeof(Model), true, "package", "name", "Action1", "afterTest"));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestBeforeAfterEqualException()
         {
-            TestClassBuilder.Build(typeof(Model), true, "package", "name", "Action1", "Action1");
+            ThrowsExactly<ArgumentException>(() => TestClassBuilder.Build(typeof(Model), true, "package", "name", "Action1", "Action1"));
         }
 
         [TestMethod]

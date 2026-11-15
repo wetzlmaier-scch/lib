@@ -29,7 +29,7 @@ namespace Scch.DataAccess.EntityFramework
             {
                 ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings[connectionStringName];
 
-                var factory = DbProviderFactories.GetFactory(settings.ProviderName);
+                var factory = DbProviderFactoryResolver.GetFactory(settings.ProviderName);
                 using (DbConnection conn = factory.CreateConnection())
                 {
                     if (conn != null)
@@ -38,7 +38,9 @@ namespace Scch.DataAccess.EntityFramework
 
                         if (Database.Exists(conn))
                         {
+#pragma warning disable CS0618 // System.Data.SqlClient is the provider used by the EF6 SQL Server provider
                             var b = (SqlConnectionStringBuilder)factory.CreateConnectionStringBuilder();
+#pragma warning restore CS0618
                             b.ConnectionString = settings.ConnectionString;
 
                             try

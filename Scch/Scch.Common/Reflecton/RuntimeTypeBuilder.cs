@@ -15,7 +15,7 @@ namespace Scch.Common.Reflecton
 
         static RuntimeTypeBuilder()
         {
-            ModuleBuilder = Thread.GetDomain().DefineDynamicAssembly(AssemblyName, AssemblyBuilderAccess.Run).DefineDynamicModule(AssemblyName.Name);
+            ModuleBuilder = AssemblyBuilder.DefineDynamicAssembly(AssemblyName, AssemblyBuilderAccess.Run).DefineDynamicModule(AssemblyName.Name);
         }
 
         private static string GetTypeKey(Dictionary<string, Type> fields)
@@ -38,7 +38,9 @@ namespace Scch.Common.Reflecton
                 if (BuiltTypes.ContainsKey(className))
                     return BuiltTypes[className];
 
+#pragma warning disable SYSLIB0050 // the generated types keep their [Serializable] flag
                 TypeBuilder typeBuilder = ModuleBuilder.DefineType(className, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable);
+#pragma warning restore SYSLIB0050
 
                 foreach (var field in fields)
                     typeBuilder.DefineField(field.Key, field.Value, FieldAttributes.Public);

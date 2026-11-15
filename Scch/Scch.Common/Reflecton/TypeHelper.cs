@@ -139,11 +139,10 @@ namespace Scch.Common.Reflecton
             if (!type.IsAbstract)
                 throw new ArgumentOutOfRangeException("type", "Type is not abstract.");
 
-            AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(type.Assembly.GetName(),
-               AssemblyBuilderAccess.RunAndSave);
+            AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(type.Assembly.GetName(),
+               AssemblyBuilderAccess.Run);
 
-            ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(type.Name + "Module",
-                                          type.FullName + ".dll");
+            ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(type.Name + "Module");
 
             TypeBuilder typeBuilder = moduleBuilder.DefineType(type.FullName,
                                             TypeAttributes.Public | TypeAttributes.Class, type);

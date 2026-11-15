@@ -36,7 +36,7 @@ namespace Scch.Logging.UdpTraceListener.Tests
             {
                 if (_udpThread.IsAlive)
                 {
-                    _udpThread.Abort();
+                    // Thread.Abort is not supported on .NET; closing the socket ends the blocking Receive.
                     _udpSock.Close();
                     _udpThread.Join(5000);
                 }
@@ -131,9 +131,13 @@ namespace Scch.Logging.UdpTraceListener.Tests
                     }
                 }
             }
-            catch (ThreadAbortException)
+            catch (SocketException)
             {
-                Thread.ResetAbort();
+                // the socket has been closed by TearDown
+            }
+            catch (ObjectDisposedException)
+            {
+                // the socket has been closed by TearDown
             }
         }
     }
