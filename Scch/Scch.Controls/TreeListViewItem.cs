@@ -20,8 +20,7 @@ public class TreeListViewItem : TreeViewItem
         {
             if (_level == -1)
             {
-                var parent = ItemsControlFromItemContainer(this) as TreeListViewItem;
-                _level = (parent != null) ? parent.Level + 1 : 0;
+                _level = (ItemsControlFromItemContainer(this) is TreeListViewItem parent) ? parent.Level + 1 : 0;
             }
             return _level;
         }

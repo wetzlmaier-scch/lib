@@ -99,7 +99,7 @@ public class CollectionEditorTest
         var person = new Person { Name = "New Person", Age = 5 };
         _viewModel.AvailablePersons.Add(person);
 
-        Assert.AreSame(person, _lvAvailableItems.Items[_lvAvailableItems.Items.Count - 1]);
+        Assert.AreSame(person, _lvAvailableItems.Items[^1]);
         Assert.AreEqual(4, _lvAvailableItems.Items.Count);
         Assert.IsFalse(_lvSelectedItems.Items.Contains(person));
         Assert.AreEqual(0, _lvSelectedItems.Items.Count);
@@ -288,7 +288,7 @@ public class CollectionEditorTest
         var person = new Person { Name = "New Person", Age = 5 };
         _editor.AvailableItems.Add(person);
 
-        Assert.AreSame(person, _lvAvailableItems.Items[_lvAvailableItems.Items.Count - 1]);
+        Assert.AreSame(person, _lvAvailableItems.Items[^1]);
         Assert.AreEqual(4, _lvAvailableItems.Items.Count);
         Assert.IsFalse(_lvSelectedItems.Items.Contains(person));
         Assert.AreEqual(0, _lvSelectedItems.Items.Count);

@@ -58,7 +58,7 @@ public class EnumValueToStringConverter<T> : IValueConverter
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (!(value is string))
+        if (value is not string)
             throw new ArgumentOutOfRangeException(nameof(value));
 
         if (targetType != typeof(T))

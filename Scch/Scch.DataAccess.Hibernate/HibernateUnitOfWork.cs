@@ -92,10 +92,7 @@ public class HibernateUnitOfWork<TKey> : Disposable, IHibernateUnitOfWork
     /// </summary>
     private void ReleaseCurrentTransaction()
     {
-        if (_transaction != null)
-        {
-            _transaction.Dispose();
-            _transaction = null;
-        }
+        _transaction?.Dispose();
+        _transaction = null;
     }
 }

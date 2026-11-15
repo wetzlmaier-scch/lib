@@ -21,8 +21,7 @@ public static class ListBoxItemBehavior
 
     static void OnBringIntoViewWhenSelectedChanged(DependencyObject depObj, DependencyPropertyChangedEventArgs e)
     {
-        var item = depObj as ListBoxItem;
-        if (item == null)
+        if (depObj is not ListBoxItem item)
             return;
 
         if (e.NewValue is bool == false)

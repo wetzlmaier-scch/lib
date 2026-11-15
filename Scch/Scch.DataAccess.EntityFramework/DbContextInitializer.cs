@@ -14,9 +14,7 @@ public class DbContextInitializer
     {
         if (_instance == null) {
             lock (typeof(DbContextInitializer)) {
-                if (_instance == null) {
-                    _instance = new DbContextInitializer();
-                }
+                _instance ??= new DbContextInitializer();
             }
         }
 

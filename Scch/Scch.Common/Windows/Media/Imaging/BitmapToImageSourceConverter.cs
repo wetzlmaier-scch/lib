@@ -22,8 +22,7 @@ public class BitmapToImageSourceConverter : IValueConverter
     /// <returns></returns>
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        var bitmap = value as Bitmap;
-        if (bitmap == null)
+        if (value is not Bitmap bitmap)
             return null;
 
         return BitmapSourceHelper.LoadBitmap(bitmap);

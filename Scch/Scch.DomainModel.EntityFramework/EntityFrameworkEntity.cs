@@ -138,7 +138,7 @@ public abstract class EntityFrameworkEntity<TKey> : Entity<TKey>, IEntityFramewo
     /// <param name="property"></param>
     protected new void RaisePropertyChanged<T>(Expression<Func<T>> property)
     {
-        if (ChangeTracker.State != ObjectState.Added && ChangeTracker.State != ObjectState.Deleted)
+        if (ChangeTracker.State is not ObjectState.Added and not ObjectState.Deleted)
         {
             ChangeTracker.State = ObjectState.Modified;
         }
@@ -164,15 +164,9 @@ public abstract class EntityFrameworkEntity<TKey> : Entity<TKey>, IEntityFramewo
         }
         set
         {
-            if (_changeTracker != null)
-            {
-                _changeTracker.ObjectStateChanging -= HandleObjectStateChanging;
-            }
+            _changeTracker?.ObjectStateChanging -= HandleObjectStateChanging;
             _changeTracker = value;
-            if (_changeTracker != null)
-            {
-                _changeTracker.ObjectStateChanging += HandleObjectStateChanging;
-            }
+            _changeTracker?.ObjectStateChanging += HandleObjectStateChanging;
         }
     }
 
@@ -293,8 +287,7 @@ public abstract class EntityFrameworkEntity<TKey> : Entity<TKey>, IEntityFramewo
         {
             foreach (TNavigationEntity item in e.NewItems)
             {
-                if (sourceProperty!=null)
-                    sourceProperty.SetValue(item, this, null);
+                sourceProperty?.SetValue(item, this, null);
 
                 if (ChangeTracker.ChangeTrackingEnabled)
                 {

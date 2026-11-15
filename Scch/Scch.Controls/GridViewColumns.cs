@@ -78,8 +78,7 @@ public static class GridViewColumns
 
     private static void ColumnsSourceChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
     {
-        var gridView = obj as GridView;
-        if (gridView != null)
+        if (obj is GridView gridView)
         {
             gridView.Columns.Clear();
 

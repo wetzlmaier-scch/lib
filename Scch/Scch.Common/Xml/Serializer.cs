@@ -34,8 +34,7 @@ public static class Serializer
         if (type == null)
             throw new ArgumentNullException("type");
 
-        if (extraTypes == null)
-            extraTypes = [];
+        extraTypes ??= [];
 
         if (!SerializerCache.ContainsKey(type))
         {
@@ -98,8 +97,7 @@ public static class Serializer
         if (file == null)
             throw new ArgumentNullException("file");
 
-        if (encoding == null)
-            encoding = DefaultEncoding;
+        encoding ??= DefaultEncoding;
 
         using (FileStream fs = file.OpenWrite())
         {
@@ -147,8 +145,7 @@ public static class Serializer
         if (stream == null)
             throw new ArgumentNullException("stream");
 
-        if (encoding == null)
-            encoding = DefaultEncoding;
+        encoding ??= DefaultEncoding;
 
         var sw = new StreamWriter(stream, encoding);
         SerializeToTextWriter(sw, obj);
@@ -162,8 +159,7 @@ public static class Serializer
     /// <returns>The serialized object.</returns>
     public static string SerializeToString(object obj, Encoding encoding = null)
     {
-        if (encoding == null)
-            encoding = DefaultEncoding;
+        encoding ??= DefaultEncoding;
 
         StringBuilder builder = new();
         using (var sw = new EncodingStringWriter(builder, encoding))
@@ -182,8 +178,7 @@ public static class Serializer
     /// <returns>The serialized object.</returns>
     public static XmlDocument SerializeToXmlDocument(object obj, Encoding encoding = null)
     {
-        if (encoding == null)
-            encoding = DefaultEncoding;
+        encoding ??= DefaultEncoding;
 
         var doc = new XmlDocument();
         doc.LoadXml(SerializeToString(obj, encoding));
@@ -198,8 +193,7 @@ public static class Serializer
     /// <returns>The serialized object.</returns>
     public static XmlElement SerializeToXmlElement(object obj, Encoding encoding = null)
     {
-        if (encoding == null)
-            encoding = DefaultEncoding;
+        encoding ??= DefaultEncoding;
 
         XmlDocument doc = SerializeToXmlDocument(obj, encoding);
 
@@ -235,8 +229,7 @@ public static class Serializer
         if (file == null)
             throw new ArgumentNullException("file");
 
-        if (encoding == null)
-            encoding = DefaultEncoding;
+        encoding ??= DefaultEncoding;
 
         using (FileStream fs = file.OpenRead())
         {
@@ -323,8 +316,7 @@ public static class Serializer
         if (stream == null)
             throw new ArgumentNullException("stream");
 
-        if (encoding == null)
-            encoding = DefaultEncoding;
+        encoding ??= DefaultEncoding;
 
         using (var sr = new StreamReader(stream, encoding))
         {
@@ -357,8 +349,7 @@ public static class Serializer
         if (xml == null)
             return null;
 
-        if (encoding == null)
-            encoding = DefaultEncoding;
+        encoding ??= DefaultEncoding;
 
         using (var stream = new MemoryStream(encoding.GetBytes(xml)))
         {
@@ -392,8 +383,7 @@ public static class Serializer
         if (document == null)
             throw new ArgumentNullException("document");
 
-        if (encoding == null)
-            encoding = DefaultEncoding;
+        encoding ??= DefaultEncoding;
 
         var sb = new StringBuilder();
         document.Save(new EncodingStringWriter(sb, encoding));
@@ -426,8 +416,7 @@ public static class Serializer
         if (element == null)
             throw new ArgumentNullException("element");
 
-        if (encoding == null)
-            encoding = DefaultEncoding;
+        encoding ??= DefaultEncoding;
 
         return DeserializeFromXmlDocument(type, extraTypes, element.OwnerDocument, encoding);
     }

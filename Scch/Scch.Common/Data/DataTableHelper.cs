@@ -609,7 +609,7 @@ public static class DataTableHelper
             var columnName = column.Trim();
 
             if (columnName.StartsWith("\"") && columnName.EndsWith("\""))
-                columnName = columnName.Substring(1, columnName.Length - 2);
+                columnName = columnName[1..^1];
 
             dt.Columns.Add(columnName, typeof(string));
         }
@@ -624,7 +624,7 @@ public static class DataTableHelper
                 data[column] = data[column].Trim();
 
                 if (data[column].StartsWith("\"") && data[column].EndsWith("\""))
-                    data[column] = data[column].Substring(1, data[column].Length - 2);
+                    data[column] = data[column][1..^1];
 
                 row[column] = data[column];
             }

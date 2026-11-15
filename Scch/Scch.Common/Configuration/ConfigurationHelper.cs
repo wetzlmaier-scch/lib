@@ -82,7 +82,7 @@ public class ConfigurationHelper
             if (args[i][arg.Length] != KeyValueDelimiter)
                 continue;
 
-            return args[i].Substring(arg.Length + 1);
+            return args[i][(arg.Length + 1)..];
         }
 
         return null;
@@ -587,8 +587,7 @@ public class ConfigurationHelper
 
     public void WriteDateTimeToConfig(string key, DateTime value, string format = null, IFormatProvider provider = null)
     {
-        if (provider == null)
-            provider = DateTimeFormatInfo.CurrentInfo;
+        provider ??= DateTimeFormatInfo.CurrentInfo;
 
         WriteStringToConfig(key, value.ToString(format, provider));
     }

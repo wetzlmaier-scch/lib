@@ -46,10 +46,7 @@ abstract public class CollectionViewModel<TItem, TViewModel> : NavigationViewMod
         CurrentViewModel.Item = CurrentItem;
         RaisePropertyChanged(() => CurrentItem);
         RaisePropertyChanged(() => CurrentViewModel);
-
-        EventHandler<CurrentChangedArgs<TItem, TViewModel>> handler = CurrentChanged;
-        if (handler != null)
-            handler(null, new CurrentChangedArgs<TItem, TViewModel>(CurrentItem, CurrentViewModel));
+        CurrentChanged?.Invoke(null, new CurrentChangedArgs<TItem, TViewModel>(CurrentItem, CurrentViewModel));
     }
 
     /// <summary>
@@ -123,13 +120,11 @@ abstract public class CollectionViewModel<TItem, TViewModel> : NavigationViewMod
     {
         add
         {
-            if (View != null)
-                View.CollectionChanged += value;
+            View?.CollectionChanged += value;
         }
         remove
         {
-            if (View != null)
-                View.CollectionChanged -= value;
+            View?.CollectionChanged -= value;
         }
     }
 

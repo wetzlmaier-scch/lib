@@ -42,8 +42,7 @@ public abstract class MongoDBNoSqlEntity : NoSqlEntity<ObjectId>, IMongoDBNoSqlE
         {
             foreach (TNavigationEntity item in e.NewItems)
             {
-                if (sourceProperty != null)
-                    sourceProperty.SetValue(item, this, null);
+                sourceProperty?.SetValue(item, this, null);
             }
         }
 

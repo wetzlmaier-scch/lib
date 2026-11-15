@@ -81,17 +81,11 @@ public class ManyToManyFixupTest
 
                 ThrowExceptionIfChangeTrackingEnabled();
 
-                if (Many1 != null)
-                {
-                    Many1.CollectionChanged -= FixupMany;
-                }
+                Many1?.CollectionChanged -= FixupMany;
 
                 _many1 = value;
 
-                if (Many1 != null)
-                {
-                    Many1.CollectionChanged += FixupMany;
-                }
+                Many1?.CollectionChanged += FixupMany;
 
                 RaiseNavigationPropertyChanged(() => Many1);
             }
@@ -122,17 +116,11 @@ public class ManyToManyFixupTest
 
                 ThrowExceptionIfChangeTrackingEnabled();
 
-                if (Many2 != null)
-                {
-                    Many2.CollectionChanged -= FixupMany;
-                }
+                Many2?.CollectionChanged -= FixupMany;
 
                 _many2 = value;
 
-                if (Many2 != null)
-                {
-                    Many2.CollectionChanged += FixupMany;
-                }
+                Many2?.CollectionChanged += FixupMany;
 
                 RaiseNavigationPropertyChanged(() => Many2);
             }

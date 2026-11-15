@@ -101,9 +101,7 @@ public class KeyboardHook : Disposable
     /// <param name="e"></param>
     protected virtual void OnKeyGesturePressed(KeyGesturePressedEventArgs e)
     {
-        KeyGesturePressedEventHandler handler = KeyGesturePressed;
-        if (handler != null) 
-            handler(null, e);
+        KeyGesturePressed?.Invoke(null, e);
     }
 
     private IntPtr SetHook(User32.LowLevelKeyboardProc proc)

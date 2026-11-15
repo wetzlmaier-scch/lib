@@ -25,12 +25,12 @@ static class Program
 
                 if (pos >= 1)
                 {
-                    key = arg.Substring(1, pos - 1);
-                    value = arg.Substring(pos + 1);
+                    key = arg[1..pos];
+                    value = arg[(pos + 1)..];
                 }
                 else
                 {
-                    key = arg.Substring(1);
+                    key = arg[1..];
                     value = null;
                 }
 

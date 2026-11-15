@@ -66,11 +66,7 @@ public abstract class AsyncRelayCommandBase<T, TResult> : ICommand
 
     void NotifyCompleted()
     {
-        var handler = ExecuteCompleted;
-        if (handler != null)
-        {
-            handler(this, new AsyncCompletedEventArgs(_task.Exception, _task.IsCanceled, null));
-        }
+        ExecuteCompleted?.Invoke(this, new AsyncCompletedEventArgs(_task.Exception, _task.IsCanceled, null));
 
         _task = null;
         CommandManager.InvalidateRequerySuggested();

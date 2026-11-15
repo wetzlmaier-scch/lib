@@ -21,38 +21,22 @@ public abstract class BitmapSourceBase : BitmapSource
 
     protected virtual void OnDecodeFailed(ExceptionEventArgs e)
     {
-        EventHandler<ExceptionEventArgs> decodeFailed = DecodeFailed;
-        if (decodeFailed != null)
-        {
-            decodeFailed(this, e);
-        }
+        DecodeFailed?.Invoke(this, e);
     }
 
     protected virtual void OnDownloadCompleted()
     {
-        EventHandler downloadCompleted = DownloadCompleted;
-        if (downloadCompleted != null)
-        {
-            downloadCompleted(this, EventArgs.Empty);
-        }
+        DownloadCompleted?.Invoke(this, EventArgs.Empty);
     }
 
     protected virtual void OnDownloadProgress(DownloadProgressEventArgs e)
     {
-        EventHandler<DownloadProgressEventArgs> downloadProgress = DownloadProgress;
-        if (downloadProgress != null)
-        {
-            downloadProgress(this, e);
-        }
+        DownloadProgress?.Invoke(this, e);
     }
 
     protected virtual void OnDownloadFailed(ExceptionEventArgs e)
     {
-        EventHandler<ExceptionEventArgs> downloadFailed = DownloadFailed;
-        if (downloadFailed != null)
-        {
-            downloadFailed(this, e);
-        }
+        DownloadFailed?.Invoke(this, e);
     }
 
     protected BitmapImage BitmapSource

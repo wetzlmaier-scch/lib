@@ -33,8 +33,7 @@ public static class BusinessHelper
         where TEntity : IEntityFrameworkEntity<TKey>
         where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        if (entity != null)
-            entity.StartTracking();
+        entity?.StartTracking();
         return entity;
     }
 

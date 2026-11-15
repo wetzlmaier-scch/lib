@@ -77,8 +77,7 @@ public abstract class ConsoleViewModel : MainViewModelBase, IConsoleViewModel
     {
         _cancellationTokenSource.Cancel();
 
-        if (_consoleTask!=null)
-            _consoleTask.Wait(TimeSpan.FromSeconds(10));
+        _consoleTask?.Wait(TimeSpan.FromSeconds(10));
 
         base.OnClosed();
     }

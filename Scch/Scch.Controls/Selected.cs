@@ -25,8 +25,7 @@ public static class Selected
 
     private static void OnSetCommandCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
     {
-        var selector = dependencyObject as Selector;
-        if (selector != null)
+        if (dependencyObject is Selector selector)
         {
             GetOrCreateBehavior(selector).Command = e.NewValue as ICommand;
         }
@@ -34,8 +33,7 @@ public static class Selected
 
     private static SelectorSelectedCommandBehavior GetOrCreateBehavior(Selector selector)
     {
-        var behavior = selector.GetValue(SelectedCommandBehaviorProperty) as SelectorSelectedCommandBehavior;
-        if (behavior == null)
+        if (selector.GetValue(SelectedCommandBehaviorProperty) is not SelectorSelectedCommandBehavior behavior)
         {
             behavior = new SelectorSelectedCommandBehavior(selector);
             selector.SetValue(SelectedCommandBehaviorProperty, behavior);

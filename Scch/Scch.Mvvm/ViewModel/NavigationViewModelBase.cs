@@ -41,7 +41,7 @@ public abstract class NavigationViewModelBase : ViewModelBase, INavigationViewMo
     /// <value>The add command.</value>
     public ICommand AddNewCommand
     {
-        get { return _addNewCommand ?? (_addNewCommand = new RelayCommand(Add, () => CanAdd)); }
+        get { return _addNewCommand ??= new RelayCommand(Add, () => CanAdd); }
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ public abstract class NavigationViewModelBase : ViewModelBase, INavigationViewMo
     /// </summary>
     public ICommand DeleteCommand
     {
-        get { return _deleteCommand ?? (_deleteCommand = new RelayCommand(Delete, () => CanDelete)); }
+        get { return _deleteCommand ??= new RelayCommand(Delete, () => CanDelete); }
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ public abstract class NavigationViewModelBase : ViewModelBase, INavigationViewMo
     /// </summary>
     public ICommand NextCommand
     {
-        get { return _nextCommand ?? (_nextCommand = new RelayCommand(Next, () => CanNext)); }
+        get { return _nextCommand ??= new RelayCommand(Next, () => CanNext); }
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ public abstract class NavigationViewModelBase : ViewModelBase, INavigationViewMo
     /// </summary>
     public ICommand PreviousCommand
     {
-        get { return _previousCommand ?? (_previousCommand = new RelayCommand(Previous, () => CanPrevious)); }
+        get { return _previousCommand ??= new RelayCommand(Previous, () => CanPrevious); }
     }
 
     /// <summary>
@@ -73,7 +73,7 @@ public abstract class NavigationViewModelBase : ViewModelBase, INavigationViewMo
     /// </summary>
     public ICommand FirstCommand
     {
-        get { return _firstCommand ?? (_firstCommand = new RelayCommand(First, () => CanFirst)); }
+        get { return _firstCommand ??= new RelayCommand(First, () => CanFirst); }
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public abstract class NavigationViewModelBase : ViewModelBase, INavigationViewMo
     /// </summary>
     public ICommand LastCommand
     {
-        get { return _lastCommand ?? (_lastCommand = new RelayCommand(Last, () => CanLast)); }
+        get { return _lastCommand ??= new RelayCommand(Last, () => CanLast); }
     }
 
     /// <summary>

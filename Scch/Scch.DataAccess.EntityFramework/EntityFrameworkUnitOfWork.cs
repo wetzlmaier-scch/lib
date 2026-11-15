@@ -132,10 +132,7 @@ public class EntityFrameworkUnitOfWork<TKey> : Disposable, IEntityFrameworkUnitO
     /// </summary>
     private void ReleaseCurrentTransaction()
     {
-        if (_transaction != null)
-        {
-            _transaction.Dispose();
-            _transaction = null;
-        }
+        _transaction?.Dispose();
+        _transaction = null;
     }
 }

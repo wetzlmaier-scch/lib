@@ -61,7 +61,7 @@ public class ImageSerializer : IXmlSerializable
     /// <returns>The <see cref="Image"/>.</returns>
     public static implicit operator Image(ImageSerializer serializer)
     {
-        return serializer == null ? null : serializer.Image;
+        return serializer?.Image;
     }
     #endregion Operators
 

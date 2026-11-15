@@ -114,8 +114,7 @@ public class MvvmApplication : Application
             }
         }
 
-        if (Container != null)
-            Container.Dispose();
+        Container?.Dispose();
 
         KeyboardHooks.Dispose();
         base.OnExit(e);

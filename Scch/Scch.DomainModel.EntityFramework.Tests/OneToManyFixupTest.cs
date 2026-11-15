@@ -90,17 +90,11 @@ public class OneToManyFixupTest
 
                 ThrowExceptionIfChangeTrackingEnabled();
 
-                if (Many != null)
-                {
-                    Many.CollectionChanged -= FixupMany;
-                }
+                Many?.CollectionChanged -= FixupMany;
 
                 _many = value;
 
-                if (Many != null)
-                {
-                    Many.CollectionChanged += FixupMany;
-                }
+                Many?.CollectionChanged += FixupMany;
 
                 RaiseNavigationPropertyChanged(() => Many);
             }

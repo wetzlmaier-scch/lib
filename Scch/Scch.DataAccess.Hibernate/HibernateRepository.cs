@@ -169,8 +169,7 @@ public class HibernateRepository<TKey> : Disposable, IHibernateRepository<TKey>
     {
         if (!_disposed && disposing)
         {
-            if (_unitOfWork != null)
-                _unitOfWork.Dispose();
+            _unitOfWork?.Dispose();
 
             Logger.Write(new DebugLogEntry("HibernateRepository.Dispose for thread '{0}'.",
                 Thread.CurrentThread.ManagedThreadId));
@@ -188,7 +187,7 @@ public class HibernateRepository<TKey> : Disposable, IHibernateRepository<TKey>
 
     public IHibernateUnitOfWork UnitOfWork
     {
-        get { return _unitOfWork ?? (_unitOfWork = new HibernateUnitOfWork<TKey>(_session)); }
+        get { return _unitOfWork ??= new HibernateUnitOfWork<TKey>(_session); }
     }
 
     public IQueryable<TEntity> FilterDeleted<TEntity>(IQueryable<TEntity> entities)

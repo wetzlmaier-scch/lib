@@ -100,17 +100,11 @@ public class Produkt : EntityWithBezeichnung
 
             ThrowExceptionIfChangeTrackingEnabled();
 
-            if (Produktversionen != null)
-            {
-                Produktversionen.CollectionChanged -= FixupProduktversionen;
-            }
+            Produktversionen?.CollectionChanged -= FixupProduktversionen;
 
             _produktversionen = value;
 
-            if (Produktversionen != null)
-            {
-                Produktversionen.CollectionChanged += FixupProduktversionen;
-            }
+            Produktversionen?.CollectionChanged += FixupProduktversionen;
 
             RaiseNavigationPropertyChanged(() => Produktversionen);
         }

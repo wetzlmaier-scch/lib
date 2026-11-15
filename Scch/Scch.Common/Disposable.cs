@@ -51,10 +51,7 @@ public abstract class Disposable : IDisposable
             if (disposing)
             {
                 // dispose managed ressources
-                if (Components != null)
-                {
-                    Components.Dispose();
-                }
+                Components?.Dispose();
 
                 foreach (var disposable in Disposables)
                 {
@@ -65,10 +62,7 @@ public abstract class Disposable : IDisposable
             // dispose unmanaged ressources
             IsDisposed = true;
 
-            if (Disposed != null)
-            {
-                Disposed(this, EventArgs.Empty);
-            }
+            Disposed?.Invoke(this, EventArgs.Empty);
         }
     }
 

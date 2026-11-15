@@ -33,17 +33,11 @@ public class Produktmerkmal : EntityWithBezeichnung
 
             ThrowExceptionIfChangeTrackingEnabled();
 
-            if (Auspraegungen != null)
-            {
-                Auspraegungen.CollectionChanged -= FixupAuspraegungen;
-            }
+            Auspraegungen?.CollectionChanged -= FixupAuspraegungen;
 
             _auspraegungen = value;
 
-            if (Auspraegungen != null)
-            {
-                Auspraegungen.CollectionChanged += FixupAuspraegungen;
-            }
+            Auspraegungen?.CollectionChanged += FixupAuspraegungen;
 
             RaiseNavigationPropertyChanged(() => Auspraegungen);
         }

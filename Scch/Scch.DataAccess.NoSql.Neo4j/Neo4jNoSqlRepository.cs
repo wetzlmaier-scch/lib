@@ -163,8 +163,7 @@ public class Neo4jNoSqlRepository : Disposable, INeo4jNoSqlRepository
     {
         if (!IsDisposed && disposing)
         {
-            var disposableClient = _client as IDisposable;
-            if (disposableClient != null)
+            if (_client is IDisposable disposableClient)
             {
                 disposableClient.Dispose();
                 _client = null;

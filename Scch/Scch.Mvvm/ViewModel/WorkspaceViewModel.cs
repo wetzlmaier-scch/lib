@@ -50,8 +50,8 @@ public abstract class WorkspaceViewModel : ImageSourceViewModel, IWorkspaceViewM
     {
         get
         {
-            return _closeCommand ?? (_closeCommand = new CommandViewModel(Properties.Resources.WorkspaceViewModel_Close_DisplayName,
-                Properties.Resources.WorkspaceViewModel_Close_ToolTip, new RelayCommand(PerformClose)));
+            return _closeCommand ??= new CommandViewModel(Properties.Resources.WorkspaceViewModel_Close_DisplayName,
+                Properties.Resources.WorkspaceViewModel_Close_ToolTip, new RelayCommand(PerformClose));
         }
     }
 

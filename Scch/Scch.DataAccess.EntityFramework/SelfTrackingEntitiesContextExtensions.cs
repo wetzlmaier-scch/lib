@@ -259,9 +259,9 @@ public static class SelfTrackingEntitiesContextExtensions
                                                RelationshipSet allRelationships, IObjectWithChangeTracker entity)
     {
         ObjectChangeTracker changeTracker = entity.ChangeTracker;
-        if (changeTracker.State == ObjectState.Unchanged ||
-            changeTracker.State == ObjectState.Modified ||
-            changeTracker.State == ObjectState.Deleted)
+        if (changeTracker.State is ObjectState.Unchanged or
+            ObjectState.Modified or
+            ObjectState.Deleted)
         {
             ObjectStateEntry entry = context.ObjectStateManager.GetObjectStateEntry(entity);
             EntityType entityType = context.MetadataWorkspace.GetCSpaceEntityType(entity);

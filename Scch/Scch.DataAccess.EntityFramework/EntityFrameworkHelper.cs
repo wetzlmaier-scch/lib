@@ -40,8 +40,7 @@ internal static class EntityFrameworkHelper
 
         DateTime changeTime = DateTime.UtcNow;
 
-        var tableAttr = dbEntry.Entity.GetType().GetCustomAttributes(typeof(TableAttribute), false).SingleOrDefault() as TableAttribute;
-        string tableName = tableAttr != null ? tableAttr.Name : dbEntry.Entity.GetType().Name;
+        string tableName = dbEntry.Entity.GetType().GetCustomAttributes(typeof(TableAttribute), false).SingleOrDefault() is TableAttribute tableAttr ? tableAttr.Name : dbEntry.Entity.GetType().Name;
 
         DbPropertyValues values = (dbEntry.State == EntityState.Deleted)
                           ? dbEntry.OriginalValues
@@ -90,8 +89,8 @@ internal static class EntityFrameworkHelper
                                     TableName = tableName,
                                     RecordId = GetKeyValues(dbEntry),
                                     ColumnName = propertyName,
-                                    OriginalValue = dbEntry.OriginalValues.GetValue<object>(propertyName) == null ? null : dbEntry.OriginalValues.GetValue<object>(propertyName).ToString(),
-                                    NewValue = dbEntry.CurrentValues.GetValue<object>(propertyName) == null ? null : dbEntry.CurrentValues.GetValue<object>(propertyName).ToString()
+                                    OriginalValue = dbEntry.OriginalValues.GetValue<object>(propertyName)?.ToString(),
+                                    NewValue = dbEntry.CurrentValues.GetValue<object>(propertyName)?.ToString()
                                 });
                 break;
         }

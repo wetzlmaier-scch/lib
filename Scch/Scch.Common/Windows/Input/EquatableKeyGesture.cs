@@ -38,23 +38,17 @@ public class EquatableKeyGesture : KeyGesture, IEquatable<EquatableKeyGesture>
 
     public static bool IsValid(Key key, ModifierKeys modifiers)
     {
-        if (((key < Key.F1) || (key > Key.F24)) && ((key < Key.NumPad0) || (key > Key.Divide)))
+        if (key is (< Key.F1 or > Key.F24) and (< Key.NumPad0 or > Key.Divide))
         {
             if ((modifiers & (ModifierKeys.Windows | ModifierKeys.Control | ModifierKeys.Alt)) != ModifierKeys.None)
             {
-                switch (key)
+                return key switch
                 {
-                    case Key.LWin:
-                    case Key.RWin:
-                    case Key.LeftCtrl:
-                    case Key.RightCtrl:
-                    case Key.LeftAlt:
-                    case Key.RightAlt:
-                        return false;
-                }
-                return true;
+                    Key.LWin or Key.RWin or Key.LeftCtrl or Key.RightCtrl or Key.LeftAlt or Key.RightAlt => false,
+                    _ => true,
+                };
             }
-            if (((key >= Key.D0) && (key <= Key.D9)) || ((key >= Key.A) && (key <= Key.Z)))
+            if (key is >= Key.D0 and <= Key.D9 or >= Key.A and <= Key.Z)
             {
                 return false;
             }

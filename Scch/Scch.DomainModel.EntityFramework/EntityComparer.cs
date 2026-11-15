@@ -52,10 +52,7 @@ public class EntityComparer<T> : IComparer<T>, IEqualityComparer<T>
         if (object.Equals(y, default(T)))
             return 1;
 
-        var xvalue = _property.GetValue(x, null) as IComparable;
-        var yvalue = _property.GetValue(y, null) as IComparable;
-
-        if (xvalue == null || yvalue == null)
+        if (_property.GetValue(x, null) is not IComparable xvalue || _property.GetValue(y, null) is not IComparable yvalue)
             throw new ArgumentException(string.Format("Type of property '{0}' does not implement IComparable", _property.Name));
 
         return (xvalue.CompareTo(yvalue));

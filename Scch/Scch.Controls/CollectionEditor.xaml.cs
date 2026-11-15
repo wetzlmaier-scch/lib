@@ -511,7 +511,7 @@ public partial class CollectionEditor : UserControl
 
     private static bool IsValidSelectedItemsSource(object value)
     {
-        return value == null || value is IList;
+        return value is null or IList;
     }
 
     private static void OnAvailableItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -524,7 +524,7 @@ public partial class CollectionEditor : UserControl
 
     private static bool IsValidAvailableItemsSource(object value)
     {
-        return value == null || value is IList;
+        return value is null or IList;
     }
 
     /// <summary>

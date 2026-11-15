@@ -21,8 +21,7 @@ public static class TreeViewItemBehavior
 
     static void OnBringIntoViewWhenSelectedChanged(DependencyObject depObj, DependencyPropertyChangedEventArgs e)
     {
-        var item = depObj as TreeViewItem;
-        if (item == null)
+        if (depObj is not TreeViewItem item)
             return;
 
         if (e.NewValue is bool == false)

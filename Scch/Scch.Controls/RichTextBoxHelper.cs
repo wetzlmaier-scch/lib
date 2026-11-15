@@ -129,8 +129,7 @@ public class RichTextBoxHelper
 
     private static void TableMouseEnter(object sender, MouseEventArgs e)
     {
-        var table = sender as Table;
-        if (null != table)
+        if (sender is Table table)
         {
             TableDragHandle.LastEnteredObjectTable = sender as Table;
         }
@@ -138,9 +137,8 @@ public class RichTextBoxHelper
 
     private static void CellMouseEnter(object sender, MouseEventArgs e)
     {
-        var tableCell = sender as TableCell;
         //Debug.WriteLine("cell_MouseEnter dirOver: " + tableCell.IsMouseDirectlyOver + ", "+ e.GetPosition(tableCell).X + " " + e.GetPosition(tableCell).Y);
-        if (null != tableCell && tableCell.IsMouseDirectlyOver)
+        if (sender is TableCell tableCell && tableCell.IsMouseDirectlyOver)
         {
             //Point point = e.GetPosition(tableCell);
 
@@ -154,8 +152,7 @@ public class RichTextBoxHelper
         {
             //TableDragHandle.LastEnteredObjectTable.Cursor = Cursors.Arrow;
             TableDragHandle.Reset();
-            var tableCell = sender as TableCell;
-            if (null != tableCell)
+            if (sender is TableCell tableCell)
             {
                 tableCell.Focus();
                 tableCell.Cursor = Cursors.Arrow;
@@ -169,13 +166,11 @@ public class RichTextBoxHelper
         {
             try
             {
-                var tableCell = sender as TableCell;
-                if (null == tableCell || Cursors.SizeWE != tableCell.Cursor)
+                if (sender is not TableCell tableCell || Cursors.SizeWE != tableCell.Cursor)
                 {
                     return;
                 }
-                var tableRow = tableCell.Parent as TableRow;
-                if (null == tableRow)
+                if (tableCell.Parent is not TableRow tableRow)
                 {
                     return;
                 }
@@ -205,8 +200,7 @@ public class RichTextBoxHelper
         {
             try
             {
-                var tableCell = sender as TableCell;
-                if (null == tableCell)
+                if (sender is not TableCell tableCell)
                 {
                     return;
                 }
@@ -320,10 +314,8 @@ public class RichTextBoxHelper
             throw new ArgumentNullException("position");
 
         InlineUIContainer cont = null;
-        var parent = position.Parent as Paragraph;
-        var run = position.Parent as Inline;
 
-        if (parent != null)
+        if (position.Parent is Paragraph parent)
         {
             foreach (Inline inline in parent.Inlines)
             {
@@ -342,7 +334,7 @@ public class RichTextBoxHelper
                 }
             }
         }
-        else if (run != null && run.NextInline != null)
+        else if (position.Parent is Inline run && run.NextInline != null)
         {
             //while(run.NextInline != null)
             cont = GetInlineFromCollection(run.SiblingInlines);
@@ -381,8 +373,7 @@ public class RichTextBoxHelper
         {
             foreach (Inline inline in parent.Inlines)
             {
-                var inlineUIContainer = inline as InlineUIContainer;
-                if (inlineUIContainer != null)
+                if (inline is InlineUIContainer inlineUIContainer)
                 {
                     cont = inlineUIContainer;
                     return cont;

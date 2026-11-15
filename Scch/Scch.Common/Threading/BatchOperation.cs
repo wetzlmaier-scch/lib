@@ -10,11 +10,9 @@ public static class BatchOperation
         if (worker == null)
             throw new ArgumentNullException(nameof(worker));
 
-        if (blockingCondition == null)
-            blockingCondition = () => false;
+        blockingCondition ??= () => false;
 
-        if (cancellation == null)
-            cancellation = () => false;
+        cancellation ??= () => false;
 
         CancellationTokenSource source = new();
 

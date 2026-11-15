@@ -142,6 +142,6 @@ public static class DirectoryHelper
     }
     private static bool IsValidDriveChar(char value)
     {
-        return (value >= 'A' && value <= 'Z') || (value >= 'a' && value <= 'z');
+        return value is >= 'A' and <= 'Z' or >= 'a' and <= 'z';
     }
 }

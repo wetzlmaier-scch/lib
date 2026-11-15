@@ -26,10 +26,7 @@ public class CommandBehaviorBase<T> where T : Control
 
     protected virtual void ExecuteCommand()
     {
-        if (Command != null)
-        {
-            Command.Execute(CommandParameter);
-        }
+        Command?.Execute(CommandParameter);
     }
 
     protected virtual void UpdateEnabledState()
@@ -54,10 +51,7 @@ public class CommandBehaviorBase<T> where T : Control
         }
         set
         {
-            if (_command != null)
-            {
-                _command.CanExecuteChanged -= _commandCanExecuteChangedHandler;
-            }
+            _command?.CanExecuteChanged -= _commandCanExecuteChangedHandler;
             _command = value;
             if (_command != null)
             {

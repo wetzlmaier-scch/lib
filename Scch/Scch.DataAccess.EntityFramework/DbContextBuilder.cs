@@ -149,7 +149,7 @@ public sealed class DbContextBuilder<TContext, TKey> : DbModelBuilder, IDbContex
         string name = args.Name;
         int separator = name.IndexOf(',');
         if (separator >= 0)
-            name = name.Substring(0, separator);
+            name = name[..separator];
 
         try
         {

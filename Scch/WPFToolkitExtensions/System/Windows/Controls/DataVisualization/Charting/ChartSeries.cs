@@ -23,8 +23,7 @@ public static class ChartSeries
 
     private static void SeriesSourceChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
     {
-        var chart = obj as Chart;
-        if (chart != null)
+        if (obj is Chart chart)
         {
             chart.Series.Clear();
 

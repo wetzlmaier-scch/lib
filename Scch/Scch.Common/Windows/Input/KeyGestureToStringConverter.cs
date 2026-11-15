@@ -20,7 +20,7 @@ public class KeyGestureToStringConverter : IValueConverter
     /// <returns></returns>
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value != null && !(value is KeyGesture))
+        if (value is not null and not KeyGesture)
             throw new ArgumentOutOfRangeException("value");
 
         if (value == null)

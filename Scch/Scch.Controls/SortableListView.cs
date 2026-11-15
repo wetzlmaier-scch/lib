@@ -58,13 +58,11 @@ public class SortableListView : ListView
     {
         var list = (SortableListView)d;
 
-        if (list._gridView != null)
-            list._gridView.Columns.CollectionChanged -= list.ColumnsChanged;
+        list._gridView?.Columns.CollectionChanged -= list.ColumnsChanged;
 
         list._gridView = e.NewValue as GridView;
 
-        if (list._gridView != null)
-            list._gridView.Columns.CollectionChanged += list.ColumnsChanged;
+        list._gridView?.Columns.CollectionChanged += list.ColumnsChanged;
     }
 
     private void ColumnsChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -116,12 +114,10 @@ public class SortableListView : ListView
         }
 
         GridViewColumn column = FindColumn(_lastOrder.PropertyName);
-        if (column != null)
-            column.HeaderTemplate = null;
+        column?.HeaderTemplate = null;
 
         column = FindColumn(newValue.PropertyName);
-        if (column != null)
-            column.HeaderTemplate = newValue.Direction == ListSortDirection.Ascending ? _headerTemplateArrowUp : _headerTemplateArrowDown;
+        column?.HeaderTemplate = newValue.Direction == ListSortDirection.Ascending ? _headerTemplateArrowUp : _headerTemplateArrowDown;
 
         Items.Refresh();
 
@@ -174,9 +170,7 @@ public class SortableListView : ListView
 
     void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
     {
-        var headerClicked = e.OriginalSource as GridViewColumnHeader;
-
-        if (headerClicked != null && headerClicked.Role != GridViewColumnHeaderRole.Padding && ColumnHeaderSortingEnabled)
+        if (e.OriginalSource is GridViewColumnHeader headerClicked && headerClicked.Role != GridViewColumnHeaderRole.Padding && ColumnHeaderSortingEnabled)
         {
             ListSortDirection direction;
             if ((string)headerClicked.Column.Header != _lastOrder.PropertyName)

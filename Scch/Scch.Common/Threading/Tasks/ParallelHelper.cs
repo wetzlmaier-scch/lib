@@ -10,8 +10,7 @@ public class ParallelHelper
     {
         if (executeInParallel)
         {
-            if (options == null)
-                options = new ParallelOptions();
+            options ??= new ParallelOptions();
 
             Parallel.ForEach(source, options, action);
         }

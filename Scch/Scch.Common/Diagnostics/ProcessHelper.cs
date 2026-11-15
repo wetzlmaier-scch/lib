@@ -51,7 +51,7 @@ public static class ProcessHelper
         string text;
         if (machineName.StartsWith("\\", StringComparison.Ordinal))
         {
-            text = machineName.Substring(2);
+            text = machineName[2..];
         }
         else
         {
@@ -74,11 +74,8 @@ public static class ProcessHelper
 
     public static void DisposeMutex()
     {
-        if (_mutex != null)
-        {
-            _mutex.Dispose();
-            _mutex = null;
-        }
+        _mutex?.Dispose();
+        _mutex = null;
     }
 
     public static Process[] GetProcessesByFileName(string fileName)

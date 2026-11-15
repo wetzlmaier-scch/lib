@@ -91,6 +91,6 @@ public static class FileHelper
 
     private static string FileNameWithoutExtension(FileInfo fileInfo)
     {
-        return fileInfo.Name.Substring(0, fileInfo.Name.Length - fileInfo.Extension.Length);
+        return fileInfo.Name[..^fileInfo.Extension.Length];
     }
 }

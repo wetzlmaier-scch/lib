@@ -210,14 +210,12 @@ public static class RichTextBoxCommands
             return;
         }
 
-        var startTableRow = startTableCell.Parent as TableRow;
-        if (startTableRow == null)
+        if (startTableCell.Parent is not TableRow startTableRow)
         {
             return;
         }
 
-        var startTableRowGroup = startTableRow.Parent as TableRowGroup;
-        if (startTableRowGroup == null)
+        if (startTableRow.Parent is not TableRowGroup startTableRowGroup)
         {
             return;
         }
@@ -260,8 +258,7 @@ public static class RichTextBoxCommands
 
             if (startTableRow.Cells.Count == 0)
             {
-                var table = startTableRowGroup.Parent as Table;
-                if (table != null && table.SiblingBlocks != null)
+                if (startTableRowGroup.Parent is Table table && table.SiblingBlocks != null)
                     table.SiblingBlocks.Remove(table);
             }
         }
@@ -278,8 +275,7 @@ public static class RichTextBoxCommands
             return;
         }
 
-        var startTableRowGroup = startTableRow.Parent as TableRowGroup;
-        if (startTableRowGroup == null)
+        if (startTableRow.Parent is not TableRowGroup startTableRowGroup)
         {
             return;
         }
@@ -312,8 +308,7 @@ public static class RichTextBoxCommands
 
             if (startTableRowGroup.Rows.Count == 0)
             {
-                var table = startTableRowGroup.Parent as Table;
-                if (table != null && table.SiblingBlocks != null)
+                if (startTableRowGroup.Parent is Table table && table.SiblingBlocks != null)
                     table.SiblingBlocks.Remove(table);
             }
         }
@@ -330,14 +325,12 @@ public static class RichTextBoxCommands
             return;
         }
 
-        var tableRow = tableCell.Parent as TableRow;
-        if (tableRow == null)
+        if (tableCell.Parent is not TableRow tableRow)
         {
             return;
         }
 
-        var tableRowGroup = tableRow.Parent as TableRowGroup;
-        if (tableRowGroup == null)
+        if (tableRow.Parent is not TableRowGroup tableRowGroup)
         {
             return;
         }
@@ -364,14 +357,12 @@ public static class RichTextBoxCommands
             return;
         }
 
-        var tableRow = tableCell.Parent as TableRow;
-        if (tableRow == null)
+        if (tableCell.Parent is not TableRow tableRow)
         {
             return;
         }
 
-        var tableRowGroup = tableRow.Parent as TableRowGroup;
-        if (tableRowGroup == null)
+        if (tableRow.Parent is not TableRowGroup tableRowGroup)
         {
             return;
         }
@@ -398,8 +389,7 @@ public static class RichTextBoxCommands
             return;
         }
 
-        var tableRowGroup = tableRow.Parent as TableRowGroup;
-        if (tableRowGroup == null)
+        if (tableRow.Parent is not TableRowGroup tableRowGroup)
         {
             return;
         }
@@ -424,8 +414,7 @@ public static class RichTextBoxCommands
             return;
         }
 
-        var tableRowGroup = tableRow.Parent as TableRowGroup;
-        if (tableRowGroup == null)
+        if (tableRow.Parent is not TableRowGroup tableRowGroup)
         {
             return;
         }
@@ -471,8 +460,7 @@ public static class RichTextBoxCommands
         // myPath.Height = 1;
 
         //<Path  Height="10" Fill="Black" Stretch="Fill" Stroke="Black" StrokeThickness="1" Visibility="Visible" Data="M7,34 L390,34" />
-        if (insertionPosition.Paragraph != null)
-            insertionPosition.Paragraph.Inlines.Add(myPath);
+        insertionPosition.Paragraph?.Inlines.Add(myPath);
     }
 
     private static void InsertTable(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs)

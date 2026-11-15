@@ -43,7 +43,7 @@ public static class MethodHelper
     /// <returns>The converted value.</returns>
     public static object InvokeImplicitOperator(object fromValue, Type toType)
     {
-        MethodInfo implicitOperator = GetImplicitOperator(fromValue != null ? fromValue.GetType() : null, toType);
+        MethodInfo implicitOperator = GetImplicitOperator(fromValue?.GetType(), toType);
         return implicitOperator.Invoke(null, [fromValue]);
     }
 }

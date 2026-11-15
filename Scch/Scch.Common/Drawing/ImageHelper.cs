@@ -88,8 +88,7 @@ public static class ImageHelper
     {
         using (Bitmap bmp = new(image))
         {
-            if (format == null)
-                format = bmp.RawFormat;
+            format ??= bmp.RawFormat;
 
             bmp.Save(fileName, format);
         }

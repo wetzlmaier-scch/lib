@@ -30,10 +30,7 @@ public class ObjectChangeTracker
 
     protected virtual void OnObjectStateChanging(ObjectState newState)
     {
-        if (ObjectStateChanging != null)
-        {
-            ObjectStateChanging(this, new ObjectStateChangingEventArgs { NewState = newState });
-        }
+        ObjectStateChanging?.Invoke(this, new ObjectStateChangingEventArgs { NewState = newState });
     }
 
     [DataMember]
@@ -61,8 +58,7 @@ public class ObjectChangeTracker
     public ObjectsRemovedFromCollectionProperties ObjectsRemovedFromCollectionProperties
     {
         get {
-            return _objectsRemovedFromCollections ??
-                   (_objectsRemovedFromCollections = []);
+            return _objectsRemovedFromCollections ??= [];
         }
     }
 
@@ -70,7 +66,7 @@ public class ObjectChangeTracker
     [DataMember]
     public OriginalValuesDictionary OriginalValues
     {
-        get { return _originalValues ?? (_originalValues = []); }
+        get { return _originalValues ??= []; }
     }
 
     // Returns the extended property values.
@@ -79,7 +75,7 @@ public class ObjectChangeTracker
     [DataMember]
     public ExtendedPropertiesDictionary ExtendedProperties
     {
-        get { return _extendedProperties ?? (_extendedProperties = []); }
+        get { return _extendedProperties ??= []; }
     }
 
     // Returns the added objects to collection valued properties that were changed.
@@ -87,8 +83,7 @@ public class ObjectChangeTracker
     public ObjectsAddedToCollectionProperties ObjectsAddedToCollectionProperties
     {
         get {
-            return _objectsAddedToCollections ??
-                   (_objectsAddedToCollections = []);
+            return _objectsAddedToCollections ??= [];
         }
     }
 

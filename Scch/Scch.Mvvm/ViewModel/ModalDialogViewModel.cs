@@ -138,12 +138,12 @@ public class ModalDialogViewModel : ViewModelBase, IModalDialogViewModel
             if (Content == value)
                 return;
 
-            if (Content != null && Content is INotifyPropertyChanged)
+            if (Content is not null and INotifyPropertyChanged)
                 ((INotifyPropertyChanged)_content).PropertyChanged -= ContentPropertyChanged;
             
             _content = value;
 
-            if (Content != null && Content is INotifyPropertyChanged)
+            if (Content is not null and INotifyPropertyChanged)
                 ((INotifyPropertyChanged)_content).PropertyChanged += ContentPropertyChanged;
 
             RaisePropertyChanged(()=>Content);
@@ -154,7 +154,7 @@ public class ModalDialogViewModel : ViewModelBase, IModalDialogViewModel
     {
         get
         {
-            if (Content != null && (Content is IDataErrorInfo))
+            if (Content is not null and IDataErrorInfo)
                 return ((IDataErrorInfo)Content).Error;
 
             return base.Error;
@@ -165,7 +165,7 @@ public class ModalDialogViewModel : ViewModelBase, IModalDialogViewModel
     {
         get
         {
-            if (Content != null && (Content is IDataErrorInfo))
+            if (Content is not null and IDataErrorInfo)
                 return ((IDataErrorInfo)Content)[columnName];
 
             return base[columnName];

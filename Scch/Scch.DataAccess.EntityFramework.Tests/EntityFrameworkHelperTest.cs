@@ -68,8 +68,8 @@ public class EntityFrameworkHelperTest
 
             var entries = from entry in context.ChangeTracker.Entries()
                           where
-                              (entry.State == EntityState.Added || entry.State == EntityState.Deleted ||
-                               entry.State == EntityState.Modified)
+                              (entry.State is EntityState.Added or EntityState.Deleted or
+                               EntityState.Modified)
                           select entry;
 
             foreach (var entry in entries)
@@ -102,8 +102,8 @@ public class EntityFrameworkHelperTest
 
             var entries = from entry in context.ChangeTracker.Entries()
                           where
-                              (entry.State == EntityState.Added || entry.State == EntityState.Deleted ||
-                               entry.State == EntityState.Modified)
+                              (entry.State is EntityState.Added or EntityState.Deleted or
+                               EntityState.Modified)
                           select entry;
 
             foreach (var entry in entries)
@@ -144,8 +144,8 @@ public class EntityFrameworkHelperTest
 
             var entries = from entry in context.ChangeTracker.Entries()
                           where
-                              (entry.State == EntityState.Added || entry.State == EntityState.Deleted ||
-                               entry.State == EntityState.Modified)
+                              (entry.State is EntityState.Added or EntityState.Deleted or
+                               EntityState.Modified)
                           select entry;
 
             foreach (var entry in entries)

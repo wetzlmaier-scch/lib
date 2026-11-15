@@ -61,7 +61,7 @@ public class TypeSerializer: IXmlSerializable
     /// <returns>The <see cref="Type"/>.</returns>
     public static implicit operator Type(TypeSerializer serializer)
     {
-        return serializer == null ? null : serializer.Type;
+        return serializer?.Type;
     }
     #endregion Operators
 

@@ -18,19 +18,19 @@ public class DiffLineViewModel
         {
             viewModel.Style = DiffContext.Added;
             viewModel.PrefixForStyle = "+";
-            viewModel.Text = s.Substring(1);
+            viewModel.Text = s[1..];
         }
         else if (s.StartsWith("-"))
         {
             viewModel.Style = DiffContext.Deleted;
             viewModel.PrefixForStyle = "-";
-            viewModel.Text = s.Substring(1);
+            viewModel.Text = s[1..];
         }
         else
         {
             viewModel.Style = DiffContext.Context;
             viewModel.PrefixForStyle = "";
-            viewModel.Text = s.Length > 1 ? s.Substring(1) : s; // lol hax
+            viewModel.Text = s.Length > 1 ? s[1..] : s; // lol hax
         }
 
         return viewModel;

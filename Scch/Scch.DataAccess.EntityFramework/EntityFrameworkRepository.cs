@@ -335,8 +335,7 @@ public class EntityFrameworkRepository<TKey> : Disposable, IEntityFrameworkRepos
     {
         if (!_disposed && disposing)
         {
-            if (_unitOfWork != null)
-                _unitOfWork.Dispose();
+            _unitOfWork?.Dispose();
 
             if (_context.ObjectContext.Connection.State != ConnectionState.Closed)
             {
@@ -352,7 +351,7 @@ public class EntityFrameworkRepository<TKey> : Disposable, IEntityFrameworkRepos
 
     public IEntityFrameworkUnitOfWork UnitOfWork
     {
-        get { return _unitOfWork ?? (_unitOfWork = new EntityFrameworkUnitOfWork<TKey>(_context)); }
+        get { return _unitOfWork ??= new EntityFrameworkUnitOfWork<TKey>(_context); }
     }
 
     public IQueryable<TEntity> FilterDeleted<TEntity>(IQueryable<TEntity> entities)

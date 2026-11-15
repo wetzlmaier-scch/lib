@@ -55,13 +55,12 @@ public class ModelWrapper
         var code = method.Name;
 
         if (method.IsSpecialName)
-            code = code.Remove(0, 4);
+            code = code[4..];
         else
             code += "()";
 
-        var values = method.Invoke(null, null) as IEnumerable;
 
-        if (values == null)
+        if (method.Invoke(null, null) is not IEnumerable values)
             throw new InvalidOperationException($"Return type of domain '{domainName}' is not an IEnumerable");
 
         _domainValues.Add(domainName, new Tuple<string, object[]>(code, values.Cast<object>().ToArray()));
@@ -238,8 +237,7 @@ public class ModelWrapper
 
     public void PerformAction(string action, params int[] indexes)
     {
-        if (indexes == null)
-            indexes = [];
+        indexes ??= [];
 
         if (DomainNames(action).Count != indexes.Length)
             throw new InvalidOperationException($"Parameter count of action '{action}' does not match.");

@@ -32,8 +32,7 @@ public class ExtendedDbContext<TKey> : DbContext where TKey : IComparable<TKey>,
 
     private void HandleObjectMaterialized(object sender, ObjectMaterializedEventArgs e)
     {
-        var entity = e.Entity as IObjectWithChangeTracker;
-        if (entity != null)
+        if (e.Entity is IObjectWithChangeTracker entity)
         {
             bool changeTrackingEnabled = entity.ChangeTracker.ChangeTrackingEnabled;
             try
@@ -114,7 +113,7 @@ public class ExtendedDbContext<TKey> : DbContext where TKey : IComparable<TKey>,
 
             if (trimmedLine.EndsWith(";"))
             {
-                sql.Append(trimmedLine.Substring(0, trimmedLine.Length - 1));
+                sql.Append(trimmedLine[..^1]);
             }
 
             try
@@ -200,7 +199,7 @@ public class ExtendedDbContext<TKey> : DbContext where TKey : IComparable<TKey>,
     private void WriteAuditLog()
     {
         var entries = from entry in ChangeTracker.Entries()
-                      where (entry.State == EntityState.Added || entry.State == EntityState.Deleted || entry.State == EntityState.Modified)
+                      where (entry.State is EntityState.Added or EntityState.Deleted or EntityState.Modified)
                       select entry;
 
         foreach (var entry in entries)
@@ -218,7 +217,7 @@ public class ExtendedDbContext<TKey> : DbContext where TKey : IComparable<TKey>,
         ChangeTracker.DetectChanges(); // Important!
 
         var entries = from entry in ChangeTracker.Entries()
-                      where (entry.State == EntityState.Added || entry.State == EntityState.Deleted || entry.State == EntityState.Modified)
+                      where (entry.State is EntityState.Added or EntityState.Deleted or EntityState.Modified)
                       select entry;
 
         foreach (var entry in entries)

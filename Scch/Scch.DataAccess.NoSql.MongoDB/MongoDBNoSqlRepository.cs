@@ -145,9 +145,7 @@ public class MongoDBNoSqlRepository : Disposable, IMongoDBNoSqlRepository
     private void AddToCollection<TEntity, TValue>(TEntity entity, Expression<Func<TEntity, IEnumerable<TValue>>> expression, IEnumerable<TValue> values)
         where TEntity : class, INoSqlEntity<ObjectId>
     {
-        var propertyValue = ExpressionHelper.GetPropertyValue(expression, entity) as ICollection<TValue>;
-
-        if (propertyValue != null)
+        if (ExpressionHelper.GetPropertyValue(expression, entity) is ICollection<TValue> propertyValue)
             foreach (var value in values)
                 propertyValue.Add(value);
     }
@@ -155,9 +153,7 @@ public class MongoDBNoSqlRepository : Disposable, IMongoDBNoSqlRepository
     private void RemoveFromCollection<TEntity, TValue>(TEntity entity, Expression<Func<TEntity, IEnumerable<TValue>>> expression, IEnumerable<TValue> values)
         where TEntity : class, INoSqlEntity<ObjectId>
     {
-        var propertyValue = ExpressionHelper.GetPropertyValue(expression, entity) as ICollection<TValue>;
-
-        if (propertyValue != null)
+        if (ExpressionHelper.GetPropertyValue(expression, entity) is ICollection<TValue> propertyValue)
             foreach (var value in values)
                 propertyValue.Remove(value);
     }

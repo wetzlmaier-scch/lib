@@ -140,8 +140,8 @@ public class BindableRichTextBox : RichTextBox
         if (binding == null)
             return;
 
-        if (binding.UpdateSourceTrigger == UpdateSourceTrigger.Default ||
-            binding.UpdateSourceTrigger == UpdateSourceTrigger.LostFocus)
+        if (binding.UpdateSourceTrigger is UpdateSourceTrigger.Default or
+            UpdateSourceTrigger.LostFocus)
         {
             var expression=BindingOperations.GetBindingExpression(this, DocumentProperty);
             Debug.Assert(expression != null);

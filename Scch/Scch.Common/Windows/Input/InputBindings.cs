@@ -13,12 +13,10 @@ public static class InputBindings
 
     private static void OnBindingsSourceChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
     {
-        var element = sender as UIElement;
-
-        if (element == null)
+        if (sender is not UIElement element)
             throw new ArgumentException();
 
-        if (!(e.NewValue is IEnumerable<InputBinding>) && !(e.NewValue is InputBindingCollection))
+        if (e.NewValue is not IEnumerable<InputBinding> and not InputBindingCollection)
             throw new ArgumentException();
 
         element.InputBindings.Clear();
