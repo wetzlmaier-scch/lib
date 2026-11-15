@@ -464,13 +464,13 @@ public class CollectionEditorViewModel : ViewModelBase
     public CollectionEditorViewModel()
         : base("")
     {
-        AvailablePersons = new ObservableCollection<Person>();
-        SelectedPersons = new ObservableCollection<Person>();
-        Columns = new ObservableCollection<LocalizedColumnDescriptor>
-                      {
+        AvailablePersons = [];
+        SelectedPersons = [];
+        Columns =
+                      [
                           new LocalizedColumnDescriptor<Person>(x => x.Name),
                           new LocalizedColumnDescriptor<Person>(x => x.Age)
-                      };
+                      ];
     }
 
     public ObservableCollection<Person> AvailablePersons { get; set; }

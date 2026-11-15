@@ -18,7 +18,7 @@ public class Produkt : EntityWithBezeichnung
 
     public Produkt()
     {
-        Produktversionen = new TrackableCollection<long, Produktversion>();
+        Produktversionen = [];
     }
 
     [Required(ErrorMessageResourceName = "Produkt_Nummer_Required", ErrorMessageResourceType = typeof(Resources))]

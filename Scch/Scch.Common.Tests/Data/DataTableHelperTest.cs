@@ -35,7 +35,7 @@ public class DataTableHelperTest
         dt.Columns.Add("String", typeof(string));
         dt.Columns.Add("Number", typeof(int));
 
-        dt.PrimaryKey = new[] { dt.Columns["String"] };
+        dt.PrimaryKey = [dt.Columns["String"]];
 
         return dt;
     }
@@ -169,17 +169,17 @@ public class DataTableHelperTest
     [TestMethod]
     public void TestGenerateTextHeader()
     {
-        var result = DataTableHelper.GenerateTextHeader(_source, new[] { 10, 10 });
+        var result = DataTableHelper.GenerateTextHeader(_source, [10, 10]);
         Assert.AreEqual("| String     | Number     |" + Environment.NewLine, result);
     }
 
     [TestMethod]
     public void TestGenerateTextContent()
     {
-        var result = DataTableHelper.GenerateTextContent(_source, new[] { 10, 10 });
+        var result = DataTableHelper.GenerateTextContent(_source, [10, 10]);
         Assert.AreEqual("| SourceRow1 | 1          |" + Environment.NewLine + "| SourceRow2 | 2          |" + Environment.NewLine + "| SourceRow3 | 3          |" + Environment.NewLine, result);
 
-        result = DataTableHelper.GenerateTextContent(_source, new[] { 9, 9 });
+        result = DataTableHelper.GenerateTextContent(_source, [9, 9]);
         Assert.AreEqual("| Source... | 1         |" + Environment.NewLine + "| Source... | 2         |" + Environment.NewLine + "| Source... | 3         |" + Environment.NewLine, result);
     }
 

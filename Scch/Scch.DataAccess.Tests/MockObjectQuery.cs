@@ -15,7 +15,7 @@ public class MockObjectQuery<TEntity> : IObjectQuery<TEntity>
 
     public MockObjectQuery()
     {
-        _entities = new List<TEntity>();
+        _entities = [];
     }
 
     internal MockObjectQuery(IEnumerable<TEntity> entities)

@@ -110,7 +110,7 @@ public static class GridViewColumns
         List<GridView> gridViews;
         if (!_gridViewsByColumnsSource.TryGetValue(columnSource, out gridViews))
         {
-            gridViews = new List<GridView>();
+            gridViews = [];
             _gridViewsByColumnsSource.Add(columnSource, gridViews);
         }
         return gridViews;

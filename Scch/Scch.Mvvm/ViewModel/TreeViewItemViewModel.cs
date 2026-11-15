@@ -21,7 +21,7 @@ public class TreeViewItemViewModel<T> : ImageSourceViewModel, ITreeViewItemViewM
     public TreeViewItemViewModel(string displayName)
         : base(displayName)
     {
-        _items = new ThreadSafeObservableCollection<T>();
+        _items = [];
     }
 
     /// <summary>
@@ -32,7 +32,7 @@ public class TreeViewItemViewModel<T> : ImageSourceViewModel, ITreeViewItemViewM
     public TreeViewItemViewModel(string displayName, Image image)
         : base(displayName, image)
     {
-        _items = new ThreadSafeObservableCollection<T>();
+        _items = [];
     }
 
     /// <summary>
@@ -43,7 +43,7 @@ public class TreeViewItemViewModel<T> : ImageSourceViewModel, ITreeViewItemViewM
     public TreeViewItemViewModel(string displayName, Icon icon)
         : base(displayName, icon.ToBitmap())
     {
-        _items = new ThreadSafeObservableCollection<T>();
+        _items = [];
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public class TreeViewItemViewModel<T> : ImageSourceViewModel, ITreeViewItemViewM
     public TreeViewItemViewModel(string displayName, ImageSource imageSource)
         : base(displayName, imageSource)
     {
-        _items = new ThreadSafeObservableCollection<T>();
+        _items = [];
     }
 
     /// <summary>

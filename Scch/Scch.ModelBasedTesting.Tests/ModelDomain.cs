@@ -10,7 +10,7 @@ internal static class ModelDomain
 
     static ModelDomain()
     {
-        CalledActions = new List<Tuple<int, KnownColor>>();
+        CalledActions = [];
     }
 
     [Action]
@@ -22,11 +22,11 @@ internal static class ModelDomain
     [Domain("number")]
     public static int[] NumberDomain()
     {
-        return new[] { 1, 3, 5, 7 };
+        return [1, 3, 5, 7];
     }
 
     [Domain("color")]
-    public static KnownColor[] ColorDomain => new[] { KnownColor.Red, KnownColor.Green, KnownColor.Blue };
+    public static KnownColor[] ColorDomain => [KnownColor.Red, KnownColor.Green, KnownColor.Blue];
 
     public static void Reset()
     {

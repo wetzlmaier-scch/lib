@@ -33,7 +33,7 @@ public class TreeListView : TreeView
 
     public TreeListView()
     {
-        Columns = new GridViewColumnCollection();
+        Columns = [];
     }
 
     protected override DependencyObject GetContainerForItemOverride()

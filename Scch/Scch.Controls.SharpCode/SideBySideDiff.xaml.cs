@@ -34,7 +34,7 @@ public partial class SideBySideDiff
             diffContents = DiffCmd + Environment.NewLine + diffContents;
         }
 
-        var allLines = diffContents.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None).ToList();
+        var allLines = diffContents.Split([Environment.NewLine, "\n"], StringSplitOptions.None).ToList();
 
         for (int i = 0; i < allLines.Count; i++)
         {

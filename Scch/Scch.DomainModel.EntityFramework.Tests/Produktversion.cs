@@ -17,7 +17,7 @@ public class Produktversion : EntityFrameworkEntity<long>
 
     public Produktversion()
     {
-        Auspraegungen = new TrackableCollection<long, Auspraegung>();
+        Auspraegungen = [];
     }
 
     [Range(FieldRange.MinPositive, FieldRange.MaxPositive, ErrorMessageResourceName = "Produktversion_Nummer_Range", ErrorMessageResourceType = typeof(Resources))]

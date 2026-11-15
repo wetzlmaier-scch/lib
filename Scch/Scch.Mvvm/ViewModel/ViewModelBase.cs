@@ -56,12 +56,12 @@ public abstract class ViewModelBase : DataErrorInfo, IViewModel
 
     private void Initialize(string displayName, int displayIndex, IMessenger messenger)
     {
-        _childViewModels = new List<ViewModelBase>();
+        _childViewModels = [];
 
         DisplayName = displayName;
         DisplayIndex = displayIndex;
         MessengerInstance = messenger;
-        InputBindings = new InputBindingCollection();
+        InputBindings = [];
         OwnerThread = Thread.CurrentThread;
     }
 

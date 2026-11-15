@@ -8,7 +8,7 @@ namespace Scch.Common.Threading;
 public sealed class SingleThreadSynchronizationContext : SynchronizationContext
 {
     /// <summary>The queue of work items.</summary>
-    private readonly BlockingCollection<KeyValuePair<SendOrPostCallback, object>> _queue = new();
+    private readonly BlockingCollection<KeyValuePair<SendOrPostCallback, object>> _queue = [];
     /// <summary>The processing thread.</summary>
     private readonly Thread _thread = Thread.CurrentThread;
 

@@ -102,7 +102,7 @@ public class ModelWrapper
             if (method.GetCustomAttributes().All(attribute => attribute.GetType() != type))
                 continue;
 
-            _domainIndex.Add(method.Name, new List<string>());
+            _domainIndex.Add(method.Name, []);
 
             foreach (var parameter in method.GetParameters())
             {
@@ -194,8 +194,8 @@ public class ModelWrapper
 
     private List<int[]> GetCombinations(List<List<int>> parameters)
     {
-        List<int[]> results = new();
-        CreateCombinations(parameters, new List<int>(), 0, results);
+        List<int[]> results = [];
+        CreateCombinations(parameters, [], 0, results);
         return results;
     }
 
@@ -239,7 +239,7 @@ public class ModelWrapper
     public void PerformAction(string action, params int[] indexes)
     {
         if (indexes == null)
-            indexes = new int[0];
+            indexes = [];
 
         if (DomainNames(action).Count != indexes.Length)
             throw new InvalidOperationException($"Parameter count of action '{action}' does not match.");

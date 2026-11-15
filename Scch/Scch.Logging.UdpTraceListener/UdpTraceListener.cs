@@ -77,6 +77,6 @@ public class UdpTraceListener : CustomTraceListener
     /// </summary>
     protected override string[] GetSupportedAttributes()
     {
-        return new[] { "remoteHosts", "header", "footer" };
+        return ["remoteHosts", "header", "footer"];
     }
 }

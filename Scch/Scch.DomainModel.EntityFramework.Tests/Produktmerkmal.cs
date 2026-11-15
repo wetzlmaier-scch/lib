@@ -16,7 +16,7 @@ public class Produktmerkmal : EntityWithBezeichnung
 
     public Produktmerkmal()
     {
-        Auspraegungen = new TrackableCollection<long, Auspraegung>();
+        Auspraegungen = [];
     }
 
     [LocalizedDisplayName(typeof(Produktmerkmal), "Auspraegungen", typeof(Resources))]

@@ -72,7 +72,7 @@ public static class ExceptionHelper
                         displayString = (value == null) ? "(null)" : value.ToString();
                     }
 
-                    string[] lines = displayString.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] lines = displayString.Split([Environment.NewLine], StringSplitOptions.RemoveEmptyEntries);
 
                     message.Append(intent + property.Name + " = ");
 

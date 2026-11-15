@@ -14,7 +14,7 @@ public static class AssemblyHelper
     /// <summary>
     /// File extensions for assemblies.
     /// </summary>
-    public static readonly string[] Extensions = { "dll", "exe" };
+    public static readonly string[] Extensions = ["dll", "exe"];
 
     /// <summary>
     /// Returns the file name of the specified assembly.

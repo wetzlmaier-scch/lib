@@ -31,7 +31,7 @@ public class GenericType : MarkupExtension
         InnerTypes = innerTypes;
     }
 
-    public GenericType(Type baseType, Type innerType) :this(baseType, new[] {innerType})
+    public GenericType(Type baseType, Type innerType) :this(baseType, [innerType])
     {
         if (innerType == null)
         {
@@ -92,7 +92,7 @@ public class GenericType : MarkupExtension
             if (value == null)
                 throw new ArgumentNullException("value");
 
-            InnerTypes = new[] { value };
+            InnerTypes = [value];
         }
     }
 }

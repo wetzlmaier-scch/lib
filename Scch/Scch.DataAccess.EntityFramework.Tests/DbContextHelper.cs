@@ -14,7 +14,7 @@ public static class DbContextHelper
             if (_initialized)
                 return;
 
-            DbContextManager<long>.Init("Database", new[] { "Scch.DomainModel", "Scch.DomainModel.EntityFramework", "Scch.DataAccess.EntityFramework.Tests", "Scch.DomainModel.EntityFramework.Tests" }, true);
+            DbContextManager<long>.Init("Database", ["Scch.DomainModel", "Scch.DomainModel.EntityFramework", "Scch.DataAccess.EntityFramework.Tests", "Scch.DomainModel.EntityFramework.Tests"], true);
             _initialized = true;
         }
     }

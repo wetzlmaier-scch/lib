@@ -11,7 +11,7 @@ public static class RuntimeTypeBuilder
 {
     private static readonly AssemblyName AssemblyName = new() { Name = "DynamicTypes" };
     private static readonly ModuleBuilder ModuleBuilder;
-    private static readonly Dictionary<string, Type> BuiltTypes = new();
+    private static readonly Dictionary<string, Type> BuiltTypes = [];
 
     static RuntimeTypeBuilder()
     {

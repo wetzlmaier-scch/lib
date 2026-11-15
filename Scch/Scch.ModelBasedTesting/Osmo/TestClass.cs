@@ -6,7 +6,7 @@ public class TestClass
 {
     public TestClass()
     {
-        TestSteps = new List<TestStep>();
+        TestSteps = [];
     }
 
     public IList<TestStep> TestSteps { get; }

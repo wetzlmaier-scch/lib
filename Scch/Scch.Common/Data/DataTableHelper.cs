@@ -309,7 +309,7 @@ public static class DataTableHelper
     public static DataTable CreateDataTable()
     {
         DataTable dt = CreateDataTable(typeof(PropertyDescriptor));
-        dt.PrimaryKey = new[] { dt.Columns["Name"] };
+        dt.PrimaryKey = [dt.Columns["Name"]];
         return dt;
     }
 
@@ -600,7 +600,7 @@ public static class DataTableHelper
 
         var dt = new DataTable();
 
-        var lines = csv.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.RemoveEmptyEntries);
+        var lines = csv.Split([Environment.NewLine, "\n"], StringSplitOptions.RemoveEmptyEntries);
 
         var header = lines[0].Split(CsvDelimiter);
 

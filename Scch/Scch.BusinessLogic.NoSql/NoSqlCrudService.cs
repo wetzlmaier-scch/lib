@@ -81,7 +81,7 @@ public abstract class NoSqlCrudService<TKey, TEntity> : INoSqlCrudService<TKey, 
 
         var list = ids.ToList();
         if (!list.Any())
-            return new List<TEntity>();
+            return [];
 
         try
         {

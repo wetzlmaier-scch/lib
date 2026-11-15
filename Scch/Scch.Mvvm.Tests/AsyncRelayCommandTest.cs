@@ -131,7 +131,7 @@ public class AsyncRelayCommandTest
             Completed = true;
             Cancelled = e.Cancelled;
 
-            Items = (e.Cancelled ? new ObservableCollection<string>() : Update.Result);
+            Items = (e.Cancelled ? [] : Update.Result);
         }
 
         private ObservableCollection<string> _items;

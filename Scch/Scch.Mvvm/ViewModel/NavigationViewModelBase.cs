@@ -26,7 +26,7 @@ public abstract class NavigationViewModelBase : ViewModelBase, INavigationViewMo
         : base(null, 0)
     {
         VisibleCommandCommandText = false;
-        NavigationViewModels = new ObservableCollection<ViewModelBase>();
+        NavigationViewModels = [];
     }
 
     /// <summary>

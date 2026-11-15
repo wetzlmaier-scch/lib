@@ -41,7 +41,7 @@ public class TrackableCollectionTest
     {
         _removeCount = 0;
         _addCount = 0;
-        _collection = new TrackableCollection<long, Person>();
+        _collection = [];
     }
     //
     // Use TestCleanup to run code after each test has run

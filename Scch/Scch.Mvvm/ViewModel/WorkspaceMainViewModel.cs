@@ -19,7 +19,7 @@ public abstract class WorkspaceMainViewModel : MainViewModelBase, IMainViewModel
         {
             if (_workspaces == null)
             {
-                _workspaces = new ObservableCollection<IWorkspaceViewModel>();
+                _workspaces = [];
 
                 foreach (var viewModel in from vm in ViewModels orderby vm.DisplayIndex select vm)
                 {

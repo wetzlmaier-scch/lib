@@ -65,7 +65,7 @@ public class ManyToManyFixupTest
 
         public Class1()
         {
-            Many1 = new TrackableCollection<long, Class2>();
+            Many1 = [];
         }
 
         public TrackableCollection<long, Class2> Many1
@@ -109,7 +109,7 @@ public class ManyToManyFixupTest
 
         public Class2()
         {
-            Many2 = new TrackableCollection<long, Class1>();
+            Many2 = [];
         }
 
         public TrackableCollection<long, Class1> Many2

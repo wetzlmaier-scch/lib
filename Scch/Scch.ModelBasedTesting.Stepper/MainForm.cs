@@ -166,7 +166,7 @@ public partial class MainForm : Form
 
     private static List<Button> CreateButtons(ICollection<string> actions, EventHandler clickHandler)
     {
-        List<Button> buttons = new();
+        List<Button> buttons = [];
 
         foreach (var action in actions)
         {

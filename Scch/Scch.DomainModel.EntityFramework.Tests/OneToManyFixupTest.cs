@@ -74,7 +74,7 @@ public class OneToManyFixupTest
 
         public One()
         {
-            Many = new TrackableCollection<long, Many>();
+            Many = [];
         }
 
         public TrackableCollection<long, Many> Many

@@ -74,7 +74,7 @@ public abstract class EntityFrameworkCrudService<TKey, TEntity> : IEntityFramewo
 
         var idCollection=new List<TKey>(ids);
         if (!idCollection.Any())
-            return new List<TEntity>();
+            return [];
 
         try
         {

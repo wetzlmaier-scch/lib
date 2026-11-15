@@ -14,7 +14,7 @@ public class Person : XmlNoSqlEntity
     public Person()
     {
         Address = new Address();
-        Children = new List<Person>();
+        Children = [];
     }
 
     public string Name { get; set; }

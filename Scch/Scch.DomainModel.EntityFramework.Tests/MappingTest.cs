@@ -31,7 +31,7 @@ public class MappingTest
     ///information about and functionality for the current test run.
     ///</summary>
     public TestContext TestContext { get; set; }
-    private readonly List<Type> _testedTypes = new();
+    private readonly List<Type> _testedTypes = [];
 
     #region Additional test attributes
     //
@@ -61,11 +61,10 @@ public class MappingTest
         var failedAssertions = new List<string>();
 
         var builder = new DbContextBuilder<ExtendedDbContext<long>, long>("SCCH",
-                                                              new[]
-                                                                  {
+                                                              [
                                                                       "Scch.DomainModel",
                                                                       "Scch.DomainModel.EntityFramework"
-                                                                  },
+                                                                  ],
                                                               false, false);
 
         TestIfAllPropertiesAreMapped(builder.Entity<AuditLog>(), failedAssertions);

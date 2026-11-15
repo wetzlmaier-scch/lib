@@ -90,7 +90,7 @@ public class ConfigurationHelper
 
     private string[] SplitString(string value, params char[] separators)
     {
-        return value == null ? new string[0] : value.Split(separators).Select(str => str.Trim()).ToArray();
+        return value == null ? [] : value.Split(separators).Select(str => str.Trim()).ToArray();
     }
 
     #region ReadString
@@ -133,7 +133,7 @@ public class ConfigurationHelper
 
     public string[] ReadStringArray(string name, char[] separators)
     {
-        return ReadStringArray(name, new string[0], separators);
+        return ReadStringArray(name, [], separators);
     }
 
     public string ReadString(string name, string defaultValue)

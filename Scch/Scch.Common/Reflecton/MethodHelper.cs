@@ -19,7 +19,7 @@ public static class MethodHelper
         if (toType == null)
             throw new ArgumentNullException("toType");
 
-        MethodInfo implicitOperator = toType.GetMethod("op_Implicit", new[] { fromType });
+        MethodInfo implicitOperator = toType.GetMethod("op_Implicit", [fromType]);
 
         if (implicitOperator != null)
             return implicitOperator;
@@ -27,7 +27,7 @@ public static class MethodHelper
         if (fromType == null)
             throw new ArgumentNullException("fromType");
 
-        MethodInfo reverseImplicitOperator = fromType.GetMethod("op_Implicit", new[] { fromType });
+        MethodInfo reverseImplicitOperator = fromType.GetMethod("op_Implicit", [fromType]);
 
         if (reverseImplicitOperator != null && reverseImplicitOperator.ReturnType == toType)
             return reverseImplicitOperator;
@@ -44,6 +44,6 @@ public static class MethodHelper
     public static object InvokeImplicitOperator(object fromValue, Type toType)
     {
         MethodInfo implicitOperator = GetImplicitOperator(fromValue != null ? fromValue.GetType() : null, toType);
-        return implicitOperator.Invoke(null, new[] { fromValue });
+        return implicitOperator.Invoke(null, [fromValue]);
     }
 }

@@ -147,7 +147,7 @@ public class ListBoxSorterTest
         public ListBoxSorterViewModel()
             : base("")
         {
-            Persons = new ObservableCollection<Person>();
+            Persons = [];
         }
 
         public ObservableCollection<Person> Persons { get; set; }

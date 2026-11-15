@@ -8,7 +8,7 @@ internal static class Model
 
     static Model()
     {
-        _calledActions = new List<string>();
+        _calledActions = [];
     }
 
     [Action]

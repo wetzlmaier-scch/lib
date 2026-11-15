@@ -16,7 +16,7 @@ public static class DbContextManager<TKey>
     /// repositories. If only one database is being used, this dictionary contains a single
     /// factory with a key of <see cref="DefaultConnectionStringName" />.
     /// </summary>
-    private static readonly Dictionary<string, IDbContextBuilder<ExtendedDbContext<TKey>, TKey>> DbContextBuilders = new();
+    private static readonly Dictionary<string, IDbContextBuilder<ExtendedDbContext<TKey>, TKey>> DbContextBuilders = [];
 
     public static void Init(string[] mappingAssemblies, bool deleteDatabaseIfExists = false, bool lazyLoadingEnabled = false, bool auditingEnabled = false, bool saveSqlScript = false)
     {

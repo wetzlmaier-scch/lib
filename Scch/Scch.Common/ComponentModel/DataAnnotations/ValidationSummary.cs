@@ -18,7 +18,7 @@ public class ValidationSummary : IEnumerable<ValidationResult>
     /// </summary>
     public ValidationSummary()
     {
-        _results = new List<ValidationResult>();
+        _results = [];
     }
 
     /// <summary>

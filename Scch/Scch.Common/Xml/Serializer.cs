@@ -35,7 +35,7 @@ public static class Serializer
             throw new ArgumentNullException("type");
 
         if (extraTypes == null)
-            extraTypes = new Type[0];
+            extraTypes = [];
 
         if (!SerializerCache.ContainsKey(type))
         {

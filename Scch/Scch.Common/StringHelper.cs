@@ -16,7 +16,7 @@ public static class StringHelper
     {
         get
         {
-            return new[] { Comma, Semicolon };
+            return [Comma, Semicolon];
         }
     }
 

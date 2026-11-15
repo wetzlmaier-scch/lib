@@ -17,8 +17,8 @@ public class ObjectChangeTracker
     private bool _changeTrackingEnabled;
     private OriginalValuesDictionary _originalValues;
     private ExtendedPropertiesDictionary _extendedProperties;
-    private ObjectsAddedToCollectionProperties _objectsAddedToCollections = new();
-    private ObjectsRemovedFromCollectionProperties _objectsRemovedFromCollections = new();
+    private ObjectsAddedToCollectionProperties _objectsAddedToCollections = [];
+    private ObjectsRemovedFromCollectionProperties _objectsRemovedFromCollections = [];
 
     #endregion
 
@@ -62,7 +62,7 @@ public class ObjectChangeTracker
     {
         get {
             return _objectsRemovedFromCollections ??
-                   (_objectsRemovedFromCollections = new ObjectsRemovedFromCollectionProperties());
+                   (_objectsRemovedFromCollections = []);
         }
     }
 
@@ -70,7 +70,7 @@ public class ObjectChangeTracker
     [DataMember]
     public OriginalValuesDictionary OriginalValues
     {
-        get { return _originalValues ?? (_originalValues = new OriginalValuesDictionary()); }
+        get { return _originalValues ?? (_originalValues = []); }
     }
 
     // Returns the extended property values.
@@ -79,7 +79,7 @@ public class ObjectChangeTracker
     [DataMember]
     public ExtendedPropertiesDictionary ExtendedProperties
     {
-        get { return _extendedProperties ?? (_extendedProperties = new ExtendedPropertiesDictionary()); }
+        get { return _extendedProperties ?? (_extendedProperties = []); }
     }
 
     // Returns the added objects to collection valued properties that were changed.
@@ -88,7 +88,7 @@ public class ObjectChangeTracker
     {
         get {
             return _objectsAddedToCollections ??
-                   (_objectsAddedToCollections = new ObjectsAddedToCollectionProperties());
+                   (_objectsAddedToCollections = []);
         }
     }
 
@@ -155,7 +155,7 @@ public class ObjectChangeTracker
 
             if (!ObjectsAddedToCollectionProperties.ContainsKey(propertyName))
             {
-                ObjectsAddedToCollectionProperties[propertyName] = new ObjectList {value};
+                ObjectsAddedToCollectionProperties[propertyName] = [value];
             }
             else
             {
@@ -183,7 +183,7 @@ public class ObjectChangeTracker
 
             if (!ObjectsRemovedFromCollectionProperties.ContainsKey(propertyName))
             {
-                ObjectsRemovedFromCollectionProperties[propertyName] = new ObjectList {value};
+                ObjectsRemovedFromCollectionProperties[propertyName] = [value];
             }
             else
             {

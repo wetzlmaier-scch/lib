@@ -62,7 +62,7 @@ public static class ProcessHelper
             return false;
         }
         StringBuilder stringBuilder = new(256);
-        Kernel32.GetComputerName(stringBuilder, new[] { stringBuilder.Capacity });
+        Kernel32.GetComputerName(stringBuilder, [stringBuilder.Capacity]);
         string strA = stringBuilder.ToString();
         return string.Compare(strA, text, StringComparison.OrdinalIgnoreCase) != 0;
     }
@@ -524,7 +524,7 @@ public static class ProcessHelper
                 throw new FileNotFoundException("Command '{0}' not found.", command);
 
             var commandIndex = commandArgs[0].ToLower() == "call" ? 1 : 0;
-            List<string> expandedArgs = new();
+            List<string> expandedArgs = [];
             for (int index = commandIndex + 1; index < commandArgs.Length; index++)
             {
                 var expandedArg = Environment.ExpandEnvironmentVariables(commandArgs[index]);

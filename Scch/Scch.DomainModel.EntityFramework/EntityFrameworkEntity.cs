@@ -26,8 +26,8 @@ public abstract class EntityFrameworkEntity<TKey> : Entity<TKey>, IEntityFramewo
     static EntityFrameworkEntity()
     {
         ClearMethod = typeof (IList).GetMethod("Clear");
-        NavigationReferencePropertyChache = new Dictionary<Type, List<PropertyInfo>>();
-        NavigationCollectionPropertyChache = new Dictionary<Type, List<PropertyInfo>>();
+        NavigationReferencePropertyChache = [];
+        NavigationCollectionPropertyChache = [];
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public abstract class EntityFrameworkEntity<TKey> : Entity<TKey>, IEntityFramewo
         List<PropertyInfo> navigationReferencePropertyChache;
         if (!NavigationReferencePropertyChache.TryGetValue(GetType(), out navigationReferencePropertyChache))
         {
-            navigationReferencePropertyChache = new List<PropertyInfo>();
+            navigationReferencePropertyChache = [];
             lock (GetType())
             {
                 NavigationReferencePropertyChache.Add(GetType(), navigationReferencePropertyChache);
@@ -48,7 +48,7 @@ public abstract class EntityFrameworkEntity<TKey> : Entity<TKey>, IEntityFramewo
         List<PropertyInfo> navigationCollectionPropertyChache;
         if (!NavigationCollectionPropertyChache.TryGetValue(GetType(), out navigationCollectionPropertyChache))
         {
-            navigationCollectionPropertyChache = new List<PropertyInfo>();
+            navigationCollectionPropertyChache = [];
             lock (GetType())
             {
                 NavigationCollectionPropertyChache.Add(GetType(), navigationCollectionPropertyChache);

@@ -1105,8 +1105,8 @@ public static class SelfTrackingEntitiesContextExtensions
         {
             _context = context;
 
-            _allEntities = new HashSet<IObjectWithChangeTracker>();
-            _temporaryKeyMap = new Dictionary<EntityKey, EntityKey>();
+            _allEntities = [];
+            _temporaryKeyMap = [];
         }
 
         public void Add(ObjectStateEntry entry, ObjectChangeTracker changeTracker)
@@ -1175,7 +1175,7 @@ public static class SelfTrackingEntitiesContextExtensions
         public RelationshipSet(ObjectContext context, IEnumerable<object> allEntities)
         {
             _context = context;
-            _relationships = new HashSet<RelationshipWrapper>();
+            _relationships = [];
             foreach (object entity in allEntities)
             {
                 ObjectStateEntry entry = context.ObjectStateManager.GetObjectStateEntry(entity);

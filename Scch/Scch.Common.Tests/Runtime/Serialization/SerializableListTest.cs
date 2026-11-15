@@ -92,7 +92,7 @@ public class SerializableListTest
         _list.GetObjectData(info, context);
 
         var list = (StringList)Activator.CreateInstance(typeof(StringList),
-            BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { info, context }, null);
+            BindingFlags.Instance | BindingFlags.NonPublic, null, [info, context], null);
 
         Assert.AreEqual(_list.Count, list.Count);
 

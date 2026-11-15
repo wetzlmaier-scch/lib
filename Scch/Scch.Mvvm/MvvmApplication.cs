@@ -31,13 +31,13 @@ public class MvvmApplication : Application
     protected string[] IgnoreAssemblies { get; private set; }
 
     public MvvmApplication(SearchOption searchOption = SearchOption.TopDirectoryOnly)
-        : this(true, new string[0], searchOption)
+        : this(true, [], searchOption)
     {
 
     }
 
     public MvvmApplication(bool requestSingleInstance, string[] ignoreAssemblies, SearchOption searchOption = SearchOption.TopDirectoryOnly)
-        : this(requestSingleInstance, new string[0], ignoreAssemblies, searchOption)
+        : this(requestSingleInstance, [], ignoreAssemblies, searchOption)
     {
 
     }

@@ -14,9 +14,9 @@ public static class FileHelper
     {
         _dllFileType = ".dll";
         _exeFileType = ".exe";
-        _imageFileTypes = new[] { ".jpg", ".bmp", "jpeg", "png", "gif" };
-        _assemblyFileTypes = new[] { _dllFileType, _exeFileType };
-        _executableFileTypes = new[] { _exeFileType, ".bat", ".com" };
+        _imageFileTypes = [".jpg", ".bmp", "jpeg", "png", "gif"];
+        _assemblyFileTypes = [_dllFileType, _exeFileType];
+        _executableFileTypes = [_exeFileType, ".bat", ".com"];
     }
 
     public static string[] ImageFileTypes

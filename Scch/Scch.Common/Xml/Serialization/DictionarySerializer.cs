@@ -62,7 +62,7 @@ public class DictionarySerializer<TKey, TValue> : IXmlSerializable
     public static implicit operator
         SerializableDictionary<TKey, TValue>(DictionarySerializer<TKey, TValue> serializer)
     {
-        return serializer == null ? new SerializableDictionary<TKey, TValue>() : serializer.Dictionary;
+        return serializer == null ? [] : serializer.Dictionary;
     }
     #endregion Operators
 
@@ -82,7 +82,7 @@ public class DictionarySerializer<TKey, TValue> : IXmlSerializable
     /// <param name="reader"></param>
     public void ReadXml(XmlReader reader)
     {
-        _dictionary = new SerializableDictionary<TKey, TValue>();
+        _dictionary = [];
 
         var keySerializer = new XmlSerializer(typeof(TKey));
         var valueSerializer = new XmlSerializer(typeof(TValue));

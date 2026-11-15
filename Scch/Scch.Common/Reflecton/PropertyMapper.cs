@@ -43,7 +43,7 @@ public static class PropertyMapper
         if (!inherited)
             flags |= BindingFlags.DeclaredOnly;
 
-        List<Exception> exceptions = new();
+        List<Exception> exceptions = [];
 
         foreach (PropertyInfo providerProperty in propertyProvider.GetProperties(flags))
         {
@@ -87,7 +87,7 @@ public static class PropertyMapper
             object value = sourceProperty.GetValue(source, null);
             if (implicitOperator != null)
             {
-                value = implicitOperator.Invoke(null, new[] { value });
+                value = implicitOperator.Invoke(null, [value]);
             }
 
             destinationProperty.SetValue(destination, value, null);

@@ -13,12 +13,12 @@ public static class CompositionHelper
 {
     public static CompositionContainer CreateCompositionContainer(SearchOption searchOption = SearchOption.TopDirectoryOnly)
     {
-        return CreateCompositionContainer(new string[0], new string[0], searchOption);
+        return CreateCompositionContainer([], [], searchOption);
     }
 
     public static CompositionContainer CreateCompositionContainer(string[] ignoreAssemblies, SearchOption searchOption = SearchOption.TopDirectoryOnly)
     {
-        return CreateCompositionContainer(new string[0], ignoreAssemblies, searchOption);
+        return CreateCompositionContainer([], ignoreAssemblies, searchOption);
     }
 
     public static CompositionContainer CreateCompositionContainer(string[] moduleAssemblies, string[] ignoreAssemblies, SearchOption searchOption = SearchOption.TopDirectoryOnly)

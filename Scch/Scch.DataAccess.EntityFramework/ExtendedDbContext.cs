@@ -98,7 +98,7 @@ public class ExtendedDbContext<TKey> : DbContext where TKey : IComparable<TKey>,
     public void FillDatabase(string sqlScript)
     {
         var sql = new StringBuilder();
-        foreach (string line in sqlScript.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None))
+        foreach (string line in sqlScript.Split([Environment.NewLine, "\n"], StringSplitOptions.None))
         {
             var trimmedLine = line.Trim();
 

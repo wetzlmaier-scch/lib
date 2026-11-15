@@ -33,7 +33,7 @@ public class RichTextBoxViewModel : ViewModelBase
     public RichTextBoxViewModel() : base("RichTextBox", 0)
     {
         _text = string.Empty;
-        Styles = new ObservableCollection<StyleInfo>();
+        Styles = [];
 
         var font = new Style();
         font.Setters.Add(new Setter(TextElement.FontFamilyProperty, new FontFamily("Tahoma")));
