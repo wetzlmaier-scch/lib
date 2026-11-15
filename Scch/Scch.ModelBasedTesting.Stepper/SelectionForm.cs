@@ -3,87 +3,86 @@ using System.ComponentModel;
 using System.Data;
 using System.Windows.Forms;
 
-namespace Scch.ModelBasedTesting.Stepper
+namespace Scch.ModelBasedTesting.Stepper;
+
+public partial class SelectionForm : Form
 {
-    public partial class SelectionForm : Form
+    private DataTable _dataTable;
+
+    public SelectionForm()
     {
-        private DataTable _dataTable;
+        InitializeComponent();
+    }
 
-        public SelectionForm()
+    private void SelectionForm_Load(object sender, EventArgs e)
+    {
+
+    }
+
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public DataTable DataTable
+    {
+        get { return _dataTable; }
+        set
         {
-            InitializeComponent();
-        }
+            if (_dataTable == value)
+                return;
 
-        private void SelectionForm_Load(object sender, EventArgs e)
-        {
+            _dataTable = value;
 
-        }
-
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public DataTable DataTable
-        {
-            get { return _dataTable; }
-            set
+            foreach (DataColumn column in _dataTable.Columns)
             {
-                if (_dataTable == value)
-                    return;
+                var header = new ColumnHeader { Text = column.Caption };
+                lvCombinations.Columns.Add(header);
+            }
 
-                _dataTable = value;
+            lvCombinations.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
-                foreach (DataColumn column in _dataTable.Columns)
+            foreach (DataRow row in _dataTable.Rows)
+            {
+                ListViewItem item = new ListViewItem(row[0].ToString());
+                for (int i = 1; i < _dataTable.Columns.Count; i++)
                 {
-                    var header = new ColumnHeader { Text = column.Caption };
-                    lvCombinations.Columns.Add(header);
+                    item.SubItems.Add(row[i].ToString());
                 }
 
-                lvCombinations.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-
-                foreach (DataRow row in _dataTable.Rows)
-                {
-                    ListViewItem item = new ListViewItem(row[0].ToString());
-                    for (int i = 1; i < _dataTable.Columns.Count; i++)
-                    {
-                        item.SubItems.Add(row[i].ToString());
-                    }
-
-                    lvCombinations.Items.Add(item);
-                }
-
-                if (lvCombinations.Items.Count > 0)
-                {
-                    SelectItem(0);
-                }
+                lvCombinations.Items.Add(item);
             }
-        }
 
-        private void SelectItem(int index)
-        {
-            lvCombinations.Items[index].Selected = true;
-            lvCombinations.Select();
-        }
-
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int SelectedIndex
-        {
-            get
+            if (lvCombinations.Items.Count > 0)
             {
-                return lvCombinations.SelectedIndices[0];
-            }
-            set
-            {
-                SelectItem(value);
+                SelectItem(0);
             }
         }
+    }
 
-        private void btnOk_Click(object sender, EventArgs e)
-        {
-            DialogResult=DialogResult.OK;
-            Close();
-        }
+    private void SelectItem(int index)
+    {
+        lvCombinations.Items[index].Selected = true;
+        lvCombinations.Select();
+    }
 
-        private void lvCombinations_DoubleClick(object sender, EventArgs e)
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public int SelectedIndex
+    {
+        get
         {
-            AcceptButton.PerformClick();
+            return lvCombinations.SelectedIndices[0];
         }
+        set
+        {
+            SelectItem(value);
+        }
+    }
+
+    private void btnOk_Click(object sender, EventArgs e)
+    {
+        DialogResult=DialogResult.OK;
+        Close();
+    }
+
+    private void lvCombinations_DoubleClick(object sender, EventArgs e)
+    {
+        AcceptButton.PerformClick();
     }
 }

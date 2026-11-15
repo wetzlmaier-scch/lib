@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Scch.ModelBasedTesting
+namespace Scch.ModelBasedTesting;
+
+[AttributeUsage(AttributeTargets.Enum | AttributeTargets.Class)]
+public sealed class AbstractAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Class)]
-    public sealed class AbstractAttribute : Attribute
-    {
-    }
 }

@@ -1,19 +1,18 @@
 ﻿using System;
 
-namespace Scch.ModelBasedTesting
+namespace Scch.ModelBasedTesting;
+
+[AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Method)]
+public sealed class DomainAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Method)]
-    public sealed class DomainAttribute : Attribute
+    public DomainAttribute(string name)
     {
-        public DomainAttribute(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("name is null or empty");
+        if (string.IsNullOrEmpty(name))
+            throw new ArgumentException("name is null or empty");
 
-            Name = name;
-        }
-
-        public string Name { get; }
+        Name = name;
     }
+
+    public string Name { get; }
 }
 
