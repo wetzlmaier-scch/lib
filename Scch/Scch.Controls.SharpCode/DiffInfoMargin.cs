@@ -9,150 +9,149 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media;
 
-namespace Scch.Controls.SharpCode
+namespace Scch.Controls.SharpCode;
+
+public class DiffInfoMargin : AbstractMargin
 {
-    public class DiffInfoMargin : AbstractMargin
+    static readonly Brush AddedBackground;
+    static readonly Brush DeletedBackground;
+    static readonly Brush BlankBackground;
+
+    static readonly SolidColorBrush BackBrush;
+    static readonly SolidColorBrush ForegroundBrush;
+
+    static readonly Pen BorderlessPen;
+
+    const double TextHorizontalMargin = 4.0;
+
+    FormattedText _lineFt, _plusMinusFt;
+
+    static DiffInfoMargin()
     {
-        static readonly Brush AddedBackground;
-        static readonly Brush DeletedBackground;
-        static readonly Brush BlankBackground;
+        AddedBackground = new SolidColorBrush(Color.FromRgb(0xdd, 0xff, 0xdd));
+        AddedBackground.Freeze();
 
-        static readonly SolidColorBrush BackBrush;
-        static readonly SolidColorBrush ForegroundBrush;
+        DeletedBackground = new SolidColorBrush(Color.FromRgb(0xff, 0xdd, 0xdd));
+        DeletedBackground.Freeze();
 
-        static readonly Pen BorderlessPen;
+        BlankBackground = new SolidColorBrush(Color.FromRgb(0xfa, 0xfa, 0xfa));
+        BlankBackground.Freeze();
 
-        const double TextHorizontalMargin = 4.0;
+        var transparentBrush = new SolidColorBrush(Colors.Transparent);
+        transparentBrush.Freeze();
 
-        FormattedText _lineFt, _plusMinusFt;
- 
-        static DiffInfoMargin()
+        BorderlessPen = new Pen(transparentBrush, 0.0);
+        BorderlessPen.Freeze();
+
+        BackBrush = new SolidColorBrush(Color.FromRgb(255, 0, 255));
+        BackBrush.Freeze();
+
+        ForegroundBrush = new SolidColorBrush(Colors.DarkGray);
+        ForegroundBrush.Freeze();
+    }
+
+    protected override Size MeasureOverride(Size availableSize)
+    {
+        if (Lines == null || Lines.Count == 0) return new Size(0.0, 0.0);
+
+        var textToUse = Lines.Last().LineNumber.ToString();
+
+        var tf = CreateTypeface();
+        _lineFt = new FormattedText(
+            textToUse,
+            CultureInfo.CurrentCulture, System.Windows.FlowDirection.LeftToRight,
+            tf, (double)GetValue(TextBlock.FontSizeProperty),
+            BackBrush, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+        _plusMinusFt = new FormattedText(
+            "+ ",
+            CultureInfo.CurrentCulture, System.Windows.FlowDirection.LeftToRight,
+            tf, (double)GetValue(TextBlock.FontSizeProperty),
+            BackBrush, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+
+        // NB: This is a bit tricky. We use the margin control to actually
+        // draw the diff "+/-" prefix, so that it's not selectable. So, looking
+        // at this from the perspective of a single line, the arrangement is:
+        //
+        // margin-lineFt-margin-lineFt-margin-margin-plusMinusFt
+        return new Size(
+            _lineFt.Width + _plusMinusFt.WidthIncludingTrailingWhitespace + (TextHorizontalMargin * 2.0),
+            0.0);
+    }
+
+    protected override void OnRender(DrawingContext drawingContext)
+    {
+        base.OnRender(drawingContext);
+        if (Lines == null || Lines.Count == 0) return;
+
+        var lineNumberWidth = Math.Round(_lineFt.Width + TextHorizontalMargin * 2.0);
+
+        var tf = CreateTypeface();
+        var fontSize = (double)GetValue(TextBlock.FontSizeProperty);
+
+        var visualLines = TextView.VisualLinesValid ? TextView.VisualLines : Enumerable.Empty<VisualLine>();
+        foreach (var v in visualLines)
         {
-            AddedBackground = new SolidColorBrush(Color.FromRgb(0xdd, 0xff, 0xdd));
-            AddedBackground.Freeze();
+            var rcs = BackgroundGeometryBuilder.GetRectsFromVisualSegment(TextView, v, 0, 1000).ToArray();
+            var linenum = v.FirstDocumentLine.LineNumber - 1;
+            if (linenum >= Lines.Count) continue;
 
-            DeletedBackground = new SolidColorBrush(Color.FromRgb(0xff, 0xdd, 0xdd));
-            DeletedBackground.Freeze();
+            var diffLine = Lines[linenum];
 
-            BlankBackground = new SolidColorBrush(Color.FromRgb(0xfa, 0xfa, 0xfa));
-            BlankBackground.Freeze();
+            FormattedText ft;
 
-            var transparentBrush = new SolidColorBrush(Colors.Transparent);
-            transparentBrush.Freeze();
-
-            BorderlessPen = new Pen(transparentBrush, 0.0);
-            BorderlessPen.Freeze();
-
-            BackBrush = new SolidColorBrush(Color.FromRgb(255, 0, 255));
-            BackBrush.Freeze();
-
-            ForegroundBrush = new SolidColorBrush(Colors.DarkGray);
-            ForegroundBrush.Freeze();
-        }
-
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            if (Lines == null || Lines.Count == 0) return new Size(0.0, 0.0);
-
-            var textToUse = Lines.Last().LineNumber.ToString();
-
-            var tf = CreateTypeface();
-            _lineFt = new FormattedText(
-                textToUse,
-                CultureInfo.CurrentCulture, System.Windows.FlowDirection.LeftToRight,
-                tf, (double)GetValue(TextBlock.FontSizeProperty),
-                BackBrush, VisualTreeHelper.GetDpi(this).PixelsPerDip);
-            _plusMinusFt = new FormattedText(
-                "+ ",
-                CultureInfo.CurrentCulture, System.Windows.FlowDirection.LeftToRight,
-                tf, (double)GetValue(TextBlock.FontSizeProperty),
-                BackBrush, VisualTreeHelper.GetDpi(this).PixelsPerDip);
-
-            // NB: This is a bit tricky. We use the margin control to actually
-            // draw the diff "+/-" prefix, so that it's not selectable. So, looking
-            // at this from the perspective of a single line, the arrangement is:
-            //
-            // margin-lineFt-margin-lineFt-margin-margin-plusMinusFt
-            return new Size(
-                _lineFt.Width + _plusMinusFt.WidthIncludingTrailingWhitespace + (TextHorizontalMargin * 2.0),
-                0.0);
-        }
-
-        protected override void OnRender(DrawingContext drawingContext)
-        {
-            base.OnRender(drawingContext);
-            if (Lines == null || Lines.Count == 0) return;
-
-            var lineNumberWidth = Math.Round(_lineFt.Width + TextHorizontalMargin * 2.0);
-
-            var tf = CreateTypeface();
-            var fontSize = (double)GetValue(TextBlock.FontSizeProperty);
-
-            var visualLines = TextView.VisualLinesValid ? TextView.VisualLines : Enumerable.Empty<VisualLine>();
-            foreach (var v in visualLines)
+            if (diffLine.Style != DiffContext.Context)
             {
-                var rcs = BackgroundGeometryBuilder.GetRectsFromVisualSegment(TextView, v, 0, 1000).ToArray();
-                var linenum = v.FirstDocumentLine.LineNumber - 1;
-                if (linenum >= Lines.Count) continue;
-
-                var diffLine = Lines[linenum];
-
-                FormattedText ft;
-
-                if (diffLine.Style != DiffContext.Context)
+                var brush = default(Brush);
+                switch (diffLine.Style)
                 {
-                    var brush = default(Brush);
-                    switch (diffLine.Style)
-                    {
-                        case DiffContext.Added:
-                            brush = AddedBackground;
-                            break;
-                        case DiffContext.Deleted:
-                            brush = DeletedBackground;
-                            break;
-                        case DiffContext.Blank:
-                            brush = BlankBackground;
-                            break;
-                    }
-
-                    foreach (var rc in rcs)
-                    {
-                        drawingContext.DrawRectangle(brush, BorderlessPen, new Rect(0, rc.Top, ActualWidth, rc.Height));
-                    }
+                    case DiffContext.Added:
+                        brush = AddedBackground;
+                        break;
+                    case DiffContext.Deleted:
+                        brush = DeletedBackground;
+                        break;
+                    case DiffContext.Blank:
+                        brush = BlankBackground;
+                        break;
                 }
 
-                if (diffLine.Text != "")
+                foreach (var rc in rcs)
                 {
-                    ft = new FormattedText(diffLine.LineNumber,
-                        CultureInfo.CurrentCulture, System.Windows.FlowDirection.LeftToRight,
-                        tf, fontSize, ForegroundBrush, VisualTreeHelper.GetDpi(this).PixelsPerDip);
-
-                    var left = TextHorizontalMargin;
-
-                    drawingContext.DrawText(ft, new Point(left, rcs[0].Top));
-                }
-
-                if (diffLine.PrefixForStyle != "")
-                {
-                    var prefix = diffLine.PrefixForStyle;
-                    ft = new FormattedText(prefix,
-                        CultureInfo.CurrentCulture, System.Windows.FlowDirection.LeftToRight,
-                        tf, fontSize, (Brush)TextView.GetValue(System.Windows.Controls.Control.ForegroundProperty), VisualTreeHelper.GetDpi(this).PixelsPerDip);
-
-                    drawingContext.DrawText(ft, new Point(lineNumberWidth + TextHorizontalMargin, rcs[0].Top));
+                    drawingContext.DrawRectangle(brush, BorderlessPen, new Rect(0, rc.Top, ActualWidth, rc.Height));
                 }
             }
-        }
 
-        public List<DiffLineViewModel> Lines { get; set; }
+            if (diffLine.Text != "")
+            {
+                ft = new FormattedText(diffLine.LineNumber,
+                    CultureInfo.CurrentCulture, System.Windows.FlowDirection.LeftToRight,
+                    tf, fontSize, ForegroundBrush, VisualTreeHelper.GetDpi(this).PixelsPerDip);
 
-        Typeface CreateTypeface()
-        {
-            var fe = TextView;
-            return new Typeface((FontFamily)fe.GetValue(TextBlock.FontFamilyProperty),
-                (FontStyle)fe.GetValue(TextBlock.FontStyleProperty),
-                (FontWeight)fe.GetValue(TextBlock.FontWeightProperty),
-                (FontStretch)fe.GetValue(TextBlock.FontStretchProperty));
+                var left = TextHorizontalMargin;
+
+                drawingContext.DrawText(ft, new Point(left, rcs[0].Top));
+            }
+
+            if (diffLine.PrefixForStyle != "")
+            {
+                var prefix = diffLine.PrefixForStyle;
+                ft = new FormattedText(prefix,
+                    CultureInfo.CurrentCulture, System.Windows.FlowDirection.LeftToRight,
+                    tf, fontSize, (Brush)TextView.GetValue(System.Windows.Controls.Control.ForegroundProperty), VisualTreeHelper.GetDpi(this).PixelsPerDip);
+
+                drawingContext.DrawText(ft, new Point(lineNumberWidth + TextHorizontalMargin, rcs[0].Top));
+            }
         }
+    }
+
+    public List<DiffLineViewModel> Lines { get; set; }
+
+    Typeface CreateTypeface()
+    {
+        var fe = TextView;
+        return new Typeface((FontFamily)fe.GetValue(TextBlock.FontFamilyProperty),
+            (FontStyle)fe.GetValue(TextBlock.FontStyleProperty),
+            (FontWeight)fe.GetValue(TextBlock.FontWeightProperty),
+            (FontStretch)fe.GetValue(TextBlock.FontStretchProperty));
     }
 }

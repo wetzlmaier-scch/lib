@@ -1,5 +1,5 @@
-﻿namespace Scch.Common.ComponentModel.DataAnnotations
-{
+﻿namespace Scch.Common.ComponentModel.DataAnnotations;
+
 	/// <summary>
 	/// Used to specify the sorting direction for a column in an index
 	/// </summary>
@@ -14,4 +14,3 @@
 		/// </summary>
 		Descending
 	}
-}

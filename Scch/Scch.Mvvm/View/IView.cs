@@ -1,13 +1,12 @@
-﻿namespace Scch.Mvvm.View
+﻿namespace Scch.Mvvm.View;
+
+/// <summary>
+/// Represents a view
+/// </summary>
+public interface IView
 {
     /// <summary>
-    /// Represents a view
+    /// Gets or sets the data context of the view.
     /// </summary>
-    public interface IView
-    {
-        /// <summary>
-        /// Gets or sets the data context of the view.
-        /// </summary>
-        object DataContext { get; set; }
-    }
+    object DataContext { get; set; }
 }

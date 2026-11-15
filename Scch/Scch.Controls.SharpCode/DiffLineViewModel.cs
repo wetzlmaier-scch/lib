@@ -1,44 +1,43 @@
 using System;
 
-namespace Scch.Controls.SharpCode
+namespace Scch.Controls.SharpCode;
+
+public class DiffLineViewModel
 {
-    public class DiffLineViewModel
+    public string Text { get; set; }
+    public DiffContext Style { get; set; }
+    public string LineNumber { get; set; }
+    public string PrefixForStyle { get; set; }
+
+    public static DiffLineViewModel Create(string lineNumber, string s)
     {
-        public string Text { get; set; }
-        public DiffContext Style { get; set; }
-        public string LineNumber { get; set; }
-        public string PrefixForStyle { get; set; }
+        var viewModel = new DiffLineViewModel();
+        viewModel.LineNumber = lineNumber;
 
-        public static DiffLineViewModel Create(string lineNumber, string s)
+        if (s.StartsWith("+"))
         {
-            var viewModel = new DiffLineViewModel();
-            viewModel.LineNumber = lineNumber;
-
-            if (s.StartsWith("+"))
-            {
-                viewModel.Style = DiffContext.Added;
-                viewModel.PrefixForStyle = "+";
-                viewModel.Text = s.Substring(1);
-            }
-            else if (s.StartsWith("-"))
-            {
-                viewModel.Style = DiffContext.Deleted;
-                viewModel.PrefixForStyle = "-";
-                viewModel.Text = s.Substring(1);
-            }
-            else
-            {
-                viewModel.Style = DiffContext.Context;
-                viewModel.PrefixForStyle = "";
-                viewModel.Text = s.Length > 1 ? s.Substring(1) : s; // lol hax
-            }
-
-            return viewModel;
+            viewModel.Style = DiffContext.Added;
+            viewModel.PrefixForStyle = "+";
+            viewModel.Text = s.Substring(1);
+        }
+        else if (s.StartsWith("-"))
+        {
+            viewModel.Style = DiffContext.Deleted;
+            viewModel.PrefixForStyle = "-";
+            viewModel.Text = s.Substring(1);
+        }
+        else
+        {
+            viewModel.Style = DiffContext.Context;
+            viewModel.PrefixForStyle = "";
+            viewModel.Text = s.Length > 1 ? s.Substring(1) : s; // lol hax
         }
 
-        public override string ToString()
-        {
-            return String.Format("{0}{1}", PrefixForStyle, Text);
-        }
+        return viewModel;
+    }
+
+    public override string ToString()
+    {
+        return String.Format("{0}{1}", PrefixForStyle, Text);
     }
 }

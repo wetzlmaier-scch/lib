@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Scch.DomainModel.EntityFramework
+namespace Scch.DomainModel.EntityFramework;
+
+public class ObjectStateChangingEventArgs : EventArgs
 {
-    public class ObjectStateChangingEventArgs : EventArgs
-    {
-        public ObjectState NewState { get; set; }
-    }
+    public ObjectState NewState { get; set; }
 }

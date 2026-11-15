@@ -4,69 +4,68 @@ using System.Threading;
 using System.Threading.Tasks;
 using Scch.Common.Threading;
 
-namespace Scch.Common
+namespace Scch.Common;
+
+public static class ConsoleApplication
 {
-    public static class ConsoleApplication
+    public delegate Task<int> MainAsyncMethod(string[] args, CancellationToken token);
+
+    public static BlockingConditionDelegate BlockingCondition { get; }
+
+    public static CancellationDelegate Cancellation { get; }
+
+    static ConsoleApplication()
     {
-        public delegate Task<int> MainAsyncMethod(string[] args, CancellationToken token);
-
-        public static BlockingConditionDelegate BlockingCondition { get; }
-
-        public static CancellationDelegate Cancellation { get; }
-
-        static ConsoleApplication()
+        BlockingCondition = () => Console.KeyAvailable;
+        Cancellation = () =>
         {
-            BlockingCondition = () => Console.KeyAvailable;
-            Cancellation = () =>
-            {
-                var key = Console.ReadKey(true).Key; // read next key, but discard
-                return key == ConsoleKey.Escape;
-            };
-        }
-        public static int MainAsync(MainAsyncMethod mainAsync, string[] args, CancellationTokenSource cts)
+            var key = Console.ReadKey(true).Key; // read next key, but discard
+            return key == ConsoleKey.Escape;
+        };
+    }
+    public static int MainAsync(MainAsyncMethod mainAsync, string[] args, CancellationTokenSource cts)
+    {
+        try
         {
-            try
-            {
-                var task = mainAsync(args, cts.Token);
+            var task = mainAsync(args, cts.Token);
 
-                task.Wait(cts.Token);
-                return task.Result;
-            }
-            catch (AggregateException ex)
-            {
-                throw ex.InnerException;
-            }
+            task.Wait(cts.Token);
+            return task.Result;
         }
-
-        public static int MainAsync(MainAsyncMethod mainAsync, string[] args)
+        catch (AggregateException ex)
         {
-            CancellationTokenSource cts = new CancellationTokenSource();
-
-            Console.CancelKeyPress += (s, e) =>
-            {
-                e.Cancel = true;
-                cts.Cancel();
-            };
-
-            return MainAsync(mainAsync, args, cts);
+            throw ex.InnerException;
         }
+    }
 
-        public static void Run(CancelableDelegate worker, int interval = 0)
+    public static int MainAsync(MainAsyncMethod mainAsync, string[] args)
+    {
+        CancellationTokenSource cts = new CancellationTokenSource();
+
+        Console.CancelKeyPress += (s, e) =>
         {
-            BatchOperation.Run(worker, BlockingCondition, Cancellation, interval);
-        }
+            e.Cancel = true;
+            cts.Cancel();
+        };
 
-        public static string[] ReadStdIn()
+        return MainAsync(mainAsync, args, cts);
+    }
+
+    public static void Run(CancelableDelegate worker, int interval = 0)
+    {
+        BatchOperation.Run(worker, BlockingCondition, Cancellation, interval);
+    }
+
+    public static string[] ReadStdIn()
+    {
+        string s;
+        var lines = new List<string>();
+
+        while ((s = Console.ReadLine()) != null)
         {
-            string s;
-            var lines = new List<string>();
-
-            while ((s = Console.ReadLine()) != null)
-            {
-                lines.Add(s);
-            }
-
-            return lines.ToArray();
+            lines.Add(s);
         }
+
+        return lines.ToArray();
     }
 }

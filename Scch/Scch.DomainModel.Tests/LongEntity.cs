@@ -1,8 +1,7 @@
 ﻿using Scch.DomainModel.EntityFramework;
 
-namespace Scch.DomainModel.Tests
+namespace Scch.DomainModel.Tests;
+
+public class LongEntity : EntityFrameworkEntity<long>
 {
-    public class LongEntity : EntityFrameworkEntity<long>
-    {
-    }
 }

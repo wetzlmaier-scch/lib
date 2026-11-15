@@ -1,18 +1,17 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace Scch.Mvvm.View
+namespace Scch.Mvvm.View;
+
+public interface IDialogView: IView
 {
-    public interface IDialogView: IView
-    {
-        bool? DialogResult { get; set; }
+    bool? DialogResult { get; set; }
 
-        event CancelEventHandler Closing;
+    event CancelEventHandler Closing;
 
-        event EventHandler Closed;
+    event EventHandler Closed;
 
-        void Show();
+    void Show();
 
-        void Close();
-    }
+    void Close();
 }

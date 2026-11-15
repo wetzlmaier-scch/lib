@@ -1,20 +1,19 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace Scch.Common.IO
+namespace Scch.Common.IO;
+
+public class EncodingStringWriter : StringWriter
 {
-    public class EncodingStringWriter : StringWriter
+    private readonly Encoding _encoding;
+
+    public EncodingStringWriter(StringBuilder builder, Encoding encoding) : base(builder)
     {
-        private readonly Encoding _encoding;
+        _encoding = encoding;
+    }
 
-        public EncodingStringWriter(StringBuilder builder, Encoding encoding) : base(builder)
-        {
-            _encoding = encoding;
-        }
-
-        public override Encoding Encoding
-        {
-            get { return _encoding; }
-        }
+    public override Encoding Encoding
+    {
+        get { return _encoding; }
     }
 }

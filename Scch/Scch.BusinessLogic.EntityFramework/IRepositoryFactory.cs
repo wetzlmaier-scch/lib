@@ -1,8 +1,7 @@
 ﻿using Scch.DataAccess.EntityFramework;
 
-namespace Scch.BusinessLogic.EntityFramework
+namespace Scch.BusinessLogic.EntityFramework;
+
+public interface IRepositoryFactory: IEntityFrameworkRepositoryFactory<long> 
 {
-    public interface IRepositoryFactory: IEntityFrameworkRepositoryFactory<long> 
-    {
-    }
 }

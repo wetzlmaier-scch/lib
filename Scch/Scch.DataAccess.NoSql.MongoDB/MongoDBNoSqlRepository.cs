@@ -10,199 +10,198 @@ using Scch.Common;
 using Scch.Common.Linq.Expressions;
 using Scch.DomainModel.NoSql;
 
-namespace Scch.DataAccess.NoSql.MongoDB
+namespace Scch.DataAccess.NoSql.MongoDB;
+
+public class MongoDBNoSqlRepository : Disposable, IMongoDBNoSqlRepository
 {
-    public class MongoDBNoSqlRepository : Disposable, IMongoDBNoSqlRepository
+    private readonly IMongoDatabase _database;
+
+    public MongoDBNoSqlRepository(IMongoDBContext context)
     {
-        private readonly IMongoDatabase _database;
+        _database = context.GetDatabase();
+    }
 
-        public MongoDBNoSqlRepository(IMongoDBContext context)
+    protected override void Dispose(bool disposing)
+    {
+        if (!IsDisposed && disposing)
         {
-            _database = context.GetDatabase();
+
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (!IsDisposed && disposing)
-            {
+        base.Dispose(disposing);
+    }
 
-            }
+    private IMongoCollection<TEntity> GetCollection<TEntity>()
+    {
+        return _database.GetCollection<TEntity>(typeof(TEntity).Name);
+    }
 
-            base.Dispose(disposing);
-        }
+    public IQueryable<TEntity> GetQueryable<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        return GetQueryable<TEntity>().Where(predicate);
+    }
 
-        private IMongoCollection<TEntity> GetCollection<TEntity>()
-        {
-            return _database.GetCollection<TEntity>(typeof(TEntity).Name);
-        }
+    public IQueryable<TEntity> GetQueryable<TEntity>() where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        return GetCollection<TEntity>().AsQueryable();
+    }
 
-        public IQueryable<TEntity> GetQueryable<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            return GetQueryable<TEntity>().Where(predicate);
-        }
+    public TEntity Single<TEntity>(Expression<Func<TEntity, bool>> criteria) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        return GetQueryable(criteria).Single();
+    }
 
-        public IQueryable<TEntity> GetQueryable<TEntity>() where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            return GetCollection<TEntity>().AsQueryable();
-        }
+    public TEntity SingleOrDefault<TEntity>(Expression<Func<TEntity, bool>> criteria) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        return GetQueryable(criteria).SingleOrDefault();
+    }
 
-        public TEntity Single<TEntity>(Expression<Func<TEntity, bool>> criteria) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            return GetQueryable(criteria).Single();
-        }
+    public TEntity First<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        return GetQueryable(predicate).First();
+    }
 
-        public TEntity SingleOrDefault<TEntity>(Expression<Func<TEntity, bool>> criteria) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            return GetQueryable(criteria).SingleOrDefault();
-        }
+    public void Delete<TEntity>(TEntity entity) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        Delete<TEntity>(e => e.Id == entity.Id);
+    }
 
-        public TEntity First<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            return GetQueryable(predicate).First();
-        }
+    public void Delete<TEntity>(Expression<Func<TEntity, bool>> criteria) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        var collection = GetCollection<TEntity>();
+        var filter = Builders<TEntity>.Filter.Where(criteria);
+        collection.DeleteMany(filter);
+    }
 
-        public void Delete<TEntity>(TEntity entity) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            Delete<TEntity>(e => e.Id == entity.Id);
-        }
+    public IEnumerable<TEntity> Find<TEntity>(Expression<Func<TEntity, bool>> criteria) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        return GetQueryable(criteria);
+    }
 
-        public void Delete<TEntity>(Expression<Func<TEntity, bool>> criteria) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            var collection = GetCollection<TEntity>();
-            var filter = Builders<TEntity>.Filter.Where(criteria);
-            collection.DeleteMany(filter);
-        }
+    public TEntity FindOne<TEntity>(Expression<Func<TEntity, bool>> criteria) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        return Find(criteria).FirstOrDefault();
+    }
 
-        public IEnumerable<TEntity> Find<TEntity>(Expression<Func<TEntity, bool>> criteria) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            return GetQueryable(criteria);
-        }
+    public IEnumerable<TEntity> GetAll<TEntity>() where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        return GetCollection<TEntity>().AsQueryable().AsEnumerable();
+    }
 
-        public TEntity FindOne<TEntity>(Expression<Func<TEntity, bool>> criteria) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            return Find(criteria).FirstOrDefault();
-        }
+    public IEnumerable<TEntity> Get<TEntity, TOrderBy>(Expression<Func<TEntity, TOrderBy>> orderBy, int pageIndex, int pageSize, SortOrder sortOrder = SortOrder.Ascending) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        throw new NotImplementedException();
+    }
 
-        public IEnumerable<TEntity> GetAll<TEntity>() where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            return GetCollection<TEntity>().AsQueryable().AsEnumerable();
-        }
+    public IEnumerable<TEntity> Get<TEntity, TOrderBy>(Expression<Func<TEntity, bool>> criteria, Expression<Func<TEntity, TOrderBy>> orderBy, int pageIndex, int pageSize,
+        SortOrder sortOrder = SortOrder.Ascending) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        throw new NotImplementedException();
+    }
 
-        public IEnumerable<TEntity> Get<TEntity, TOrderBy>(Expression<Func<TEntity, TOrderBy>> orderBy, int pageIndex, int pageSize, SortOrder sortOrder = SortOrder.Ascending) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            throw new NotImplementedException();
-        }
+    public long Count<TEntity>() where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        return GetCollection<TEntity>().CountDocuments(_ => true);
+    }
 
-        public IEnumerable<TEntity> Get<TEntity, TOrderBy>(Expression<Func<TEntity, bool>> criteria, Expression<Func<TEntity, TOrderBy>> orderBy, int pageIndex, int pageSize,
-            SortOrder sortOrder = SortOrder.Ascending) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            throw new NotImplementedException();
-        }
+    public long Count<TEntity>(Expression<Func<TEntity, bool>> criteria) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        return GetCollection<TEntity>().CountDocuments(Builders<TEntity>.Filter.Where(criteria));
+    }
 
-        public long Count<TEntity>() where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            return GetCollection<TEntity>().CountDocuments(_ => true);
-        }
+    public IQueryable<TEntity> FilterDeleted<TEntity>(IQueryable<TEntity> entities)
+    {
+        throw new NotImplementedException();
+    }
 
-        public long Count<TEntity>(Expression<Func<TEntity, bool>> criteria) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            return GetCollection<TEntity>().CountDocuments(Builders<TEntity>.Filter.Where(criteria));
-        }
+    public void DeleteAll<TEntity>() where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        GetCollection<TEntity>().DeleteMany(_ => true);
 
-        public IQueryable<TEntity> FilterDeleted<TEntity>(IQueryable<TEntity> entities)
-        {
-            throw new NotImplementedException();
-        }
+        var directory = Path.Combine("Xml", typeof(TEntity).Name);
+        if (Directory.Exists(directory))
+            Directory.Delete(directory, true);
+    }
 
-        public void DeleteAll<TEntity>() where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            GetCollection<TEntity>().DeleteMany(_ => true);
+    public TEntity Insert<TEntity>(TEntity entity) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        GetCollection<TEntity>().InsertOne(entity);
+        return entity;
+    }
 
-            var directory = Path.Combine("Xml", typeof(TEntity).Name);
-            if (Directory.Exists(directory))
-                Directory.Delete(directory, true);
-        }
+    public void InsertBatch<TEntity>(IEnumerable<TEntity> entities) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        GetCollection<TEntity>().InsertMany(entities);
+    }
 
-        public TEntity Insert<TEntity>(TEntity entity) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            GetCollection<TEntity>().InsertOne(entity);
-            return entity;
-        }
+    public TEntity Save<TEntity>(TEntity entity) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        var collection = GetCollection<TEntity>();
+        var filter = Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
+        collection.ReplaceOne(filter, entity, new ReplaceOptions { IsUpsert = true });
+        return entity;
+    }
 
-        public void InsertBatch<TEntity>(IEnumerable<TEntity> entities) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            GetCollection<TEntity>().InsertMany(entities);
-        }
+    private void AddToCollection<TEntity, TValue>(TEntity entity, Expression<Func<TEntity, IEnumerable<TValue>>> expression, IEnumerable<TValue> values)
+        where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        var propertyValue = ExpressionHelper.GetPropertyValue(expression, entity) as ICollection<TValue>;
 
-        public TEntity Save<TEntity>(TEntity entity) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            var collection = GetCollection<TEntity>();
-            var filter = Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
-            collection.ReplaceOne(filter, entity, new ReplaceOptions { IsUpsert = true });
-            return entity;
-        }
+        if (propertyValue != null)
+            foreach (var value in values)
+                propertyValue.Add(value);
+    }
 
-        private void AddToCollection<TEntity, TValue>(TEntity entity, Expression<Func<TEntity, IEnumerable<TValue>>> expression, IEnumerable<TValue> values)
-            where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            var propertyValue = ExpressionHelper.GetPropertyValue(expression, entity) as ICollection<TValue>;
+    private void RemoveFromCollection<TEntity, TValue>(TEntity entity, Expression<Func<TEntity, IEnumerable<TValue>>> expression, IEnumerable<TValue> values)
+        where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        var propertyValue = ExpressionHelper.GetPropertyValue(expression, entity) as ICollection<TValue>;
 
-            if (propertyValue != null)
-                foreach (var value in values)
-                    propertyValue.Add(value);
-        }
+        if (propertyValue != null)
+            foreach (var value in values)
+                propertyValue.Remove(value);
+    }
 
-        private void RemoveFromCollection<TEntity, TValue>(TEntity entity, Expression<Func<TEntity, IEnumerable<TValue>>> expression, IEnumerable<TValue> values)
-            where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            var propertyValue = ExpressionHelper.GetPropertyValue(expression, entity) as ICollection<TValue>;
+    public void UpdatePush<TEntity, TValue>(TEntity entity, Expression<Func<TEntity, IEnumerable<TValue>>> expression, params TValue[] values) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        if (entity.IsTransient)
+            throw new NoSqlException("Entity is transient.");
 
-            if (propertyValue != null)
-                foreach (var value in values)
-                    propertyValue.Remove(value);
-        }
+        var collection = GetCollection<TEntity>();
+        var filter = Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
+        var update = Builders<TEntity>.Update.PushEach(expression, values);
+        collection.UpdateOne(filter, update);
+    }
 
-        public void UpdatePush<TEntity, TValue>(TEntity entity, Expression<Func<TEntity, IEnumerable<TValue>>> expression, params TValue[] values) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            if (entity.IsTransient)
-                throw new NoSqlException("Entity is transient.");
+    public void UpdatePull<TEntity, TValue>(TEntity entity, Expression<Func<TEntity, IEnumerable<TValue>>> expression, params TValue[] values) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        if (entity.IsTransient)
+            throw new NoSqlException("Entity is transient.");
 
-            var collection = GetCollection<TEntity>();
-            var filter = Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
-            var update = Builders<TEntity>.Update.PushEach(expression, values);
-            collection.UpdateOne(filter, update);
-        }
+        var collection = GetCollection<TEntity>();
+        var filter = Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
+        var update = Builders<TEntity>.Update.PullAll(expression, values);
+        collection.UpdateOne(filter, update);
+    }
 
-        public void UpdatePull<TEntity, TValue>(TEntity entity, Expression<Func<TEntity, IEnumerable<TValue>>> expression, params TValue[] values) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            if (entity.IsTransient)
-                throw new NoSqlException("Entity is transient.");
+    public void AddToSet<TEntity, TValue>(TEntity entity, Expression<Func<TEntity, IEnumerable<TValue>>> expression, TValue value) where TEntity : class, INoSqlEntity<ObjectId>
+    {
+        if (entity.IsTransient)
+            throw new NoSqlException("Entity is transient.");
 
-            var collection = GetCollection<TEntity>();
-            var filter = Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
-            var update = Builders<TEntity>.Update.PullAll(expression, values);
-            collection.UpdateOne(filter, update);
-        }
+        var collection = GetCollection<TEntity>();
+        var filter = Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
+        var update = Builders<TEntity>.Update.AddToSet(expression, value);
+        collection.UpdateOne(filter, update);
+    }
 
-        public void AddToSet<TEntity, TValue>(TEntity entity, Expression<Func<TEntity, IEnumerable<TValue>>> expression, TValue value) where TEntity : class, INoSqlEntity<ObjectId>
-        {
-            if (entity.IsTransient)
-                throw new NoSqlException("Entity is transient.");
+    public void DropDatabase()
+    {
+        throw new NotImplementedException();
+    }
 
-            var collection = GetCollection<TEntity>();
-            var filter = Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
-            var update = Builders<TEntity>.Update.AddToSet(expression, value);
-            collection.UpdateOne(filter, update);
-        }
-
-        public void DropDatabase()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DropCollection<TEntity>()
-        {
-            _database.DropCollection(typeof(TEntity).Name);
-        }
+    public void DropCollection<TEntity>()
+    {
+        _database.DropCollection(typeof(TEntity).Name);
     }
 }

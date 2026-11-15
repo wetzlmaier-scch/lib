@@ -1,19 +1,18 @@
 ﻿using System.Windows.Media;
 
-namespace Scch.Mvvm.ViewModel
+namespace Scch.Mvvm.ViewModel;
+
+/// <summary>
+/// Interface extension for <see cref="IViewModel"/> for the main view.
+/// </summary>
+public interface IMainViewModel : IViewModel
 {
     /// <summary>
-    /// Interface extension for <see cref="IViewModel"/> for the main view.
+    /// Gets the Icon for the main window.
     /// </summary>
-    public interface IMainViewModel : IViewModel
-    {
-        /// <summary>
-        /// Gets the Icon for the main window.
-        /// </summary>
-        ImageSource Icon { get; }
+    ImageSource Icon { get; }
 
-        void CloseWindow();
+    void CloseWindow();
 
-        void Shutdown(int exitCode);
-    }
+    void Shutdown(int exitCode);
 }

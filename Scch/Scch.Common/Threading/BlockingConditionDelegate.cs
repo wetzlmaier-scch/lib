@@ -1,4 +1,3 @@
-﻿namespace Scch.Common.Threading
-{
-    public delegate bool BlockingConditionDelegate();
-}
+﻿namespace Scch.Common.Threading;
+
+public delegate bool BlockingConditionDelegate();

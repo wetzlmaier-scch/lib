@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Scch.DomainModel.NoSql.ElasticSearch
+namespace Scch.DomainModel.NoSql.ElasticSearch;
+
+public class ElasticSearchEntity : NoSqlEntity<Guid>, IElasticSearchEntity
 {
-    public class ElasticSearchEntity : NoSqlEntity<Guid>, IElasticSearchEntity
-    {
-        public override bool IsTransient => Id == Guid.Empty;
-    }
+    public override bool IsTransient => Id == Guid.Empty;
 }

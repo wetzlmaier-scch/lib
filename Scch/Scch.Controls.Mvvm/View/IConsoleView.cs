@@ -1,8 +1,7 @@
 ﻿using Scch.Mvvm.View;
 
-namespace Scch.Controls.Mvvm.View
+namespace Scch.Controls.Mvvm.View;
+
+public interface IConsoleView : IMainView
 {
-    public interface IConsoleView : IMainView
-    {
-    }
 }

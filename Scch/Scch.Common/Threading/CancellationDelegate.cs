@@ -1,4 +1,3 @@
-﻿namespace Scch.Common.Threading
-{
-    public delegate bool CancellationDelegate();
-}
+﻿namespace Scch.Common.Threading;
+
+public delegate bool CancellationDelegate();

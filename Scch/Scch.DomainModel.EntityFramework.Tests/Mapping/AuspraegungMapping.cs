@@ -1,10 +1,9 @@
-﻿namespace Scch.DomainModel.EntityFramework.Tests.Mapping
+﻿namespace Scch.DomainModel.EntityFramework.Tests.Mapping;
+
+public class AuspraegungMapping : EntityWithBezeichnungMapping<Auspraegung>
 {
-    public class AuspraegungMapping : EntityWithBezeichnungMapping<Auspraegung>
+    public AuspraegungMapping()
     {
-        public AuspraegungMapping()
-        {
-            HasRequired(x => x.Produktmerkmal).WithMany();
-        }
+        HasRequired(x => x.Produktmerkmal).WithMany();
     }
 }

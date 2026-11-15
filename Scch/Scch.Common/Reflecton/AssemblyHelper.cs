@@ -4,191 +4,190 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace Scch.Common.Reflecton
+namespace Scch.Common.Reflecton;
+
+/// <summary>
+/// Helper functions for <see cref="Assembly"/>.
+/// </summary>
+public static class AssemblyHelper
 {
     /// <summary>
-    /// Helper functions for <see cref="Assembly"/>.
+    /// File extensions for assemblies.
     /// </summary>
-    public static class AssemblyHelper
+    public static readonly string[] Extensions = { "dll", "exe" };
+
+    /// <summary>
+    /// Returns the file name of the specified assembly.
+    /// </summary>
+    /// <param name="assembly">The assembly.</param>
+    /// <returns>The file name of the specified assembly.</returns>
+    public static string GetAssemblyFileName(Assembly assembly)
     {
-        /// <summary>
-        /// File extensions for assemblies.
-        /// </summary>
-        public static readonly string[] Extensions = { "dll", "exe" };
+        return assembly.Location;
+    }
 
-        /// <summary>
-        /// Returns the file name of the specified assembly.
-        /// </summary>
-        /// <param name="assembly">The assembly.</param>
-        /// <returns>The file name of the specified assembly.</returns>
-        public static string GetAssemblyFileName(Assembly assembly)
+    public static string GetApplicationDirectory()
+    {
+        return new FileInfo(GetAssemblyFileName(Assembly.GetExecutingAssembly())).DirectoryName;
+    }
+
+    /// <summary>
+    /// Returns the extension of the assembly file.
+    /// </summary>
+    /// <param name="assembly">The assembly.</param>
+    /// <returns>The extension of the assembly file.</returns>
+    public static string GetAssemblyFileExtension(Assembly assembly)
+    {
+        return new FileInfo(GetAssemblyFileName(assembly)).Extension;
+    }
+
+    /// <summary>
+    /// Loads the application icon.
+    /// </summary>
+    /// <returns>The application icon.</returns>
+    public static Icon LoadApplicationIcon()
+    {
+        Assembly assembly = Assembly.GetEntryAssembly();
+        if (assembly == null)
+            return null;
+        using (Stream stream = assembly.GetManifestResourceStream(assembly.GetName().Name + ".App.ico"))
         {
-            return assembly.Location;
+            return stream == null ? null : new Icon(stream);
         }
+    }
 
-        public static string GetApplicationDirectory()
-        {
-            return new FileInfo(GetAssemblyFileName(Assembly.GetExecutingAssembly())).DirectoryName;
-        }
+    /// <summary>
+    /// Returns the information from the <see cref="AssemblyCompanyAttribute"/>.
+    /// </summary>
+    /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
+    /// <returns>The information from the <see cref="AssemblyCompanyAttribute"/>.</returns>
+    public static string GetAssemblyCompany(Assembly assembly)
+    {
+        var attribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCompanyAttribute));
+        return attribute != null ? attribute.Company : string.Empty;
+    }
 
-        /// <summary>
-        /// Returns the extension of the assembly file.
-        /// </summary>
-        /// <param name="assembly">The assembly.</param>
-        /// <returns>The extension of the assembly file.</returns>
-        public static string GetAssemblyFileExtension(Assembly assembly)
-        {
-            return new FileInfo(GetAssemblyFileName(assembly)).Extension;
-        }
+    /// <summary>
+    /// Returns the information from the <see cref="AssemblyProductAttribute"/>.
+    /// </summary>
+    /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
+    /// <returns>The information from the <see cref="AssemblyProductAttribute"/>.</returns>
+    public static string GetAssemblyProduct(Assembly assembly)
+    {
+        var attribute = (AssemblyProductAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyProductAttribute));
+        return attribute != null ? attribute.Product : string.Empty;
+    }
 
-        /// <summary>
-        /// Loads the application icon.
-        /// </summary>
-        /// <returns>The application icon.</returns>
-        public static Icon LoadApplicationIcon()
+    /// <summary>
+    /// Returns the information from the <see cref="AssemblyCopyrightAttribute"/>.
+    /// </summary>
+    /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
+    /// <returns>The information from the <see cref="AssemblyCopyrightAttribute"/>.</returns>
+    public static string GetAssemblyCopyright(Assembly assembly)
+    {
+        var attribute = (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCopyrightAttribute));
+        return attribute != null ? attribute.Copyright : string.Empty;
+    }
+
+    /// <summary>
+    /// Returns the information from the <see cref="AssemblyTrademarkAttribute"/>.
+    /// </summary>
+    /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
+    /// <returns>The information from the <see cref="AssemblyTrademarkAttribute"/>.</returns>
+    public static string GetAssemblyTrademark(Assembly assembly)
+    {
+        var attribute = (AssemblyTrademarkAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyTrademarkAttribute));
+        return attribute != null ? attribute.Trademark : string.Empty;
+    }
+
+    /// <summary>
+    /// Returns the information from the <see cref="AssemblyCultureAttribute"/>.
+    /// </summary>
+    /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
+    /// <returns>The information from the <see cref="AssemblyCultureAttribute"/>.</returns>
+    public static string GetAssemblyCulture(Assembly assembly)
+    {
+        var attribute = (AssemblyCultureAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCultureAttribute));
+        return attribute != null ? attribute.Culture : string.Empty;
+    }
+
+    /// <summary>
+    /// Returns the information from the <see cref="AssemblyVersionAttribute"/>.
+    /// </summary>
+    /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
+    /// <returns>The information from the <see cref="AssemblyVersionAttribute"/>.</returns>
+    public static string GetAssemblyVersion(Assembly assembly)
+    {
+        var attribute = (AssemblyVersionAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyVersionAttribute));
+        return attribute != null ? attribute.Version : string.Empty;
+    }
+
+    /// <summary>
+    /// Returns the information from the <see cref="AssemblyFileVersionAttribute"/>.
+    /// </summary>
+    /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
+    /// <returns>The information from the <see cref="AssemblyFileVersionAttribute"/>.</returns>
+    public static string GetAssemblyFileVersion(Assembly assembly)
+    {
+        var attribute = (AssemblyFileVersionAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyFileVersionAttribute));
+        return attribute != null ? attribute.Version : string.Empty;
+    }
+
+    /// <summary>
+    /// Returns the public key token of an <see cref="Assembly"/>.
+    /// </summary>
+    /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
+    /// <returns>The public key token of an <see cref="Assembly"/>.</returns>
+    public static string GetPublicKeyToken(Assembly assembly)
+    {
+        var result=new StringBuilder();
+        var pk = assembly.GetName().GetPublicKey();
+        for (int i = 0; i < pk.GetLength(0); i++)
+            result.AppendFormat("{0:x2}", pk[i]);
+        return result.ToString();
+    }
+
+    public static string GetProcessorArchitecture(Assembly assembly)
+    {
+        // AssemblyName.ProcessorArchitecture is no longer populated on .NET, so derive it from the PE header
+        // the same way the .NET Framework did.
+        PortableExecutableKinds peKind;
+        ImageFileMachine machine;
+        assembly.ManifestModule.GetPEKind(out peKind, out machine);
+
+        return GetProcessorArchitecture(peKind, machine).ToString();
+    }
+
+    private static ProcessorArchitecture GetProcessorArchitecture(PortableExecutableKinds peKind, ImageFileMachine machine)
+    {
+        if ((peKind & PortableExecutableKinds.PE32Plus) == PortableExecutableKinds.PE32Plus)
         {
-            Assembly assembly = Assembly.GetEntryAssembly();
-            if (assembly == null)
-                return null;
-            using (Stream stream = assembly.GetManifestResourceStream(assembly.GetName().Name + ".App.ico"))
+            switch (machine)
             {
-                return stream == null ? null : new Icon(stream);
+                case ImageFileMachine.IA64:
+                    return ProcessorArchitecture.IA64;
+                case ImageFileMachine.AMD64:
+                    return ProcessorArchitecture.Amd64;
+                case ImageFileMachine.I386:
+                    if ((peKind & PortableExecutableKinds.ILOnly) == PortableExecutableKinds.ILOnly)
+                        return ProcessorArchitecture.MSIL;
+                    break;
             }
         }
-
-        /// <summary>
-        /// Returns the information from the <see cref="AssemblyCompanyAttribute"/>.
-        /// </summary>
-        /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
-        /// <returns>The information from the <see cref="AssemblyCompanyAttribute"/>.</returns>
-        public static string GetAssemblyCompany(Assembly assembly)
+        else if (machine == ImageFileMachine.I386)
         {
-            var attribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCompanyAttribute));
-            return attribute != null ? attribute.Company : string.Empty;
+            if ((peKind & PortableExecutableKinds.Required32Bit) == PortableExecutableKinds.Required32Bit)
+                return ProcessorArchitecture.X86;
+
+            return (peKind & PortableExecutableKinds.ILOnly) == PortableExecutableKinds.ILOnly
+                ? ProcessorArchitecture.MSIL
+                : ProcessorArchitecture.X86;
+        }
+        else if (machine == ImageFileMachine.ARM)
+        {
+            return ProcessorArchitecture.Arm;
         }
 
-        /// <summary>
-        /// Returns the information from the <see cref="AssemblyProductAttribute"/>.
-        /// </summary>
-        /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
-        /// <returns>The information from the <see cref="AssemblyProductAttribute"/>.</returns>
-        public static string GetAssemblyProduct(Assembly assembly)
-        {
-            var attribute = (AssemblyProductAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyProductAttribute));
-            return attribute != null ? attribute.Product : string.Empty;
-        }
-
-        /// <summary>
-        /// Returns the information from the <see cref="AssemblyCopyrightAttribute"/>.
-        /// </summary>
-        /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
-        /// <returns>The information from the <see cref="AssemblyCopyrightAttribute"/>.</returns>
-        public static string GetAssemblyCopyright(Assembly assembly)
-        {
-            var attribute = (AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCopyrightAttribute));
-            return attribute != null ? attribute.Copyright : string.Empty;
-        }
-
-        /// <summary>
-        /// Returns the information from the <see cref="AssemblyTrademarkAttribute"/>.
-        /// </summary>
-        /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
-        /// <returns>The information from the <see cref="AssemblyTrademarkAttribute"/>.</returns>
-        public static string GetAssemblyTrademark(Assembly assembly)
-        {
-            var attribute = (AssemblyTrademarkAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyTrademarkAttribute));
-            return attribute != null ? attribute.Trademark : string.Empty;
-        }
-
-        /// <summary>
-        /// Returns the information from the <see cref="AssemblyCultureAttribute"/>.
-        /// </summary>
-        /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
-        /// <returns>The information from the <see cref="AssemblyCultureAttribute"/>.</returns>
-        public static string GetAssemblyCulture(Assembly assembly)
-        {
-            var attribute = (AssemblyCultureAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCultureAttribute));
-            return attribute != null ? attribute.Culture : string.Empty;
-        }
-
-        /// <summary>
-        /// Returns the information from the <see cref="AssemblyVersionAttribute"/>.
-        /// </summary>
-        /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
-        /// <returns>The information from the <see cref="AssemblyVersionAttribute"/>.</returns>
-        public static string GetAssemblyVersion(Assembly assembly)
-        {
-            var attribute = (AssemblyVersionAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyVersionAttribute));
-            return attribute != null ? attribute.Version : string.Empty;
-        }
-
-        /// <summary>
-        /// Returns the information from the <see cref="AssemblyFileVersionAttribute"/>.
-        /// </summary>
-        /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
-        /// <returns>The information from the <see cref="AssemblyFileVersionAttribute"/>.</returns>
-        public static string GetAssemblyFileVersion(Assembly assembly)
-        {
-            var attribute = (AssemblyFileVersionAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyFileVersionAttribute));
-            return attribute != null ? attribute.Version : string.Empty;
-        }
-
-        /// <summary>
-        /// Returns the public key token of an <see cref="Assembly"/>.
-        /// </summary>
-        /// <param name="assembly">The <see cref="Assembly"/> to get the information from.</param>
-        /// <returns>The public key token of an <see cref="Assembly"/>.</returns>
-        public static string GetPublicKeyToken(Assembly assembly)
-        {
-            var result=new StringBuilder();
-            var pk = assembly.GetName().GetPublicKey();
-            for (int i = 0; i < pk.GetLength(0); i++)
-                result.AppendFormat("{0:x2}", pk[i]);
-            return result.ToString();
-        }
-
-        public static string GetProcessorArchitecture(Assembly assembly)
-        {
-            // AssemblyName.ProcessorArchitecture is no longer populated on .NET, so derive it from the PE header
-            // the same way the .NET Framework did.
-            PortableExecutableKinds peKind;
-            ImageFileMachine machine;
-            assembly.ManifestModule.GetPEKind(out peKind, out machine);
-
-            return GetProcessorArchitecture(peKind, machine).ToString();
-        }
-
-        private static ProcessorArchitecture GetProcessorArchitecture(PortableExecutableKinds peKind, ImageFileMachine machine)
-        {
-            if ((peKind & PortableExecutableKinds.PE32Plus) == PortableExecutableKinds.PE32Plus)
-            {
-                switch (machine)
-                {
-                    case ImageFileMachine.IA64:
-                        return ProcessorArchitecture.IA64;
-                    case ImageFileMachine.AMD64:
-                        return ProcessorArchitecture.Amd64;
-                    case ImageFileMachine.I386:
-                        if ((peKind & PortableExecutableKinds.ILOnly) == PortableExecutableKinds.ILOnly)
-                            return ProcessorArchitecture.MSIL;
-                        break;
-                }
-            }
-            else if (machine == ImageFileMachine.I386)
-            {
-                if ((peKind & PortableExecutableKinds.Required32Bit) == PortableExecutableKinds.Required32Bit)
-                    return ProcessorArchitecture.X86;
-
-                return (peKind & PortableExecutableKinds.ILOnly) == PortableExecutableKinds.ILOnly
-                    ? ProcessorArchitecture.MSIL
-                    : ProcessorArchitecture.X86;
-            }
-            else if (machine == ImageFileMachine.ARM)
-            {
-                return ProcessorArchitecture.Arm;
-            }
-
-            return ProcessorArchitecture.None;
-        }
+        return ProcessorArchitecture.None;
     }
 }

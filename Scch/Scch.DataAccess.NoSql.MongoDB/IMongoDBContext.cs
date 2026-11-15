@@ -1,9 +1,8 @@
 ﻿using MongoDB.Driver;
 
-namespace Scch.DataAccess.NoSql.MongoDB
+namespace Scch.DataAccess.NoSql.MongoDB;
+
+public interface IMongoDBContext
 {
-    public interface IMongoDBContext
-    {
-        IMongoDatabase GetDatabase();
-    }
+    IMongoDatabase GetDatabase();
 }

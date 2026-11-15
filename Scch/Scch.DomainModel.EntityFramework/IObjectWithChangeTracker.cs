@@ -1,10 +1,9 @@
-﻿namespace Scch.DomainModel.EntityFramework
+﻿namespace Scch.DomainModel.EntityFramework;
+
+public interface IObjectWithChangeTracker
 {
-    public interface IObjectWithChangeTracker
-    {
-        /// <summary>
-        /// Has all the change tracking information for the subgraph of a given object.
-        /// </summary>
-        ObjectChangeTracker ChangeTracker { get; }
-    }
+    /// <summary>
+    /// Has all the change tracking information for the subgraph of a given object.
+    /// </summary>
+    ObjectChangeTracker ChangeTracker { get; }
 }

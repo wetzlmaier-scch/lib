@@ -1,9 +1,8 @@
 ﻿using System.Drawing;
 
-namespace Scch.Common.Drawing
+namespace Scch.Common.Drawing;
+
+public interface IImageProvider
 {
-    public interface IImageProvider
-    {
-        Image Image { get; }
-    }
+    Image Image { get; }
 }

@@ -1,7 +1,6 @@
-﻿namespace Scch.DomainModel.EntityFramework
+﻿namespace Scch.DomainModel.EntityFramework;
+
+public interface IEntityFrameworkModelResolver
 {
-    public interface IEntityFrameworkModelResolver
-    {
-        string ResolveAssembly();
-    }
+    string ResolveAssembly();
 }

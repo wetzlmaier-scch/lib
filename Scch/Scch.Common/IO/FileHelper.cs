@@ -1,97 +1,96 @@
 ﻿using System.IO;
 
-namespace Scch.Common.IO
+namespace Scch.Common.IO;
+
+public static class FileHelper
 {
-    public static class FileHelper
+    private static readonly string[] _imageFileTypes;
+    private static readonly string[] _assemblyFileTypes;
+    private static readonly string _dllFileType;
+    private static readonly string _exeFileType;
+    private static readonly string[] _executableFileTypes;
+
+    static FileHelper()
     {
-        private static readonly string[] _imageFileTypes;
-        private static readonly string[] _assemblyFileTypes;
-        private static readonly string _dllFileType;
-        private static readonly string _exeFileType;
-        private static readonly string[] _executableFileTypes;
+        _dllFileType = ".dll";
+        _exeFileType = ".exe";
+        _imageFileTypes = new[] { ".jpg", ".bmp", "jpeg", "png", "gif" };
+        _assemblyFileTypes = new[] { _dllFileType, _exeFileType };
+        _executableFileTypes = new[] { _exeFileType, ".bat", ".com" };
+    }
 
-        static FileHelper()
+    public static string[] ImageFileTypes
+    {
+        get
         {
-            _dllFileType = ".dll";
-            _exeFileType = ".exe";
-            _imageFileTypes = new[] { ".jpg", ".bmp", "jpeg", "png", "gif" };
-            _assemblyFileTypes = new[] { _dllFileType, _exeFileType };
-            _executableFileTypes = new[] { _exeFileType, ".bat", ".com" };
+            return _imageFileTypes;
         }
+    }
 
-        public static string[] ImageFileTypes
+    public static string[] AssemblyFileTypes
+    {
+        get
         {
-            get
-            {
-                return _imageFileTypes;
-            }
+            return _assemblyFileTypes;
         }
+    }
 
-        public static string[] AssemblyFileTypes
+    public static string[] ExecutableFileTypes
+    {
+        get
         {
-            get
-            {
-                return _assemblyFileTypes;
-            }
+            return _executableFileTypes;
         }
+    }
 
-        public static string[] ExecutableFileTypes
+    public static string DllFileType
+    {
+        get
         {
-            get
-            {
-                return _executableFileTypes;
-            }
+            return _dllFileType;
         }
+    }
 
-        public static string DllFileType
+    public static string ExeFileType
+    {
+        get
         {
-            get
-            {
-                return _dllFileType;
-            }
+            return _exeFileType;
         }
+    }
 
-        public static string ExeFileType
+    public static void CreateBackup(string filename)
+    {
+        if (!File.Exists(filename))
+            return;
+
+        var bakfile = Path.ChangeExtension(filename, ".bak");
+        if (File.Exists(bakfile))
+            File.Delete(bakfile);
+
+        File.Move(filename, bakfile);
+    }
+
+    public static void DeleteFile(string directory, string fileName)
+    {
+        new FileInfo(Path.Combine(directory, fileName)).Delete();
+    }
+
+    public static void DeleteFiles(string directory, string wildcard="*.*")
+    {
+        foreach (FileInfo info in new DirectoryInfo(directory).GetFiles(wildcard))
         {
-            get
-            {
-                return _exeFileType;
-            }
+            info.Delete();
         }
+    }
 
-        public static void CreateBackup(string filename)
-        {
-            if (!File.Exists(filename))
-                return;
+    public static string FileNameWithoutExtension(string fileName)
+    {
+        return FileNameWithoutExtension(new FileInfo(fileName));
+    }
 
-            var bakfile = Path.ChangeExtension(filename, ".bak");
-            if (File.Exists(bakfile))
-                File.Delete(bakfile);
-
-            File.Move(filename, bakfile);
-        }
-
-        public static void DeleteFile(string directory, string fileName)
-        {
-            new FileInfo(Path.Combine(directory, fileName)).Delete();
-        }
-
-        public static void DeleteFiles(string directory, string wildcard="*.*")
-        {
-            foreach (FileInfo info in new DirectoryInfo(directory).GetFiles(wildcard))
-            {
-                info.Delete();
-            }
-        }
-
-        public static string FileNameWithoutExtension(string fileName)
-        {
-            return FileNameWithoutExtension(new FileInfo(fileName));
-        }
-
-        private static string FileNameWithoutExtension(FileInfo fileInfo)
-        {
-            return fileInfo.Name.Substring(0, fileInfo.Name.Length - fileInfo.Extension.Length);
-        }
+    private static string FileNameWithoutExtension(FileInfo fileInfo)
+    {
+        return fileInfo.Name.Substring(0, fileInfo.Name.Length - fileInfo.Extension.Length);
     }
 }

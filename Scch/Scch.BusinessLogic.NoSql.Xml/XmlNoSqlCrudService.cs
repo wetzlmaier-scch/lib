@@ -3,35 +3,34 @@ using Scch.DataAccess.NoSql.Xml;
 using Scch.DomainModel.NoSql;
 using Scch.Logging;
 
-namespace Scch.BusinessLogic.NoSql.Xml
+namespace Scch.BusinessLogic.NoSql.Xml;
+
+public abstract class XmlNoSqlCrudService<TEntity> : NoSqlCrudService<Guid, TEntity>, IXmlNoSqlCrudService<TEntity>
+    where TEntity : class, INoSqlEntity<Guid>, new()
 {
-    public abstract class XmlNoSqlCrudService<TEntity> : NoSqlCrudService<Guid, TEntity>, IXmlNoSqlCrudService<TEntity>
-        where TEntity : class, INoSqlEntity<Guid>, new()
+    private readonly IXmlNoSqlRepositoryFactory _factory;
+
+    protected XmlNoSqlCrudService(IXmlNoSqlRepositoryFactory factory)
+        : base(factory)
     {
-        private readonly IXmlNoSqlRepositoryFactory _factory;
+        _factory = factory;
+    }
 
-        protected XmlNoSqlCrudService(IXmlNoSqlRepositoryFactory factory)
-            : base(factory)
+    public void DropCollection()
+    {
+        try
         {
-            _factory = factory;
+            using (var repository = _factory.Create())
+            {
+                var start = DateTime.Now;
+                repository.DropCollection<TEntity>();
+                Logger.Write(new PerformanceLogEntry(start, DateTime.Now));
+            }
         }
-
-        public void DropCollection()
+        catch (Exception ex)
         {
-            try
-            {
-                using (var repository = _factory.Create())
-                {
-                    var start = DateTime.Now;
-                    repository.DropCollection<TEntity>();
-                    Logger.Write(new PerformanceLogEntry(start, DateTime.Now));
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Write(new ExceptionLogEntry(ex));
-                throw;
-            }
+            Logger.Write(new ExceptionLogEntry(ex));
+            throw;
         }
     }
 }

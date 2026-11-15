@@ -1,9 +1,8 @@
-﻿namespace Scch.Common.Diagnostics
-{
-    public interface IPerformanceCounter
-    {
-        string InstanceName { get; }
+﻿namespace Scch.Common.Diagnostics;
 
-        string MachineName { get; }
-    }
+public interface IPerformanceCounter
+{
+    string InstanceName { get; }
+
+    string MachineName { get; }
 }

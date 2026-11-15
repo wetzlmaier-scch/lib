@@ -19,65 +19,64 @@ using Microsoft.Practices.EnterpriseLibrary.Logging.Configuration;
 using Microsoft.Practices.EnterpriseLibrary.Logging.Formatters;
 using Microsoft.Practices.EnterpriseLibrary.Logging.TraceListeners;
 
-namespace Scch.Logging.UdpTraceListener
+namespace Scch.Logging.UdpTraceListener;
+
+/// <summary>
+/// A <see cref="TraceListener"/> that writes an UDP message, formatting the output with an <see cref="ILogFormatter"/>.
+/// </summary>
+[ConfigurationElementType(typeof(CustomTraceListenerData))]
+public class UdpTraceListener : CustomTraceListener 
 {
     /// <summary>
-    /// A <see cref="TraceListener"/> that writes an UDP message, formatting the output with an <see cref="ILogFormatter"/>.
+    /// Sends an UDP message given a predefined string
     /// </summary>
-    [ConfigurationElementType(typeof(CustomTraceListenerData))]
-    public class UdpTraceListener : CustomTraceListener 
+    /// <param name="message">The string to write as the UDP message</param>
+    public override void Write(string message)
     {
-        /// <summary>
-        /// Sends an UDP message given a predefined string
-        /// </summary>
-        /// <param name="message">The string to write as the UDP message</param>
-        public override void Write(string message)
-        {
-            var udpMessage = new UdpMessage(Attributes["remoteHosts"], Attributes["header"], Attributes["footer"], message, Formatter);
-            udpMessage.Send();
-        }
+        var udpMessage = new UdpMessage(Attributes["remoteHosts"], Attributes["header"], Attributes["footer"], message, Formatter);
+        udpMessage.Send();
+    }
 
-        /// <summary>
-        /// Sends an UDP message given a predefined string
-        /// </summary>
-        /// <param name="message">The string to write as the UDP message</param>
-        public override void WriteLine(string message)
-        {
-            Write(message);
-        }
+    /// <summary>
+    /// Sends an UDP message given a predefined string
+    /// </summary>
+    /// <param name="message">The string to write as the UDP message</param>
+    public override void WriteLine(string message)
+    {
+        Write(message);
+    }
 
 
-        /// <summary>
-        /// Delivers the trace data as an UDP message.
-        /// </summary>
-        /// <param name="eventCache">The context information provided by <see cref="System.Diagnostics"/>.</param>
-        /// <param name="source">The name of the trace source that delivered the trace data.</param>
-        /// <param name="eventType">The type of event.</param>
-        /// <param name="id">The id of the event.</param>
-        /// <param name="data">The data to trace.</param>
-        public override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, object data)
+    /// <summary>
+    /// Delivers the trace data as an UDP message.
+    /// </summary>
+    /// <param name="eventCache">The context information provided by <see cref="System.Diagnostics"/>.</param>
+    /// <param name="source">The name of the trace source that delivered the trace data.</param>
+    /// <param name="eventType">The type of event.</param>
+    /// <param name="id">The id of the event.</param>
+    /// <param name="data">The data to trace.</param>
+    public override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, object data)
+    {
+        if (data is LogEntry)
         {
-            if (data is LogEntry)
-            {
-                var message = new UdpMessage(Attributes["remoteHosts"], Attributes["header"], Attributes["footer"], data as LogEntry, Formatter);
-                message.Send();
-            }
-            else if (data is string)
-            {
-                Write(data as string);
-            }
-            else
-            {
-                base.TraceData(eventCache, source, eventType, id, data);
-            }
+            var message = new UdpMessage(Attributes["remoteHosts"], Attributes["header"], Attributes["footer"], data as LogEntry, Formatter);
+            message.Send();
         }
+        else if (data is string)
+        {
+            Write(data as string);
+        }
+        else
+        {
+            base.TraceData(eventCache, source, eventType, id, data);
+        }
+    }
 
-        /// <summary>
-        /// Declare the supported attributes for <see cref="UdpTraceListener"/>
-        /// </summary>
-        protected override string[] GetSupportedAttributes()
-        {
-            return new[] { "remoteHosts", "header", "footer" };
-        }
+    /// <summary>
+    /// Declare the supported attributes for <see cref="UdpTraceListener"/>
+    /// </summary>
+    protected override string[] GetSupportedAttributes()
+    {
+        return new[] { "remoteHosts", "header", "footer" };
     }
 }

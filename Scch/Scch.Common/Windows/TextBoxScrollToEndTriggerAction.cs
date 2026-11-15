@@ -1,8 +1,7 @@
 ﻿using System.Windows.Controls;
 
-namespace Scch.Common.Windows
+namespace Scch.Common.Windows;
+
+public class TextBoxScrollToEndTriggerAction : TextBoxBaseScrollToEndTriggerAction<TextBox>
 {
-    public class TextBoxScrollToEndTriggerAction : TextBoxBaseScrollToEndTriggerAction<TextBox>
-    {
-    }
 }

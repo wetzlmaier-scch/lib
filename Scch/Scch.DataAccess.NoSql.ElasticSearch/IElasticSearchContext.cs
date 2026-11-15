@@ -1,8 +1,7 @@
 ﻿using Elastic.Clients.Elasticsearch;
-namespace Scch.DataAccess.NoSql.ElasticSearch
+namespace Scch.DataAccess.NoSql.ElasticSearch;
+
+public interface IElasticSearchContext
 {
-    public interface IElasticSearchContext
-    {
-        ElasticsearchClient GetClient();
-    }
+    ElasticsearchClient GetClient();
 }

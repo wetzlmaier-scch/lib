@@ -1,9 +1,8 @@
 ﻿using System.Data;
 
-namespace Scch.DataAccess.Hibernate
+namespace Scch.DataAccess.Hibernate;
+
+public interface IHibernateUnitOfWork : IUnitOfWork
 {
-    public interface IHibernateUnitOfWork : IUnitOfWork
-    {
-        void BeginTransaction(IsolationLevel isolationLevel);
-    }
+    void BeginTransaction(IsolationLevel isolationLevel);
 }

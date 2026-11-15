@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Scch.DataAccess.NoSql.Xml
+namespace Scch.DataAccess.NoSql.Xml;
+
+public interface IXmlNoSqlRepositoryFactory : INoSqlRepositoryFactory<Guid>
 {
-    public interface IXmlNoSqlRepositoryFactory : INoSqlRepositoryFactory<Guid>
-    {
-        new IXmlNoSqlRepository Create();
-    }
+    new IXmlNoSqlRepository Create();
 }

@@ -3,99 +3,98 @@ using System.ComponentModel;
 using System.Diagnostics;
 using Scch.Common.Reflecton;
 
-namespace Scch.Common.Diagnostics
+namespace Scch.Common.Diagnostics;
+
+public class ProcessInfo : IProcessInfo
 {
-    public class ProcessInfo : IProcessInfo
+    private readonly Process _process;
+    private readonly IAssemblyInfo _assemblyInfo;
+
+    public ProcessInfo(Process process)
     {
-        private readonly Process _process;
-        private readonly IAssemblyInfo _assemblyInfo;
+        _process = process;
 
-        public ProcessInfo(Process process)
+        try
         {
-            _process = process;
-
-            try
-            {
-                _assemblyInfo = new AssemblyInfo(_process.MainModule.FileName);
-            }
-            catch (Win32Exception)
-            {
-            }
+            _assemblyInfo = new AssemblyInfo(_process.MainModule.FileName);
         }
-
-        public IAssemblyInfo AssemblyInfo
+        catch (Win32Exception)
         {
-            get { return _assemblyInfo; }
         }
+    }
 
-        public string Arguments
-        {
-            get { return _process.StartInfo.Arguments; }
-        }
+    public IAssemblyInfo AssemblyInfo
+    {
+        get { return _assemblyInfo; }
+    }
 
-        public int BasePriority
-        {
-            get { return _process.BasePriority; }
-        }
+    public string Arguments
+    {
+        get { return _process.StartInfo.Arguments; }
+    }
 
-        public int ExitCode
-        {
-            get { return _process.ExitCode; }
-        }
+    public int BasePriority
+    {
+        get { return _process.BasePriority; }
+    }
 
-        public DateTime ExitTime
-        {
-            get { return _process.ExitTime; }
-        }
+    public int ExitCode
+    {
+        get { return _process.ExitCode; }
+    }
 
-        public IntPtr Handle
-        {
-            get { return _process.Handle; }
-        }
+    public DateTime ExitTime
+    {
+        get { return _process.ExitTime; }
+    }
 
-        public bool HasExited
-        {
-            get { return _process.HasExited; }
-        }
+    public IntPtr Handle
+    {
+        get { return _process.Handle; }
+    }
 
-        public int Id
-        {
-            get { return _process.Id; }
-        }
+    public bool HasExited
+    {
+        get { return _process.HasExited; }
+    }
 
-        public string MachineName
-        {
-            get { return _process.MachineName; }
-        }
+    public int Id
+    {
+        get { return _process.Id; }
+    }
 
-        public IntPtr MainWindowHandle
-        {
-            get { return _process.MainWindowHandle; }
-        }
+    public string MachineName
+    {
+        get { return _process.MachineName; }
+    }
 
-        public string MainWindowTitle
-        {
-            get { return _process.MainWindowTitle; }
-        }
+    public IntPtr MainWindowHandle
+    {
+        get { return _process.MainWindowHandle; }
+    }
 
-        public ProcessPriorityClass PriorityClass
-        {
-            get { return _process.PriorityClass; }
-        }
+    public string MainWindowTitle
+    {
+        get { return _process.MainWindowTitle; }
+    }
 
-        public string ProcessName
-        {
-            get { return _process.ProcessName; }
-        }
+    public ProcessPriorityClass PriorityClass
+    {
+        get { return _process.PriorityClass; }
+    }
 
-        public DateTime StartTime
-        {
-            get { return _process.StartTime; }
-        }
+    public string ProcessName
+    {
+        get { return _process.ProcessName; }
+    }
 
-        public string WorkingDirectory
-        {
-            get { return _process.StartInfo.WorkingDirectory; }
-        }
+    public DateTime StartTime
+    {
+        get { return _process.StartTime; }
+    }
+
+    public string WorkingDirectory
+    {
+        get { return _process.StartInfo.WorkingDirectory; }
     }
 }

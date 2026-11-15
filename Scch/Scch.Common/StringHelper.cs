@@ -2,33 +2,32 @@
 using System.CodeDom.Compiler;
 using System.IO;
 
-namespace Scch.Common
+namespace Scch.Common;
+
+public static class StringHelper
 {
-    public static class StringHelper
+    public static char Semicolon => ';';
+
+    public static char Tabulator => '\t';
+
+    public static char Comma => ',';
+
+    public static char[] CommaSemicolon
     {
-        public static char Semicolon => ';';
-
-        public static char Tabulator => '\t';
-
-        public static char Comma => ',';
-
-        public static char[] CommaSemicolon
+        get
         {
-            get
-            {
-                return new[] { Comma, Semicolon };
-            }
+            return new[] { Comma, Semicolon };
         }
+    }
 
-        public static string ToLiteral(string input)
+    public static string ToLiteral(string input)
+    {
+        using (var writer = new StringWriter())
         {
-            using (var writer = new StringWriter())
+            using (var provider = CodeDomProvider.CreateProvider("CSharp"))
             {
-                using (var provider = CodeDomProvider.CreateProvider("CSharp"))
-                {
-                    provider.GenerateCodeFromExpression(new CodePrimitiveExpression(input), writer, null);
-                    return writer.ToString();
-                }
+                provider.GenerateCodeFromExpression(new CodePrimitiveExpression(input), writer, null);
+                return writer.ToString();
             }
         }
     }

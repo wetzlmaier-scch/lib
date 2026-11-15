@@ -6,77 +6,76 @@ using Scch.Common.Configuration;
 using Scch.Common.Diagnostics;
 using Scch.Common.Threading;
 
-namespace Scch.TimeoutWatchDog
+namespace Scch.TimeoutWatchDog;
+
+public class Program
 {
-    public class Program
+    private static int _timeout;
+
+    static int Main(string[] args)
     {
-        private static int _timeout;
-
-        static int Main(string[] args)
+        try
         {
-            try
+            if (!ProcessHelper.IsSingleInstance())
             {
-                if (!ProcessHelper.IsSingleInstance())
-                {
-                    Console.WriteLine("Only one instance allowed.");
-                    return ExitCodes.Error;
-                }
-
-                Console.WriteLine("Waiting for processes ...");
-
-                var processesToMonitor = ConfigurationHelper.Current.ReadString("Processes", string.Empty).Split(StringHelper.CommaSemicolon);
-                _timeout = ConfigurationHelper.Current.ReadInt("Timeout", 60);
-
-                var watchDog = new ProcessWatchDog();
-                watchDog.Monitor += Monitor;
-                watchDog.RunConsole(processesToMonitor, ProcessHelper.LocalMachine, 500);
-
-                return ExitCodes.Ok;
-            }
-            catch (Exception ex)
-            {
-                Console.Write(ex.Message);
+                Console.WriteLine("Only one instance allowed.");
                 return ExitCodes.Error;
             }
-            finally
-            {
-                ProcessHelper.DisposeMutex();
-            }
+
+            Console.WriteLine("Waiting for processes ...");
+
+            var processesToMonitor = ConfigurationHelper.Current.ReadString("Processes", string.Empty).Split(StringHelper.CommaSemicolon);
+            _timeout = ConfigurationHelper.Current.ReadInt("Timeout", 60);
+
+            var watchDog = new ProcessWatchDog();
+            watchDog.Monitor += Monitor;
+            watchDog.RunConsole(processesToMonitor, ProcessHelper.LocalMachine, 500);
+
+            return ExitCodes.Ok;
         }
-
-        private static void WriteTimeStamp()
+        catch (Exception ex)
         {
-            var timeStampFormat = ConfigurationHelper.Current.ReadString("TimeStampFormat", "yyyy-MM-dd HH:mm:ss");
-            Console.Write("[{0}] ", DateTime.Now.ToString(timeStampFormat));
+            Console.Write(ex.Message);
+            return ExitCodes.Error;
         }
-
-        private static void Monitor(Process process, CancellationToken token)
+        finally
         {
-            var start = DateTime.Now;
-            bool killed = false;
+            ProcessHelper.DisposeMutex();
+        }
+    }
 
-            WriteTimeStamp();
-            Console.WriteLine("Monitoring process '{0}' with id {1} (Timeout: {2})", process.ProcessName, process.Id, _timeout);
+    private static void WriteTimeStamp()
+    {
+        var timeStampFormat = ConfigurationHelper.Current.ReadString("TimeStampFormat", "yyyy-MM-dd HH:mm:ss");
+        Console.Write("[{0}] ", DateTime.Now.ToString(timeStampFormat));
+    }
 
-            while (!token.IsCancellationRequested && !process.HasExited)
-            {
-                if ((DateTime.Now - start).TotalSeconds > _timeout)
-                {
-                    WriteTimeStamp();
-                    Console.WriteLine("Process '{0}' with id {1} reached timeout.", process.ProcessName, process.Id);
-                    process.Kill();
-                    killed = true;
-                    break;
-                }
+    private static void Monitor(Process process, CancellationToken token)
+    {
+        var start = DateTime.Now;
+        bool killed = false;
 
-                Thread.Sleep(100);
-            }
+        WriteTimeStamp();
+        Console.WriteLine("Monitoring process '{0}' with id {1} (Timeout: {2})", process.ProcessName, process.Id, _timeout);
 
-            if (!killed)
+        while (!token.IsCancellationRequested && !process.HasExited)
+        {
+            if ((DateTime.Now - start).TotalSeconds > _timeout)
             {
                 WriteTimeStamp();
-                Console.WriteLine("Process '{0}' with id {1} exited.", process.ProcessName, process.Id);
+                Console.WriteLine("Process '{0}' with id {1} reached timeout.", process.ProcessName, process.Id);
+                process.Kill();
+                killed = true;
+                break;
             }
+
+            Thread.Sleep(100);
+        }
+
+        if (!killed)
+        {
+            WriteTimeStamp();
+            Console.WriteLine("Process '{0}' with id {1} exited.", process.ProcessName, process.Id);
         }
     }
 }

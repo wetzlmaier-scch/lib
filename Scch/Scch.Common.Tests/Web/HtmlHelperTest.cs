@@ -4,71 +4,70 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Scch.Common.Web;
 
-namespace Scch.Common.Tests.Web
+namespace Scch.Common.Tests.Web;
+
+/// <summary>
+/// Summary description for HtmlHelperTest
+/// </summary>
+[TestClass]
+public class HtmlHelperTest
 {
-    /// <summary>
-    /// Summary description for HtmlHelperTest
-    /// </summary>
-    [TestClass]
-    public class HtmlHelperTest
+    public HtmlHelperTest()
     {
-        public HtmlHelperTest()
+        //
+        // TODO: Add constructor logic here
+        //
+    }
+
+    private TestContext testContextInstance;
+
+    /// <summary>
+    ///Gets or sets the test context which provides
+    ///information about and functionality for the current test run.
+    ///</summary>
+    public TestContext TestContext
+    {
+        get
         {
-            //
-            // TODO: Add constructor logic here
-            //
+            return testContextInstance;
         }
-
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
+        set
         {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
+            testContextInstance = value;
         }
+    }
 
-        #region Additional test attributes
-        //
-        // You can use the following additional attributes as you write your tests:
-        //
-        // Use ClassInitialize to run code before running the first test in the class
-        // [ClassInitialize()]
-        // public static void MyClassInitialize(TestContext testContext) { }
-        //
-        // Use ClassCleanup to run code after all tests in a class have run
-        // [ClassCleanup()]
-        // public static void MyClassCleanup() { }
-        //
-        // Use TestInitialize to run code before running each test 
-        // [TestInitialize()]
-        // public void MyTestInitialize() { }
-        //
-        // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
-        #endregion
+    #region Additional test attributes
+    //
+    // You can use the following additional attributes as you write your tests:
+    //
+    // Use ClassInitialize to run code before running the first test in the class
+    // [ClassInitialize()]
+    // public static void MyClassInitialize(TestContext testContext) { }
+    //
+    // Use ClassCleanup to run code after all tests in a class have run
+    // [ClassCleanup()]
+    // public static void MyClassCleanup() { }
+    //
+    // Use TestInitialize to run code before running each test 
+    // [TestInitialize()]
+    // public void MyTestInitialize() { }
+    //
+    // Use TestCleanup to run code after each test has run
+    // [TestCleanup()]
+    // public void MyTestCleanup() { }
+    //
+    #endregion
 
-        [TestMethod]
-        public void TestEncode()
-        {
-            Assert.AreEqual("a&nbsp;b<br>c", HtmlHelper.SpaceEncode(HtmlHelper.HtmlEncode("a b" + Environment.NewLine + "c")));        
-        }
+    [TestMethod]
+    public void TestEncode()
+    {
+        Assert.AreEqual("a&nbsp;b<br>c", HtmlHelper.SpaceEncode(HtmlHelper.HtmlEncode("a b" + Environment.NewLine + "c")));        
+    }
 
-        [TestMethod]
-        public void TestDecode()
-        {
-            Assert.AreEqual("a b" + Environment.NewLine + "c", HtmlHelper.HtmlDecode("a&nbsp;b<br>c"));
-        }
+    [TestMethod]
+    public void TestDecode()
+    {
+        Assert.AreEqual("a b" + Environment.NewLine + "c", HtmlHelper.HtmlDecode("a&nbsp;b<br>c"));
     }
 }

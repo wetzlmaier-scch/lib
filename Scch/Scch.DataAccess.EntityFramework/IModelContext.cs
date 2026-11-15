@@ -1,19 +1,18 @@
-﻿namespace Scch.DataAccess.EntityFramework
+﻿namespace Scch.DataAccess.EntityFramework;
+
+public interface IModelContext
 {
-    public interface IModelContext
-    {
-        string[] EntityAssemblies { get; }
+    string[] EntityAssemblies { get; }
 
-        bool DeleteDatabaseIfExists { get; }
+    bool DeleteDatabaseIfExists { get; }
 
-        bool LazyLoadingEnabled { get; }
+    bool LazyLoadingEnabled { get; }
 
-        string ConnectionStringName { get; }
+    string ConnectionStringName { get; }
 
-        bool AuditingEnabled { get; }
+    bool AuditingEnabled { get; }
 
-        bool SaveSqlScript { get; }
+    bool SaveSqlScript { get; }
 
-        string MasterDataScript { get; }
-    }
+    string MasterDataScript { get; }
 }

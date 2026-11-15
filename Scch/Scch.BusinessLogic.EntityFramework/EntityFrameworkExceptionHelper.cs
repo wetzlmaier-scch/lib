@@ -6,40 +6,39 @@ using Scch.Common.ComponentModel.DataAnnotations;
 using Scch.Logging;
 using ValidationException = Scch.Common.ComponentModel.DataAnnotations.ValidationException;
 
-namespace Scch.BusinessLogic.EntityFramework
+namespace Scch.BusinessLogic.EntityFramework;
+
+public static class EntityFrameworkExceptionHelper
 {
-    public static class EntityFrameworkExceptionHelper
+    /// <summary>
+    /// Handles the exception.
+    /// </summary>
+    /// <param name="exception"></param>
+    public static Exception HandleException(Exception exception)
     {
-        /// <summary>
-        /// Handles the exception.
-        /// </summary>
-        /// <param name="exception"></param>
-        public static Exception HandleException(Exception exception)
+        if (exception == null)
+            throw new ArgumentNullException("exception");
+
+        Logger.Write(new ExceptionLogEntry(exception));
+
+        switch (exception.GetType().FullName)
         {
-            if (exception == null)
-                throw new ArgumentNullException("exception");
+            case "System.Data.Entity.Infrastructure.DbUpdateConcurrencyException":
+                return new OptimisticLockingException(exception);
 
-            Logger.Write(new ExceptionLogEntry(exception));
+            case "System.Data.Entity.Validation.DbEntityValidationException":
 
-            switch (exception.GetType().FullName)
-            {
-                case "System.Data.Entity.Infrastructure.DbUpdateConcurrencyException":
-                    return new OptimisticLockingException(exception);
+                var summary = new ValidationSummary();
+                var ex = (DbEntityValidationException)exception;
+                foreach (var validationError in ex.EntityValidationErrors.SelectMany(validationResult => validationResult.ValidationErrors))
+                {
+                    summary.Add(new ValidationResult(validationError.ErrorMessage));
+                }
 
-                case "System.Data.Entity.Validation.DbEntityValidationException":
+                return new ValidationException(summary, ex);
 
-                    var summary = new ValidationSummary();
-                    var ex = (DbEntityValidationException)exception;
-                    foreach (var validationError in ex.EntityValidationErrors.SelectMany(validationResult => validationResult.ValidationErrors))
-                    {
-                        summary.Add(new ValidationResult(validationError.ErrorMessage));
-                    }
-
-                    return new ValidationException(summary, ex);
-
-                default:
-                    return exception;
-            }
+            default:
+                return exception;
         }
     }
 }

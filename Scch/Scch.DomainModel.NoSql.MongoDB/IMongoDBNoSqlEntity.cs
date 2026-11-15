@@ -1,8 +1,7 @@
 ﻿using MongoDB.Bson;
 
-namespace Scch.DomainModel.NoSql.MongoDB
+namespace Scch.DomainModel.NoSql.MongoDB;
+
+public interface IMongoDBNoSqlEntity : INoSqlEntity<ObjectId>
 {
-    public interface IMongoDBNoSqlEntity : INoSqlEntity<ObjectId>
-    {
-    }
 }

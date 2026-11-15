@@ -1,16 +1,15 @@
 ﻿using System;
 
-namespace Scch.DummyApplication
+namespace Scch.DummyApplication;
+
+class Program
 {
-    class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
+        Console.WriteLine("Arguments:");
+        foreach (var arg in args)
         {
-            Console.WriteLine("Arguments:");
-            foreach (var arg in args)
-            {
-                Console.WriteLine("  " + arg);
-            }
+            Console.WriteLine("  " + arg);
         }
     }
 }

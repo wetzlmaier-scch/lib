@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace Scch.Common.ComponentModel
+namespace Scch.Common.ComponentModel;
+
+public interface IExtendedDataErrorInfo : IDataErrorInfo
 {
-    public interface IExtendedDataErrorInfo : IDataErrorInfo
-    {
-        bool IsValid { get; }
-    }
+    bool IsValid { get; }
 }

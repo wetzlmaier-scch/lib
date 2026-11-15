@@ -3,24 +3,23 @@ using System.Windows;
 using System.Windows.Controls;
 using Scch.Mvvm.ViewModel;
 
-namespace Scch.Controls
+namespace Scch.Controls;
+
+public class ToolBarWorkspaceTemplateSelector : DataTemplateSelector
 {
-    public class ToolBarWorkspaceTemplateSelector : DataTemplateSelector
+    public DataTemplate ButtonTemplate { get; set; }
+    public DataTemplate SeparatorTemplate { get; set; }
+
+    public override DataTemplate SelectTemplate(object item, DependencyObject container)
     {
-        public DataTemplate ButtonTemplate { get; set; }
-        public DataTemplate SeparatorTemplate { get; set; }
+        var toolBarItem = (IWorkspaceViewModel)item;
+        Debug.Assert(toolBarItem != null);
 
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        if (toolBarItem.ImageSource != null)
         {
-            var toolBarItem = (IWorkspaceViewModel)item;
-            Debug.Assert(toolBarItem != null);
-
-            if (toolBarItem.ImageSource != null)
-            {
-                return ButtonTemplate;
-            }
-
-            return SeparatorTemplate;
+            return ButtonTemplate;
         }
+
+        return SeparatorTemplate;
     }
 }

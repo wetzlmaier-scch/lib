@@ -1,7 +1,6 @@
-﻿namespace Scch.DomainModel
+﻿namespace Scch.DomainModel;
+
+public interface IDeletable
 {
-    public interface IDeletable
-    {
-        bool IsDeleted { get; set; }
-    }
+    bool IsDeleted { get; set; }
 }

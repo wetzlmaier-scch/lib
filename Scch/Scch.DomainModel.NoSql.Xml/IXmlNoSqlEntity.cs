@@ -1,8 +1,7 @@
 ﻿using System;
 
-namespace Scch.DomainModel.NoSql.Xml
+namespace Scch.DomainModel.NoSql.Xml;
+
+public interface IXmlNoSqlEntity : INoSqlEntity<Guid>
 {
-    public interface IXmlNoSqlEntity : INoSqlEntity<Guid>
-    {
-    }
 }

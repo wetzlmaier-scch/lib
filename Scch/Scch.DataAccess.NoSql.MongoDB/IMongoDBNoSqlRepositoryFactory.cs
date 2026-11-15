@@ -1,9 +1,8 @@
 ﻿using MongoDB.Bson;
 
-namespace Scch.DataAccess.NoSql.MongoDB
+namespace Scch.DataAccess.NoSql.MongoDB;
+
+public interface IMongoDBNoSqlRepositoryFactory : INoSqlRepositoryFactory<ObjectId>
 {
-    public interface IMongoDBNoSqlRepositoryFactory : INoSqlRepositoryFactory<ObjectId>
-    {
-        new IMongoDBNoSqlRepository Create();
-    }
+    new IMongoDBNoSqlRepository Create();
 }

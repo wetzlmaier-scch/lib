@@ -1,6 +1,5 @@
-﻿namespace Scch.DataAccess.NoSql
+﻿namespace Scch.DataAccess.NoSql;
+
+public interface INoSqlUnitOfWork : IUnitOfWork
 {
-    public interface INoSqlUnitOfWork : IUnitOfWork
-    {
-    }
 }

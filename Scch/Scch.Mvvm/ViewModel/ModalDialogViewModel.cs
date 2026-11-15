@@ -2,174 +2,173 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace Scch.Mvvm.ViewModel
+namespace Scch.Mvvm.ViewModel;
+
+public class ModalDialogViewModel : ViewModelBase, IModalDialogViewModel
 {
-    public class ModalDialogViewModel : ViewModelBase, IModalDialogViewModel
+    private string _title;
+    private bool _isOpen;
+    private ImageSource _icon;
+    private bool? _dialogResult;
+    private ICommandViewModel _okCommand;
+    private ICommandViewModel _cancelCommand;
+    private object _content;
+    private ResizeMode _dialogResizeMode;
+
+    public ModalDialogViewModel()
+        : base("", 0)
     {
-        private string _title;
-        private bool _isOpen;
-        private ImageSource _icon;
-        private bool? _dialogResult;
-        private ICommandViewModel _okCommand;
-        private ICommandViewModel _cancelCommand;
-        private object _content;
-        private ResizeMode _dialogResizeMode;
+    }
 
-        public ModalDialogViewModel()
-            : base("", 0)
+    void ContentPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == IsValidPropertyName)
+            UpdateValid();
+    }
+
+    public string Title
+    {
+        get { return _title; }
+        set
         {
+            if (value == _title)
+                return;
+
+            _title = value;
+            RaisePropertyChanged(() => Title);
         }
+    }
 
-        void ContentPropertyChanged(object sender, PropertyChangedEventArgs e)
+    public bool IsOpen
+    {
+        get { return _isOpen; }
+        set
         {
-            if (e.PropertyName == IsValidPropertyName)
-                UpdateValid();
+            /*if (value == _isOpen)
+                return;*/
+
+            _isOpen = value;
+            RaisePropertyChanged(() => IsOpen);
         }
+    }
 
-        public string Title
+    public ImageSource Icon
+    {
+        get { return _icon; }
+        set
         {
-            get { return _title; }
-            set
-            {
-                if (value == _title)
-                    return;
+            if (value == _icon)
+                return;
 
-                _title = value;
-                RaisePropertyChanged(() => Title);
-            }
+            _icon = value;
+            RaisePropertyChanged(() => Icon);
         }
+    }
 
-        public bool IsOpen
+    public bool? DialogResult
+    {
+        get { return _dialogResult; }
+        set
         {
-            get { return _isOpen; }
-            set
-            {
-                /*if (value == _isOpen)
-                    return;*/
+            if (value == _dialogResult)
+                return;
 
-                _isOpen = value;
-                RaisePropertyChanged(() => IsOpen);
-            }
+            _dialogResult = value;
+            RaisePropertyChanged(() => DialogResult);
         }
+    }
 
-        public ImageSource Icon
+
+    public ResizeMode DialogResizeMode
+    {
+        get
         {
-            get { return _icon; }
-            set
-            {
-                if (value == _icon)
-                    return;
-
-                _icon = value;
-                RaisePropertyChanged(() => Icon);
-            }
+            return _dialogResizeMode;
         }
-
-        public bool? DialogResult
+        set
         {
-            get { return _dialogResult; }
-            set
-            {
-                if (value == _dialogResult)
-                    return;
+            if (_dialogResizeMode == value)
+                return;
 
-                _dialogResult = value;
-                RaisePropertyChanged(() => DialogResult);
-            }
+            _dialogResizeMode = value;
+            RaisePropertyChanged(()=>DialogResizeMode);
         }
+    }
 
-
-        public ResizeMode DialogResizeMode
+    public ICommandViewModel OkCommand
+    {
+        get
         {
-            get
-            {
-                return _dialogResizeMode;
-            }
-            set
-            {
-                if (_dialogResizeMode == value)
-                    return;
-
-                _dialogResizeMode = value;
-                RaisePropertyChanged(()=>DialogResizeMode);
-            }
+            return _okCommand;
         }
-
-        public ICommandViewModel OkCommand
+        set
         {
-            get
-            {
-                return _okCommand;
-            }
-            set
-            {
-                if (_okCommand == value)
-                    return;
+            if (_okCommand == value)
+                return;
 
-                _okCommand = value;
-                RaisePropertyChanged(() => OkCommand);
-            }
+            _okCommand = value;
+            RaisePropertyChanged(() => OkCommand);
         }
+    }
 
-        public ICommandViewModel CancelCommand
+    public ICommandViewModel CancelCommand
+    {
+        get
         {
-            get
-            {
-                return _cancelCommand;
-            }
-            set
-            {
-                if (_cancelCommand == value)
-                    return;
-
-                _cancelCommand = value;
-                RaisePropertyChanged(() => CancelCommand);
-            }
+            return _cancelCommand;
         }
-
-        public object Content
+        set
         {
-            get
-            {
-                return _content;
-            }
-            set
-            {
-                if (Content == value)
-                    return;
+            if (_cancelCommand == value)
+                return;
 
-                if (Content != null && Content is INotifyPropertyChanged)
-                    ((INotifyPropertyChanged)_content).PropertyChanged -= ContentPropertyChanged;
-                
-                _content = value;
-
-                if (Content != null && Content is INotifyPropertyChanged)
-                    ((INotifyPropertyChanged)_content).PropertyChanged += ContentPropertyChanged;
-
-                RaisePropertyChanged(()=>Content);
-            }
+            _cancelCommand = value;
+            RaisePropertyChanged(() => CancelCommand);
         }
+    }
 
-        public override string Error
+    public object Content
+    {
+        get
         {
-            get
-            {
-                if (Content != null && (Content is IDataErrorInfo))
-                    return ((IDataErrorInfo)Content).Error;
-
-                return base.Error;
-            }
+            return _content;
         }
-
-        public override string this[string columnName]
+        set
         {
-            get
-            {
-                if (Content != null && (Content is IDataErrorInfo))
-                    return ((IDataErrorInfo)Content)[columnName];
+            if (Content == value)
+                return;
 
-                return base[columnName];
-            }
+            if (Content != null && Content is INotifyPropertyChanged)
+                ((INotifyPropertyChanged)_content).PropertyChanged -= ContentPropertyChanged;
+            
+            _content = value;
+
+            if (Content != null && Content is INotifyPropertyChanged)
+                ((INotifyPropertyChanged)_content).PropertyChanged += ContentPropertyChanged;
+
+            RaisePropertyChanged(()=>Content);
+        }
+    }
+
+    public override string Error
+    {
+        get
+        {
+            if (Content != null && (Content is IDataErrorInfo))
+                return ((IDataErrorInfo)Content).Error;
+
+            return base.Error;
+        }
+    }
+
+    public override string this[string columnName]
+    {
+        get
+        {
+            if (Content != null && (Content is IDataErrorInfo))
+                return ((IDataErrorInfo)Content)[columnName];
+
+            return base[columnName];
         }
     }
 }

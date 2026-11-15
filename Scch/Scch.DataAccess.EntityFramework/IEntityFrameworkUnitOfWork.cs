@@ -1,14 +1,13 @@
 ﻿using System.Data;
 using System.Data.Entity.Core.Objects;
 
-namespace Scch.DataAccess.EntityFramework
+namespace Scch.DataAccess.EntityFramework;
+
+public interface IEntityFrameworkUnitOfWork : IUnitOfWork
 {
-    public interface IEntityFrameworkUnitOfWork : IUnitOfWork
-    {
-        void BeginTransaction(IsolationLevel isolationLevel);
+    void BeginTransaction(IsolationLevel isolationLevel);
 
-        void SaveChanges();
+    void SaveChanges();
 
-        void SaveChanges(SaveOptions saveOptions);
-    }
+    void SaveChanges(SaveOptions saveOptions);
 }

@@ -1,15 +1,14 @@
 ﻿using System;
 
-namespace Scch.DataAccess
+namespace Scch.DataAccess;
+
+public interface IUnitOfWork : IDisposable
 {
-    public interface IUnitOfWork : IDisposable
-    {
-        bool IsInTransaction { get; }
+    bool IsInTransaction { get; }
 
-        void BeginTransaction();
+    void BeginTransaction();
 
-        void RollBackTransaction();
+    void RollBackTransaction();
 
-        void CommitTransaction();
-    }
+    void CommitTransaction();
 }

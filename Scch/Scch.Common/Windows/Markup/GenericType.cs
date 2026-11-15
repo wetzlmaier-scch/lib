@@ -2,98 +2,97 @@
 using System.ComponentModel;
 using System.Windows.Markup;
 
-namespace Scch.Common.Windows.Markup
+namespace Scch.Common.Windows.Markup;
+
+[MarkupExtensionReturnType(typeof(Type))]
+public class GenericType : MarkupExtension
 {
-    [MarkupExtensionReturnType(typeof(Type))]
-    public class GenericType : MarkupExtension
+    private Type _baseType;
+    private Type[] _innerTypes;
+
+    public GenericType()
     {
-        private Type _baseType;
-        private Type[] _innerTypes;
+        
+    }
 
-        public GenericType()
+    public GenericType(Type baseType, params Type[] innerTypes)
+    {
+        if (baseType == null)
         {
-            
+            throw new ArgumentNullException("baseType");
         }
 
-        public GenericType(Type baseType, params Type[] innerTypes)
+        if (innerTypes == null)
         {
-            if (baseType == null)
-            {
-                throw new ArgumentNullException("baseType");
-            }
-
-            if (innerTypes == null)
-            {
-                throw new ArgumentNullException("innerTypes");
-            }
-
-            BaseType = baseType;
-            InnerTypes = innerTypes;
+            throw new ArgumentNullException("innerTypes");
         }
 
-        public GenericType(Type baseType, Type innerType) :this(baseType, new[] {innerType})
+        BaseType = baseType;
+        InnerTypes = innerTypes;
+    }
+
+    public GenericType(Type baseType, Type innerType) :this(baseType, new[] {innerType})
+    {
+        if (innerType == null)
         {
-            if (innerType == null)
-            {
-                throw new ArgumentNullException("innerType");
-            }
+            throw new ArgumentNullException("innerType");
         }
+    }
 
-        public override object ProvideValue(IServiceProvider serviceProvider)
+    public override object ProvideValue(IServiceProvider serviceProvider)
+    {
+        return BaseType.MakeGenericType(InnerTypes);
+    }
+
+    [DefaultValue((string)null), ConstructorArgument("baseType")]
+    public Type BaseType
+    {
+        get
         {
-            return BaseType.MakeGenericType(InnerTypes);
+            return _baseType;
         }
-
-        [DefaultValue((string)null), ConstructorArgument("baseType")]
-        public Type BaseType
+        set
         {
-            get
-            {
-                return _baseType;
-            }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("value");
+            if (value == null)
+                throw new ArgumentNullException("value");
 
-                _baseType = value;
-            }
+            _baseType = value;
         }
+    }
 
-        [DefaultValue((string)null), ConstructorArgument("innerTypes")]
-        public Type[] InnerTypes
+    [DefaultValue((string)null), ConstructorArgument("innerTypes")]
+    public Type[] InnerTypes
+    {
+        get
         {
-            get
-            {
-                return _innerTypes;
-            }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("value");
-
-                _innerTypes = value;
-            }
+            return _innerTypes;
         }
-
-
-        [DefaultValue((string)null), ConstructorArgument("innerType")]
-        public Type InnerType
+        set
         {
-            get
-            {
-                if (InnerTypes.Length!=1)
-                    throw new InvalidOperationException();
+            if (value == null)
+                throw new ArgumentNullException("value");
 
-                return InnerTypes[0];
-            }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("value");
+            _innerTypes = value;
+        }
+    }
 
-                InnerTypes = new[] { value };
-            }
+
+    [DefaultValue((string)null), ConstructorArgument("innerType")]
+    public Type InnerType
+    {
+        get
+        {
+            if (InnerTypes.Length!=1)
+                throw new InvalidOperationException();
+
+            return InnerTypes[0];
+        }
+        set
+        {
+            if (value == null)
+                throw new ArgumentNullException("value");
+
+            InnerTypes = new[] { value };
         }
     }
 }

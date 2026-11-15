@@ -1,13 +1,12 @@
 ﻿using System.Windows.Documents;
 using Scch.Controls.Mvvm.ViewModel;
 
-namespace Scch.Controls.Mvvm.Design
+namespace Scch.Controls.Mvvm.Design;
+
+internal class ConsoleViewDesignData : ConsoleViewModel
 {
-    internal class ConsoleViewDesignData : ConsoleViewModel
+    public ConsoleViewDesignData()
     {
-        public ConsoleViewDesignData()
-        {
-            Output.Document = new FlowDocument(new Paragraph(new Run("Beispieltext")) { Style = Output.Styles[0].Style });
-        }
+        Output.Document = new FlowDocument(new Paragraph(new Run("Beispieltext")) { Style = Output.Styles[0].Style });
     }
 }

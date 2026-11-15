@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Scch.DataAccess.NoSql.ElasticSearch
+namespace Scch.DataAccess.NoSql.ElasticSearch;
+
+public interface IElasticSearchNoSqlRepositoryFactory : INoSqlRepositoryFactory<Guid>
 {
-    public interface IElasticSearchNoSqlRepositoryFactory : INoSqlRepositoryFactory<Guid>
-    {
-        new IElasticSearchNoSqlRepository Create();
-    }
+    new IElasticSearchNoSqlRepository Create();
 }

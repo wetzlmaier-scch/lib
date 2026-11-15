@@ -2,147 +2,146 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Scch.Controls
+namespace Scch.Controls;
+
+[StyleTypedProperty(Property = "ItemContainerStyle", StyleTargetType = typeof(TreeListViewItem))]
+[StyleTypedProperty(Property="ColumnHeaderContainerStyle", StyleTargetType=typeof(GridViewColumnHeader))]
+public class TreeListView : TreeView
 {
-    [StyleTypedProperty(Property = "ItemContainerStyle", StyleTargetType = typeof(TreeListViewItem))]
-    [StyleTypedProperty(Property="ColumnHeaderContainerStyle", StyleTargetType=typeof(GridViewColumnHeader))]
-    public class TreeListView : TreeView
+    public static readonly DependencyProperty ColumnsProperty = DependencyProperty.RegisterAttached("Columns", typeof(GridViewColumnCollection), typeof(TreeListView));
+    public static readonly DependencyProperty AllowsColumnReorderProperty = DependencyProperty.Register("AllowsColumnReorder", typeof(bool), typeof(TreeListView), new FrameworkPropertyMetadata(false));
+    public static readonly DependencyProperty ColumnHeaderContainerStyleProperty = DependencyProperty.Register("ColumnHeaderContainerStyle", typeof(Style), typeof(TreeListView));
+    public static readonly DependencyProperty ColumnHeaderContextMenuProperty = DependencyProperty.Register("ColumnHeaderContextMenu", typeof(ContextMenu), typeof(TreeListView));
+    public static readonly DependencyProperty ColumnHeaderStringFormatProperty = DependencyProperty.Register("ColumnHeaderStringFormat", typeof(string), typeof(TreeListView));
+    public static readonly DependencyProperty ColumnHeaderTemplateProperty = DependencyProperty.Register("ColumnHeaderTemplate", typeof(DataTemplate), typeof(TreeListView), new FrameworkPropertyMetadata(OnColumnHeaderTemplateChanged));
+
+    private static void OnColumnHeaderTemplateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        public static readonly DependencyProperty ColumnsProperty = DependencyProperty.RegisterAttached("Columns", typeof(GridViewColumnCollection), typeof(TreeListView));
-        public static readonly DependencyProperty AllowsColumnReorderProperty = DependencyProperty.Register("AllowsColumnReorder", typeof(bool), typeof(TreeListView), new FrameworkPropertyMetadata(false));
-        public static readonly DependencyProperty ColumnHeaderContainerStyleProperty = DependencyProperty.Register("ColumnHeaderContainerStyle", typeof(Style), typeof(TreeListView));
-        public static readonly DependencyProperty ColumnHeaderContextMenuProperty = DependencyProperty.Register("ColumnHeaderContextMenu", typeof(ContextMenu), typeof(TreeListView));
-        public static readonly DependencyProperty ColumnHeaderStringFormatProperty = DependencyProperty.Register("ColumnHeaderStringFormat", typeof(string), typeof(TreeListView));
-        public static readonly DependencyProperty ColumnHeaderTemplateProperty = DependencyProperty.Register("ColumnHeaderTemplate", typeof(DataTemplate), typeof(TreeListView), new FrameworkPropertyMetadata(OnColumnHeaderTemplateChanged));
+        TreeListView view = (TreeListView)d;
+        //Helper.CheckTemplateAndTemplateSelector("TreeListViewColumnHeader", ColumnHeaderTemplateProperty, ColumnHeaderTemplateSelectorProperty, view);
+    }
 
-        private static void OnColumnHeaderTemplateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    public static readonly DependencyProperty ColumnHeaderTemplateSelectorProperty = DependencyProperty.Register("ColumnHeaderTemplateSelector", typeof(DataTemplateSelector), typeof(TreeListView), new FrameworkPropertyMetadata(OnColumnHeaderTemplateSelectorChanged));
+
+    private static void OnColumnHeaderTemplateSelectorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        TreeListView view = (TreeListView)d;
+        //Helper.CheckTemplateAndTemplateSelector("TreeListViewColumnHeader", ColumnHeaderTemplateProperty, ColumnHeaderTemplateSelectorProperty, view);
+    }
+
+    public static readonly DependencyProperty ColumnHeaderToolTipProperty = DependencyProperty.Register("ColumnHeaderToolTip", typeof(object), typeof(TreeListView));
+
+    public TreeListView()
+    {
+        Columns = new GridViewColumnCollection();
+    }
+
+    protected override DependencyObject GetContainerForItemOverride()
+    {
+        var container = new TreeListViewItem {Columns = Columns};
+        return container;
+    }
+
+    protected override bool IsItemItsOwnContainerOverride(object item)
+    {
+        return item is TreeListViewItem;
+    }
+
+    public bool AllowsColumnReorder
+    {
+        get
         {
-            TreeListView view = (TreeListView)d;
-            //Helper.CheckTemplateAndTemplateSelector("TreeListViewColumnHeader", ColumnHeaderTemplateProperty, ColumnHeaderTemplateSelectorProperty, view);
+            return (bool)GetValue(AllowsColumnReorderProperty);
         }
-
-        public static readonly DependencyProperty ColumnHeaderTemplateSelectorProperty = DependencyProperty.Register("ColumnHeaderTemplateSelector", typeof(DataTemplateSelector), typeof(TreeListView), new FrameworkPropertyMetadata(OnColumnHeaderTemplateSelectorChanged));
-
-        private static void OnColumnHeaderTemplateSelectorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        set
         {
-            TreeListView view = (TreeListView)d;
-            //Helper.CheckTemplateAndTemplateSelector("TreeListViewColumnHeader", ColumnHeaderTemplateProperty, ColumnHeaderTemplateSelectorProperty, view);
+            SetValue(AllowsColumnReorderProperty, value);
         }
+    }
 
-        public static readonly DependencyProperty ColumnHeaderToolTipProperty = DependencyProperty.Register("ColumnHeaderToolTip", typeof(object), typeof(TreeListView));
-
-        public TreeListView()
+    public Style ColumnHeaderContainerStyle
+    {
+        get
         {
-            Columns = new GridViewColumnCollection();
+            return (Style)GetValue(ColumnHeaderContainerStyleProperty);
         }
-
-        protected override DependencyObject GetContainerForItemOverride()
+        set
         {
-            var container = new TreeListViewItem {Columns = Columns};
-            return container;
+            SetValue(ColumnHeaderContainerStyleProperty, value);
         }
+    }
 
-        protected override bool IsItemItsOwnContainerOverride(object item)
+    public ContextMenu ColumnHeaderContextMenu
+    {
+        get
         {
-            return item is TreeListViewItem;
+            return (ContextMenu)GetValue(ColumnHeaderContextMenuProperty);
         }
-
-        public bool AllowsColumnReorder
+        set
         {
-            get
-            {
-                return (bool)GetValue(AllowsColumnReorderProperty);
-            }
-            set
-            {
-                SetValue(AllowsColumnReorderProperty, value);
-            }
+            SetValue(ColumnHeaderContextMenuProperty, value);
         }
+    }
 
-        public Style ColumnHeaderContainerStyle
+    public string ColumnHeaderStringFormat
+    {
+        get
         {
-            get
-            {
-                return (Style)GetValue(ColumnHeaderContainerStyleProperty);
-            }
-            set
-            {
-                SetValue(ColumnHeaderContainerStyleProperty, value);
-            }
+            return (string)GetValue(ColumnHeaderStringFormatProperty);
         }
-
-        public ContextMenu ColumnHeaderContextMenu
+        set
         {
-            get
-            {
-                return (ContextMenu)GetValue(ColumnHeaderContextMenuProperty);
-            }
-            set
-            {
-                SetValue(ColumnHeaderContextMenuProperty, value);
-            }
+            SetValue(ColumnHeaderStringFormatProperty, value);
         }
+    }
 
-        public string ColumnHeaderStringFormat
+    public DataTemplate ColumnHeaderTemplate
+    {
+        get
         {
-            get
-            {
-                return (string)GetValue(ColumnHeaderStringFormatProperty);
-            }
-            set
-            {
-                SetValue(ColumnHeaderStringFormatProperty, value);
-            }
+            return (DataTemplate)GetValue(ColumnHeaderTemplateProperty);
         }
-
-        public DataTemplate ColumnHeaderTemplate
+        set
         {
-            get
-            {
-                return (DataTemplate)GetValue(ColumnHeaderTemplateProperty);
-            }
-            set
-            {
-                SetValue(ColumnHeaderTemplateProperty, value);
-            }
+            SetValue(ColumnHeaderTemplateProperty, value);
         }
+    }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public DataTemplateSelector ColumnHeaderTemplateSelector
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public DataTemplateSelector ColumnHeaderTemplateSelector
+    {
+        get
         {
-            get
-            {
-                return (DataTemplateSelector)GetValue(ColumnHeaderTemplateSelectorProperty);
-            }
-            set
-            {
-                SetValue(ColumnHeaderTemplateSelectorProperty, value);
-            }
+            return (DataTemplateSelector)GetValue(ColumnHeaderTemplateSelectorProperty);
         }
-
-        public object ColumnHeaderToolTip
+        set
         {
-            get
-            {
-                return GetValue(ColumnHeaderToolTipProperty);
-            }
-            set
-            {
-                SetValue(ColumnHeaderToolTipProperty, value);
-            }
+            SetValue(ColumnHeaderTemplateSelectorProperty, value);
         }
+    }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        public GridViewColumnCollection Columns
+    public object ColumnHeaderToolTip
+    {
+        get
         {
-            get
-            {
-                return (GridViewColumnCollection)GetValue(ColumnsProperty);
-            }
-            set
-            {
-                SetValue(ColumnsProperty, value);
-            }
+            return GetValue(ColumnHeaderToolTipProperty);
+        }
+        set
+        {
+            SetValue(ColumnHeaderToolTipProperty, value);
+        }
+    }
+
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+    public GridViewColumnCollection Columns
+    {
+        get
+        {
+            return (GridViewColumnCollection)GetValue(ColumnsProperty);
+        }
+        set
+        {
+            SetValue(ColumnsProperty, value);
         }
     }
 }

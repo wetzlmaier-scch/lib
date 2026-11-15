@@ -1,6 +1,5 @@
-﻿namespace Scch.DomainModel.EntityFramework.Tests.Mapping
+﻿namespace Scch.DomainModel.EntityFramework.Tests.Mapping;
+
+public class MerkmalsgruppeMapping : EntityWithBezeichnungMapping<Merkmalsgruppe>
 {
-    public class MerkmalsgruppeMapping : EntityWithBezeichnungMapping<Merkmalsgruppe>
-    {
-    }
 }

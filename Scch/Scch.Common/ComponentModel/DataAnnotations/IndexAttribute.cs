@@ -1,7 +1,7 @@
 ﻿using System;
 
-namespace Scch.Common.ComponentModel.DataAnnotations
-{
+namespace Scch.Common.ComponentModel.DataAnnotations;
+
 	/// <summary>
 	/// Used to specify an index for a column
 	/// </summary>
@@ -23,9 +23,8 @@ namespace Scch.Common.ComponentModel.DataAnnotations
 		/// </summary>
 		public string IndexName { get; set; }
 
-        /// <summary>
-        /// Uniqueness of the index.
-        /// </summary>
-        public bool IsUnique { get; set; }
-    }
+    /// <summary>
+    /// Uniqueness of the index.
+    /// </summary>
+    public bool IsUnique { get; set; }
 }

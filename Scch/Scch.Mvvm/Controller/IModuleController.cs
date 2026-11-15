@@ -1,23 +1,22 @@
-﻿namespace Scch.Mvvm.Controller
+﻿namespace Scch.Mvvm.Controller;
+
+/// <summary>
+/// Responsible for the module lifecycle.
+/// </summary>
+public interface IModuleController
 {
     /// <summary>
-    /// Responsible for the module lifecycle.
+    /// Initializes the controller.
     /// </summary>
-    public interface IModuleController
-    {
-        /// <summary>
-        /// Initializes the controller.
-        /// </summary>
-        void Initialize();
+    void Initialize();
 
-        /// <summary>
-        /// Runs the controller.
-        /// </summary>
-        void Run();
+    /// <summary>
+    /// Runs the controller.
+    /// </summary>
+    void Run();
 
-        /// <summary>
-        /// Shut down the controller.
-        /// </summary>
-        void Shutdown();
-    }
+    /// <summary>
+    /// Shut down the controller.
+    /// </summary>
+    void Shutdown();
 }

@@ -1,9 +1,8 @@
-﻿namespace Scch.DataAccess.Hibernate
-{
-    public interface IModelContext
-    {
-        string[] EntityAssemblies { get; }
+﻿namespace Scch.DataAccess.Hibernate;
 
-        string ConnectionStringName { get; }
-    }
+public interface IModelContext
+{
+    string[] EntityAssemblies { get; }
+
+    string ConnectionStringName { get; }
 }

@@ -1,9 +1,8 @@
 ﻿using Neo4jClient;
 
-namespace Scch.DataAccess.NoSql.Neo4j
+namespace Scch.DataAccess.NoSql.Neo4j;
+
+public interface INeo4jContext
 {
-    public interface INeo4jContext
-    {
-        IGraphClient GetClient();
-    }
+    IGraphClient GetClient();
 }

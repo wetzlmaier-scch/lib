@@ -1,10 +1,9 @@
-﻿namespace Scch.Controls.SharpCode
+﻿namespace Scch.Controls.SharpCode;
+
+public enum DiffContext
 {
-    public enum DiffContext
-    {
-        Added,
-        Deleted,
-        Context,
-        Blank
-    }
+    Added,
+    Deleted,
+    Context,
+    Blank
 }

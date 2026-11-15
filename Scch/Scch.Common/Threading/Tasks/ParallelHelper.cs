@@ -2,38 +2,37 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Scch.Common.Threading.Tasks
+namespace Scch.Common.Threading.Tasks;
+
+public class ParallelHelper
 {
-    public class ParallelHelper
+    public static void ExecuteAction<T>(IEnumerable<T> source, Action<T> action, ParallelOptions options = null, bool executeInParallel = true)
     {
-        public static void ExecuteAction<T>(IEnumerable<T> source, Action<T> action, ParallelOptions options = null, bool executeInParallel = true)
+        if (executeInParallel)
         {
-            if (executeInParallel)
-            {
-                if (options == null)
-                    options = new ParallelOptions();
+            if (options == null)
+                options = new ParallelOptions();
 
-                Parallel.ForEach(source, options, action);
-            }
-            else
-            {
-                var exceptions = new List<Exception>();
+            Parallel.ForEach(source, options, action);
+        }
+        else
+        {
+            var exceptions = new List<Exception>();
 
-                foreach (var item in source)
+            foreach (var item in source)
+            {
+                try
                 {
-                    try
-                    {
-                        action(item);
-                    }
-                    catch (Exception ex)
-                    {
-                        exceptions.Add(ex);
-                    }
+                    action(item);
                 }
-
-                if (exceptions.Count > 0)
-                    throw new AggregateException("One or more exceptions occurred.", exceptions);
+                catch (Exception ex)
+                {
+                    exceptions.Add(ex);
+                }
             }
+
+            if (exceptions.Count > 0)
+                throw new AggregateException("One or more exceptions occurred.", exceptions);
         }
     }
 }

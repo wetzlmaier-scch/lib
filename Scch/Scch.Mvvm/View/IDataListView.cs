@@ -1,7 +1,6 @@
-﻿namespace Scch.Mvvm.View
+﻿namespace Scch.Mvvm.View;
+
+public interface IDataListView : IView
 {
-    public interface IDataListView : IView
-    {
-        void FocusFirstCell();
-    }
+    void FocusFirstCell();
 }

@@ -5,98 +5,97 @@ using System.Data;
 using System.Threading;
 using NHibernate;
 
-namespace Scch.DataAccess.Hibernate
+namespace Scch.DataAccess.Hibernate;
+
+public class HibernateUnitOfWork<TKey> : Disposable, IHibernateUnitOfWork
+    where TKey : IComparable<TKey>, IEquatable<TKey>
 {
-    public class HibernateUnitOfWork<TKey> : Disposable, IHibernateUnitOfWork
-        where TKey : IComparable<TKey>, IEquatable<TKey>
+    private ITransaction _transaction;
+    private readonly IStatelessSession _session;
+
+    public HibernateUnitOfWork(IStatelessSession session)
     {
-        private ITransaction _transaction;
-        private readonly IStatelessSession _session;
+        _session = session;
+    }
 
-        public HibernateUnitOfWork(IStatelessSession session)
+    public bool IsInTransaction
+    {
+        get { return _transaction != null; }
+    }
+
+    public void BeginTransaction()
+    {
+        BeginTransaction(IsolationLevel.ReadCommitted);
+    }
+
+    public void BeginTransaction(IsolationLevel isolationLevel)
+    {
+        if (IsInTransaction)
         {
-            _session = session;
+            throw new InvalidOperationException("Cannot begin a new transaction while an existing transaction is still running. " +
+                                            "Please commit or rollback the existing transaction before starting a new one.");
         }
 
-        public bool IsInTransaction
+        _transaction=_session.BeginTransaction(isolationLevel);
+        Logger.Write(new DebugLogEntry("HibernateUnitOfWork.BeginTransaction for thread '{0}'.", Thread.CurrentThread.ManagedThreadId));
+    }
+
+    public void RollBackTransaction()
+    {
+        if (!IsInTransaction)
         {
-            get { return _transaction != null; }
+            throw new InvalidOperationException("Cannot roll back a transaction while there is no transaction running.");
         }
 
-        public void BeginTransaction()
+        _transaction.Rollback();
+        ReleaseCurrentTransaction();
+        Logger.Write(new DebugLogEntry("HibernateUnitOfWork.RollBackTransaction for thread '{0}'.", Thread.CurrentThread.ManagedThreadId));
+    }
+
+    public void CommitTransaction()
+    {
+        if (!IsInTransaction)
         {
-            BeginTransaction(IsolationLevel.ReadCommitted);
+            throw new InvalidOperationException("Cannot roll back a transaction while there is no transaction running.");
         }
 
-        public void BeginTransaction(IsolationLevel isolationLevel)
+        try
         {
-            if (IsInTransaction)
-            {
-                throw new InvalidOperationException("Cannot begin a new transaction while an existing transaction is still running. " +
-                                                "Please commit or rollback the existing transaction before starting a new one.");
-            }
-
-            _transaction=_session.BeginTransaction(isolationLevel);
-            Logger.Write(new DebugLogEntry("HibernateUnitOfWork.BeginTransaction for thread '{0}'.", Thread.CurrentThread.ManagedThreadId));
-        }
-
-        public void RollBackTransaction()
-        {
-            if (!IsInTransaction)
-            {
-                throw new InvalidOperationException("Cannot roll back a transaction while there is no transaction running.");
-            }
-
-            _transaction.Rollback();
+            _transaction.Commit();
             ReleaseCurrentTransaction();
-            Logger.Write(new DebugLogEntry("HibernateUnitOfWork.RollBackTransaction for thread '{0}'.", Thread.CurrentThread.ManagedThreadId));
+            Logger.Write(new DebugLogEntry("HibernateUnitOfWork.CommitTransaction for thread '{0}'.", Thread.CurrentThread.ManagedThreadId));
         }
-
-        public void CommitTransaction()
+        catch (Exception ex)
         {
-            if (!IsInTransaction)
-            {
-                throw new InvalidOperationException("Cannot roll back a transaction while there is no transaction running.");
-            }
-
-            try
-            {
-                _transaction.Commit();
-                ReleaseCurrentTransaction();
-                Logger.Write(new DebugLogEntry("HibernateUnitOfWork.CommitTransaction for thread '{0}'.", Thread.CurrentThread.ManagedThreadId));
-            }
-            catch (Exception ex)
-            {
-                Logger.Write(new ExceptionLogEntry("Rolling back after exception: '{0}'.", ex.Message));
-                RollBackTransaction();
-                throw;
-            }
+            Logger.Write(new ExceptionLogEntry("Rolling back after exception: '{0}'.", ex.Message));
+            RollBackTransaction();
+            throw;
         }
-        
-        protected override void Dispose(bool disposing)
-        {
-            if (!IsDisposed && disposing)
-            {
-                if (_transaction != null)
-                {
-                    Logger.Write(new DebugLogEntry("HibernateUnitOfWork.Dispose with running transaction."));
-                    _transaction.Dispose();
-                }
-            }
-
-            base.Dispose(disposing);
-        }
-
-        /// <summary>
-        /// Releases the current transaction
-        /// </summary>
-        private void ReleaseCurrentTransaction()
+    }
+    
+    protected override void Dispose(bool disposing)
+    {
+        if (!IsDisposed && disposing)
         {
             if (_transaction != null)
             {
+                Logger.Write(new DebugLogEntry("HibernateUnitOfWork.Dispose with running transaction."));
                 _transaction.Dispose();
-                _transaction = null;
             }
+        }
+
+        base.Dispose(disposing);
+    }
+
+    /// <summary>
+    /// Releases the current transaction
+    /// </summary>
+    private void ReleaseCurrentTransaction()
+    {
+        if (_transaction != null)
+        {
+            _transaction.Dispose();
+            _transaction = null;
         }
     }
 }

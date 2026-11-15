@@ -1,4 +1,3 @@
-﻿namespace Scch.DataAccess
-{
-    public enum SortOrder { Ascending, Descending }
-}
+﻿namespace Scch.DataAccess;
+
+public enum SortOrder { Ascending, Descending }

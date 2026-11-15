@@ -1,8 +1,7 @@
 ﻿using System;
 
-namespace Scch.DomainModel.NoSql.ElasticSearch
+namespace Scch.DomainModel.NoSql.ElasticSearch;
+
+public interface IElasticSearchEntity : INoSqlEntity<Guid>
 {
-    public interface IElasticSearchEntity : INoSqlEntity<Guid>
-    {
-    }
 }

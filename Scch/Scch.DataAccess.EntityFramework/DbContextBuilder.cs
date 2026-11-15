@@ -12,210 +12,209 @@ using System.Data.Entity.Core.Objects;
 using Scch.Common.IO;
 using Scch.DomainModel.EntityFramework;
 
-namespace Scch.DataAccess.EntityFramework
-{
-    public sealed class DbContextBuilder<TContext, TKey> : DbModelBuilder, IDbContextBuilder<TContext, TKey>
-        where TContext : ExtendedDbContext<TKey>
-        where TKey : IComparable<TKey>, IEquatable<TKey>
-    {
-        private readonly DbProviderFactory _factory;
-        private readonly ConnectionStringSettings _cnStringSettings;
-        private readonly bool _lazyLoadingEnabled;
-        private readonly bool _auditingEnabled;
-        private readonly object _syncRoot = new object();
-        private readonly IDictionary<Type, DbTypeMetadata> _metadata;
-        private readonly bool _saveSqlScript;
+namespace Scch.DataAccess.EntityFramework;
 
-        public DbContextBuilder(string connectionStringName, string[] mappingAssemblies, bool lazyLoadingEnabled, bool auditingEnabled=false, bool saveSqlScript=false)
-        {
-            _metadata = new Dictionary<Type, DbTypeMetadata>();
+public sealed class DbContextBuilder<TContext, TKey> : DbModelBuilder, IDbContextBuilder<TContext, TKey>
+    where TContext : ExtendedDbContext<TKey>
+    where TKey : IComparable<TKey>, IEquatable<TKey>
+{
+    private readonly DbProviderFactory _factory;
+    private readonly ConnectionStringSettings _cnStringSettings;
+    private readonly bool _lazyLoadingEnabled;
+    private readonly bool _auditingEnabled;
+    private readonly object _syncRoot = new object();
+    private readonly IDictionary<Type, DbTypeMetadata> _metadata;
+    private readonly bool _saveSqlScript;
+
+    public DbContextBuilder(string connectionStringName, string[] mappingAssemblies, bool lazyLoadingEnabled, bool auditingEnabled=false, bool saveSqlScript=false)
+    {
+        _metadata = new Dictionary<Type, DbTypeMetadata>();
 
 #pragma warning disable 612,618
-            Conventions.Remove<IncludeMetadataConvention>();
+        Conventions.Remove<IncludeMetadataConvention>();
 #pragma warning restore 612,618
-            Conventions.Remove<PluralizingTableNameConvention>();
+        Conventions.Remove<PluralizingTableNameConvention>();
 
-            _cnStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
+        _cnStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
 
-            _factory = DbProviderFactoryResolver.GetFactory(_cnStringSettings.ProviderName);
-            _lazyLoadingEnabled = lazyLoadingEnabled;
-            _auditingEnabled = auditingEnabled;
-            _saveSqlScript = saveSqlScript;
+        _factory = DbProviderFactoryResolver.GetFactory(_cnStringSettings.ProviderName);
+        _lazyLoadingEnabled = lazyLoadingEnabled;
+        _auditingEnabled = auditingEnabled;
+        _saveSqlScript = saveSqlScript;
 
-            AddConfigurations(mappingAssemblies);
-        }
+        AddConfigurations(mappingAssemblies);
+    }
 
-        /// <summary>
-        /// Creates a new <see cref="DbContext"/>.
-        /// </summary>
-        /// <c>lazyLoadingEnabled</c> if set to <c>true</c> [lazy loading enabled].
-        /// <c>recreateDatabaseIfExist</c> if set to <c>true</c> [recreate database if exist].
-        /// <returns></returns>
-        public TContext BuildDbContext(string masterDataScript=null)
+    /// <summary>
+    /// Creates a new <see cref="DbContext"/>.
+    /// </summary>
+    /// <c>lazyLoadingEnabled</c> if set to <c>true</c> [lazy loading enabled].
+    /// <c>recreateDatabaseIfExist</c> if set to <c>true</c> [recreate database if exist].
+    /// <returns></returns>
+    public TContext BuildDbContext(string masterDataScript=null)
+    {
+        var cn = _factory.CreateConnection();
+        if (cn == null)
+            throw new ConfigurationErrorsException("Could not create a connection.");
+
+        cn.ConnectionString = _cnStringSettings.ConnectionString;
+        var dbModel = Build(cn);
+
+        var ctx = dbModel.Compile().CreateObjectContext<ObjectContext>(cn);
+        ctx.ContextOptions.LazyLoadingEnabled = _lazyLoadingEnabled;
+        ctx.ContextOptions.ProxyCreationEnabled = false;
+
+        var dbContext = (TContext)new ExtendedDbContext<TKey>(ctx, true, _metadata.Values, _auditingEnabled);
+
+        if (!dbContext.DatabaseExists())
         {
-            var cn = _factory.CreateConnection();
-            if (cn == null)
-                throw new ConfigurationErrorsException("Could not create a connection.");
-
-            cn.ConnectionString = _cnStringSettings.ConnectionString;
-            var dbModel = Build(cn);
-
-            var ctx = dbModel.Compile().CreateObjectContext<ObjectContext>(cn);
-            ctx.ContextOptions.LazyLoadingEnabled = _lazyLoadingEnabled;
-            ctx.ContextOptions.ProxyCreationEnabled = false;
-
-            var dbContext = (TContext)new ExtendedDbContext<TKey>(ctx, true, _metadata.Values, _auditingEnabled);
-
-            if (!dbContext.DatabaseExists())
+            lock (_syncRoot)
             {
-                lock (_syncRoot)
+                if (!dbContext.DatabaseExists())
                 {
-                    if (!dbContext.DatabaseExists())
+                    dbContext.CreateDatabase();
+
+                    if (_saveSqlScript)
                     {
-                        dbContext.CreateDatabase();
+                        File.WriteAllText(_cnStringSettings.Name + ".SQL", dbContext.CreateDatabaseScript());
+                    }
 
-                        if (_saveSqlScript)
-                        {
-                            File.WriteAllText(_cnStringSettings.Name + ".SQL", dbContext.CreateDatabaseScript());
-                        }
-
-                        if (!string.IsNullOrEmpty(masterDataScript))
-                        {
-                            dbContext.FillDatabase(masterDataScript);
-                        }
+                    if (!string.IsNullOrEmpty(masterDataScript))
+                    {
+                        dbContext.FillDatabase(masterDataScript);
                     }
                 }
             }
-
-            return dbContext;
         }
 
-        /// <summary>
-        /// Adds mapping classes contained in provided assemblies and register entities as well
-        /// </summary>
-        /// <param name="mappingAssemblies"></param>
-        private void AddConfigurations(string[] mappingAssemblies)
+        return dbContext;
+    }
+
+    /// <summary>
+    /// Adds mapping classes contained in provided assemblies and register entities as well
+    /// </summary>
+    /// <param name="mappingAssemblies"></param>
+    private void AddConfigurations(string[] mappingAssemblies)
+    {
+        if (mappingAssemblies == null || mappingAssemblies.Length == 0)
         {
-            if (mappingAssemblies == null || mappingAssemblies.Length == 0)
-            {
-                throw new ArgumentNullException("mappingAssemblies", "You must specify at least one mapping assembly");
-            }
+            throw new ArgumentNullException("mappingAssemblies", "You must specify at least one mapping assembly");
+        }
 
-            AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.AssemblyResolve += AssemblyResolve;
-            bool hasMappingClass = false;
-            foreach (string mappingAssembly in mappingAssemblies)
-            {
-                Assembly asm = currentDomain.Load(MakeLoadReadyAssemblyName(mappingAssembly));
+        AppDomain currentDomain = AppDomain.CurrentDomain;
+        currentDomain.AssemblyResolve += AssemblyResolve;
+        bool hasMappingClass = false;
+        foreach (string mappingAssembly in mappingAssemblies)
+        {
+            Assembly asm = currentDomain.Load(MakeLoadReadyAssemblyName(mappingAssembly));
 
-                foreach (Type type in asm.GetTypes())
+            foreach (Type type in asm.GetTypes())
+            {
+                if (!type.IsAbstract)
                 {
-                    if (!type.IsAbstract)
+                    if (IsMappingClass(type.BaseType))
                     {
-                        if (IsMappingClass(type.BaseType))
-                        {
-                            hasMappingClass = true;
+                        hasMappingClass = true;
 
-                            // http://areaofinterest.wordpress.com/2010/12/08/dynamically-load-entity-configurations-in-ef-codefirst-ctp5/
-                            dynamic configurationInstance = Activator.CreateInstance(type);
-                            Configurations.Add(configurationInstance);
-                        }
+                        // http://areaofinterest.wordpress.com/2010/12/08/dynamically-load-entity-configurations-in-ef-codefirst-ctp5/
+                        dynamic configurationInstance = Activator.CreateInstance(type);
+                        Configurations.Add(configurationInstance);
+                    }
 
-                        if (IsEntityClass(type))
-                        {
-                            if (_metadata.ContainsKey(type))
-                                continue;
+                    if (IsEntityClass(type))
+                    {
+                        if (_metadata.ContainsKey(type))
+                            continue;
 
-                            _metadata.Add(type, new DbTypeMetadata(type));
-                        }
+                        _metadata.Add(type, new DbTypeMetadata(type));
                     }
                 }
             }
-
-            currentDomain.AssemblyResolve -= AssemblyResolve;
-
-            if (!hasMappingClass)
-            {
-                throw new ArgumentException("No mapping class found!");
-            }
         }
 
-        private Assembly AssemblyResolve(object sender, ResolveEventArgs args)
+        currentDomain.AssemblyResolve -= AssemblyResolve;
+
+        if (!hasMappingClass)
         {
-            Assembly assembly = null;
-
-            // The .NET Framework passed the requested string ("X.dll"); .NET passes the parsed display name
-            // ("X.dll, Culture=neutral, PublicKeyToken=null"). Only the file name part is of interest here.
-            string name = args.Name;
-            int separator = name.IndexOf(',');
-            if (separator >= 0)
-                name = name.Substring(0, separator);
-
-            try
-            {
-                assembly = Assembly.LoadFrom(name);
-            }
-            catch (FileNotFoundException)
-            {
-            }
-            catch (FileLoadException)
-            {
-            }
-
-            if (assembly == null)
-            {
-                string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                string fullname = (directory != null) ? Path.Combine(directory, name) : name;
-
-                // On .NET this handler is also asked for assemblies that legitimately do not exist (e.g. satellite
-                // resource assemblies). Returning null leaves the decision to the runtime instead of failing here.
-                if (File.Exists(fullname))
-                    assembly = Assembly.LoadFrom(fullname);
-            }
-
-            return assembly;
+            throw new ArgumentException("No mapping class found!");
         }
+    }
 
-        /// <summary>
-        /// Determines whether a type is a subclass of entity mapping type
-        /// </summary>
-        /// <param name="mappingType">Type of the mapping.</param>
-        /// <returns>
-        /// 	<c>true</c> if it is mapping class; otherwise, <c>false</c>.
-        /// </returns>
-        private bool IsMappingClass(Type mappingType)
+    private Assembly AssemblyResolve(object sender, ResolveEventArgs args)
+    {
+        Assembly assembly = null;
+
+        // The .NET Framework passed the requested string ("X.dll"); .NET passes the parsed display name
+        // ("X.dll, Culture=neutral, PublicKeyToken=null"). Only the file name part is of interest here.
+        string name = args.Name;
+        int separator = name.IndexOf(',');
+        if (separator >= 0)
+            name = name.Substring(0, separator);
+
+        try
         {
-            Type baseType = typeof(EntityTypeConfiguration<>);
-            if (mappingType.IsGenericType && mappingType.GetGenericTypeDefinition() == baseType)
-            {
-                return true;
-            }
-
-            if ((mappingType != typeof(object)))
-            {
-                return IsMappingClass(mappingType.BaseType);
-            }
-            return false;
+            assembly = Assembly.LoadFrom(name);
         }
-
-        private bool IsEntityClass(Type entityType)
+        catch (FileNotFoundException)
         {
-            return typeof(IEntityFrameworkEntity<TKey>).IsAssignableFrom(entityType);
         }
-
-        /// <summary>
-        /// Ensures the assembly name is qualified
-        /// </summary>
-        /// <param name="assemblyName"></param>
-        /// <returns></returns>
-        private static string MakeLoadReadyAssemblyName(string assemblyName)
+        catch (FileLoadException)
         {
-            if (assemblyName == null)
-                throw new ArgumentNullException("assemblyName");
-
-            return (assemblyName.IndexOf(FileHelper.DllFileType, StringComparison.Ordinal) == -1)
-                ? assemblyName.Trim() + FileHelper.DllFileType
-                : assemblyName.Trim();
         }
+
+        if (assembly == null)
+        {
+            string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string fullname = (directory != null) ? Path.Combine(directory, name) : name;
+
+            // On .NET this handler is also asked for assemblies that legitimately do not exist (e.g. satellite
+            // resource assemblies). Returning null leaves the decision to the runtime instead of failing here.
+            if (File.Exists(fullname))
+                assembly = Assembly.LoadFrom(fullname);
+        }
+
+        return assembly;
+    }
+
+    /// <summary>
+    /// Determines whether a type is a subclass of entity mapping type
+    /// </summary>
+    /// <param name="mappingType">Type of the mapping.</param>
+    /// <returns>
+    /// 	<c>true</c> if it is mapping class; otherwise, <c>false</c>.
+    /// </returns>
+    private bool IsMappingClass(Type mappingType)
+    {
+        Type baseType = typeof(EntityTypeConfiguration<>);
+        if (mappingType.IsGenericType && mappingType.GetGenericTypeDefinition() == baseType)
+        {
+            return true;
+        }
+
+        if ((mappingType != typeof(object)))
+        {
+            return IsMappingClass(mappingType.BaseType);
+        }
+        return false;
+    }
+
+    private bool IsEntityClass(Type entityType)
+    {
+        return typeof(IEntityFrameworkEntity<TKey>).IsAssignableFrom(entityType);
+    }
+
+    /// <summary>
+    /// Ensures the assembly name is qualified
+    /// </summary>
+    /// <param name="assemblyName"></param>
+    /// <returns></returns>
+    private static string MakeLoadReadyAssemblyName(string assemblyName)
+    {
+        if (assemblyName == null)
+            throw new ArgumentNullException("assemblyName");
+
+        return (assemblyName.IndexOf(FileHelper.DllFileType, StringComparison.Ordinal) == -1)
+            ? assemblyName.Trim() + FileHelper.DllFileType
+            : assemblyName.Trim();
     }
 }

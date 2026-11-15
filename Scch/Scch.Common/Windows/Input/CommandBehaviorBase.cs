@@ -2,93 +2,92 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Scch.Common.Windows.Input
+namespace Scch.Common.Windows.Input;
+
+public class CommandBehaviorBase<T> where T : Control
 {
-    public class CommandBehaviorBase<T> where T : Control
+    // Fields
+    private ICommand _command;
+    private readonly EventHandler _commandCanExecuteChangedHandler;
+    private object _commandParameter;
+    private readonly WeakReference _targetObject;
+
+    // Methods
+    public CommandBehaviorBase(T targetObject)
     {
-        // Fields
-        private ICommand _command;
-        private readonly EventHandler _commandCanExecuteChangedHandler;
-        private object _commandParameter;
-        private readonly WeakReference _targetObject;
+        _targetObject = new WeakReference(targetObject);
+        _commandCanExecuteChangedHandler = CommandCanExecuteChanged;
+    }
 
-        // Methods
-        public CommandBehaviorBase(T targetObject)
+    private void CommandCanExecuteChanged(object sender, EventArgs e)
+    {
+        UpdateEnabledState();
+    }
+
+    protected virtual void ExecuteCommand()
+    {
+        if (Command != null)
         {
-            _targetObject = new WeakReference(targetObject);
-            _commandCanExecuteChangedHandler = CommandCanExecuteChanged;
+            Command.Execute(CommandParameter);
         }
+    }
 
-        private void CommandCanExecuteChanged(object sender, EventArgs e)
+    protected virtual void UpdateEnabledState()
+    {
+        if (TargetObject == null)
         {
-            UpdateEnabledState();
+            Command = null;
+            CommandParameter = null;
         }
-
-        protected virtual void ExecuteCommand()
+        else if (Command != null)
         {
-            if (Command != null)
-            {
-                Command.Execute(CommandParameter);
-            }
+            TargetObject.IsEnabled = Command.CanExecute(CommandParameter);
         }
+    }
 
-        protected virtual void UpdateEnabledState()
+    // Properties
+    public ICommand Command
+    {
+        get
         {
-            if (TargetObject == null)
-            {
-                Command = null;
-                CommandParameter = null;
-            }
-            else if (Command != null)
-            {
-                TargetObject.IsEnabled = Command.CanExecute(CommandParameter);
-            }
+            return _command;
         }
-
-        // Properties
-        public ICommand Command
+        set
         {
-            get
+            if (_command != null)
             {
-                return _command;
+                _command.CanExecuteChanged -= _commandCanExecuteChangedHandler;
             }
-            set
+            _command = value;
+            if (_command != null)
             {
-                if (_command != null)
-                {
-                    _command.CanExecuteChanged -= _commandCanExecuteChangedHandler;
-                }
-                _command = value;
-                if (_command != null)
-                {
-                    _command.CanExecuteChanged += _commandCanExecuteChangedHandler;
-                    UpdateEnabledState();
-                }
+                _command.CanExecuteChanged += _commandCanExecuteChangedHandler;
+                UpdateEnabledState();
             }
         }
+    }
 
-        public object CommandParameter
+    public object CommandParameter
+    {
+        get
         {
-            get
+            return _commandParameter;
+        }
+        set
+        {
+            if (_commandParameter != value)
             {
-                return _commandParameter;
-            }
-            set
-            {
-                if (_commandParameter != value)
-                {
-                    _commandParameter = value;
-                    UpdateEnabledState();
-                }
+                _commandParameter = value;
+                UpdateEnabledState();
             }
         }
+    }
 
-        protected T TargetObject
+    protected T TargetObject
+    {
+        get
         {
-            get
-            {
-                return (_targetObject.Target as T);
-            }
+            return (_targetObject.Target as T);
         }
     }
 }

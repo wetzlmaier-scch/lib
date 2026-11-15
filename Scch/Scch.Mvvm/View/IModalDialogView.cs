@@ -1,9 +1,8 @@
 ﻿using System.Windows;
 
-namespace Scch.Mvvm.View
+namespace Scch.Mvvm.View;
+
+public interface IModalDialogView : IDialogView
 {
-    public interface IModalDialogView : IDialogView
-    {
-        Window Owner { get; }
-    }
+    Window Owner { get; }
 }
