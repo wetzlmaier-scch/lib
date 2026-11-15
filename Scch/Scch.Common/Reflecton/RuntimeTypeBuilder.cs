@@ -9,9 +9,9 @@ namespace Scch.Common.Reflecton;
 
 public static class RuntimeTypeBuilder
 {
-    private static readonly AssemblyName AssemblyName = new AssemblyName { Name = "DynamicTypes" };
+    private static readonly AssemblyName AssemblyName = new() { Name = "DynamicTypes" };
     private static readonly ModuleBuilder ModuleBuilder;
-    private static readonly Dictionary<string, Type> BuiltTypes = new Dictionary<string, Type>();
+    private static readonly Dictionary<string, Type> BuiltTypes = new();
 
     static RuntimeTypeBuilder()
     {

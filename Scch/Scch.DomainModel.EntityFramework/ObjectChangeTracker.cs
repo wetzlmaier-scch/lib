@@ -17,8 +17,8 @@ public class ObjectChangeTracker
     private bool _changeTrackingEnabled;
     private OriginalValuesDictionary _originalValues;
     private ExtendedPropertiesDictionary _extendedProperties;
-    private ObjectsAddedToCollectionProperties _objectsAddedToCollections = new ObjectsAddedToCollectionProperties();
-    private ObjectsRemovedFromCollectionProperties _objectsRemovedFromCollections = new ObjectsRemovedFromCollectionProperties();
+    private ObjectsAddedToCollectionProperties _objectsAddedToCollections = new();
+    private ObjectsRemovedFromCollectionProperties _objectsRemovedFromCollections = new();
 
     #endregion
 

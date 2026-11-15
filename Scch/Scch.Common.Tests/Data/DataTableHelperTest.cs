@@ -117,9 +117,9 @@ public class DataTableHelperTest
     {
         var persons = new List<Person>
         {
-            new Person {Name = "Person1", Age = 1},
-            new Person {Name = "Person2", Age = 2},
-            new Person {Name = "Person3", Age = 3}
+            new() {Name = "Person1", Age = 1},
+            new() {Name = "Person2", Age = 2},
+            new() {Name = "Person3", Age = 3}
         };
 
         var dt = DataTableHelper.CreateDataTable(typeof(Person));

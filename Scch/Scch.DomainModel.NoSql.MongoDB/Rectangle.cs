@@ -10,7 +10,7 @@ namespace Scch.DomainModel.NoSql.MongoDB;
 [Serializable]
 public class Rectangle
 {
-    public static readonly Rectangle Empty = new Rectangle(0, 0, 0, 0);
+    public static readonly Rectangle Empty = new(0, 0, 0, 0);
     private System.Drawing.Rectangle _inner;
 
     [Browsable(false)]
@@ -171,7 +171,7 @@ public class Rectangle
         if (rect == null)
             throw new ArgumentNullException("rect");
 
-        Rectangle result = new Rectangle(rect.Location, rect.Size);
+        Rectangle result = new(rect.Location, rect.Size);
         result.Inflate(x, y);
         return result;
     }

@@ -25,7 +25,7 @@ public class EnumValueToStringConverter<T> : IValueConverter
 
         var hasFlags = value.GetType().GetCustomAttributes(typeof(FlagsAttribute)).Any();
 
-        StringBuilder result = new StringBuilder();
+        StringBuilder result = new();
         foreach (Enum enumValue in Enum.GetValues(typeof(T)))
         {
             if (hasFlags)

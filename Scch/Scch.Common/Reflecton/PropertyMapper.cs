@@ -43,7 +43,7 @@ public static class PropertyMapper
         if (!inherited)
             flags |= BindingFlags.DeclaredOnly;
 
-        List<Exception> exceptions = new List<Exception>();
+        List<Exception> exceptions = new();
 
         foreach (PropertyInfo providerProperty in propertyProvider.GetProperties(flags))
         {

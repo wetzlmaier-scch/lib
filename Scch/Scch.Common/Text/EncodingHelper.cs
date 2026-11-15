@@ -8,7 +8,7 @@ namespace Scch.Common.Text;
 /// </summary>
 public static class EncodingHelper
 {
-    private static readonly Lazy<Encoding> _ansi = new Lazy<Encoding>(
+    private static readonly Lazy<Encoding> _ansi = new(
         () => CodePagesEncodingProvider.Instance.GetEncoding(0) ?? Encoding.Default);
 
     /// <summary>

@@ -194,7 +194,7 @@ public class ModelWrapper
 
     private List<int[]> GetCombinations(List<List<int>> parameters)
     {
-        List<int[]> results = new List<int[]>();
+        List<int[]> results = new();
         CreateCombinations(parameters, new List<int>(), 0, results);
         return results;
     }

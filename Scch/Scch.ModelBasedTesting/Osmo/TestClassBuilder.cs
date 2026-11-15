@@ -41,8 +41,8 @@ public static class TestClassBuilder
             var action = kvp.Key;
             var combinations = kvp.Value;
             var guard = wrapper.GuardMethodName(action);
-            StringBuilder guardMethodName = new StringBuilder(guard) { [0] = guard.ToLower()[0] };
-            StringBuilder methodName = new StringBuilder(action) { [0] = action.ToLower()[0] };
+            StringBuilder guardMethodName = new(guard) { [0] = guard.ToLower()[0] };
+            StringBuilder methodName = new(action) { [0] = action.ToLower()[0] };
             var isBeforeTest = action == beforeTest;
             var isAfterTest = action == afterTest;
             var guardAvailable = wrapper.GuardMethod(action) != null && !isBeforeTest && !isAfterTest;

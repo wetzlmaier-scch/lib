@@ -22,7 +22,7 @@ public sealed class DbContextBuilder<TContext, TKey> : DbModelBuilder, IDbContex
     private readonly ConnectionStringSettings _cnStringSettings;
     private readonly bool _lazyLoadingEnabled;
     private readonly bool _auditingEnabled;
-    private readonly object _syncRoot = new object();
+    private readonly object _syncRoot = new();
     private readonly IDictionary<Type, DbTypeMetadata> _metadata;
     private readonly bool _saveSqlScript;
 

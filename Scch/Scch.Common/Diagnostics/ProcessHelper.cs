@@ -61,7 +61,7 @@ public static class ProcessHelper
         {
             return false;
         }
-        StringBuilder stringBuilder = new StringBuilder(256);
+        StringBuilder stringBuilder = new(256);
         Kernel32.GetComputerName(stringBuilder, new[] { stringBuilder.Capacity });
         string strA = stringBuilder.ToString();
         return string.Compare(strA, text, StringComparison.OrdinalIgnoreCase) != 0;
@@ -124,7 +124,7 @@ public static class ProcessHelper
 
     public static string GetBatchOutput(ProcessStartInfo startInfo, bool includeOutput = true, bool includeErrorOutput = true, int milliseconds = int.MaxValue)
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
 
         DataReceivedEventHandler outputDataReceived = null;
 
@@ -374,7 +374,7 @@ public static class ProcessHelper
 
     private static ManagementObjectCollection ExecuteWmiQuery(string wmiQuery)
     {
-        ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmiQuery);
+        ManagementObjectSearcher searcher = new(wmiQuery);
         return searcher.Get();
     }
 
@@ -418,7 +418,7 @@ public static class ProcessHelper
 
     public static void RestartAsAdministrator()
     {
-        WindowsPrincipal pricipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
+        WindowsPrincipal pricipal = new(WindowsIdentity.GetCurrent());
         bool isAdministrator = pricipal.IsInRole(WindowsBuiltInRole.Administrator);
 
         if (!isAdministrator)
@@ -427,7 +427,7 @@ public static class ProcessHelper
 
             // Process.StartInfo throws on .NET for a process that was not started through Process.Start;
             // on the .NET Framework it returned empty arguments for the current process.
-            ProcessStartInfo startInfo = new ProcessStartInfo(process.MainModule.FileName, string.Empty)
+            ProcessStartInfo startInfo = new(process.MainModule.FileName, string.Empty)
             {
                 WorkingDirectory = Environment.CurrentDirectory,
                 UseShellExecute = true,
@@ -524,7 +524,7 @@ public static class ProcessHelper
                 throw new FileNotFoundException("Command '{0}' not found.", command);
 
             var commandIndex = commandArgs[0].ToLower() == "call" ? 1 : 0;
-            List<string> expandedArgs = new List<string>();
+            List<string> expandedArgs = new();
             for (int index = commandIndex + 1; index < commandArgs.Length; index++)
             {
                 var expandedArg = Environment.ExpandEnvironmentVariables(commandArgs[index]);

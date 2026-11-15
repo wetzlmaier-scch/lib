@@ -17,7 +17,7 @@ public class TrackableCollection<TKey, TEntity> : ObservableCollection<TEntity>
     where TEntity : IEntityFrameworkEntity<TKey> 
     where TKey : IComparable<TKey>, IEquatable<TKey>
 {
-    private static readonly EntityComparer<TEntity> Comparer = new EntityComparer<TEntity>();
+    private static readonly EntityComparer<TEntity> Comparer = new();
 
     static TrackableCollection()
     {

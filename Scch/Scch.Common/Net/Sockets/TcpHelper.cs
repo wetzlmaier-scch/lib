@@ -19,7 +19,7 @@ public static class TcpHelper
 
     private static void CancellationTimeoutWrapper(Action<CancellationToken> action, int timeout = int.MaxValue)
     {
-        using (CancellationTokenSource cts = new CancellationTokenSource())
+        using (CancellationTokenSource cts = new())
         {
             var task = Task.Factory.StartNew(() => action(cts.Token), cts.Token);
 

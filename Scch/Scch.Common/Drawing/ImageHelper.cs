@@ -86,7 +86,7 @@ public static class ImageHelper
 
     public static void Save(Image image, string fileName, ImageFormat format = null)
     {
-        using (Bitmap bmp = new Bitmap(image))
+        using (Bitmap bmp = new(image))
         {
             if (format == null)
                 format = bmp.RawFormat;

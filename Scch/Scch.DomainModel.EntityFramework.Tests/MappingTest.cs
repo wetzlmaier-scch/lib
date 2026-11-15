@@ -31,7 +31,7 @@ public class MappingTest
     ///information about and functionality for the current test run.
     ///</summary>
     public TestContext TestContext { get; set; }
-    private readonly List<Type> _testedTypes = new List<Type>();
+    private readonly List<Type> _testedTypes = new();
 
     #region Additional test attributes
     //

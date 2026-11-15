@@ -312,7 +312,7 @@ public static class Shell32
 
     public static string FindExecutable(string filename)
     {
-        StringBuilder objResultBuffer = new StringBuilder(1024);
+        StringBuilder objResultBuffer = new(1024);
 
         long result = FindExecutableA(filename, string.Empty, objResultBuffer);
 

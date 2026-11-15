@@ -11,12 +11,12 @@ public class ExtendedChart : Chart
 {
     public void Save(string filename)
     {
-        RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int) ActualWidth, (int) ActualHeight, 96d, 96d,
+        RenderTargetBitmap renderBitmap = new((int) ActualWidth, (int) ActualHeight, 96d, 96d,
             PixelFormats.Pbgra32);
 
-        Size size = new Size(ActualWidth, ActualHeight);
+        Size size = new(ActualWidth, ActualHeight);
 
-        Rectangle rect = new Rectangle() {Width = ActualWidth, Height = ActualHeight, Fill = new VisualBrush(this)};
+        Rectangle rect = new() {Width = ActualWidth, Height = ActualHeight, Fill = new VisualBrush(this)};
         rect.Measure(size);
         rect.Arrange(new Rect(size));
         rect.UpdateLayout();
@@ -24,7 +24,7 @@ public class ExtendedChart : Chart
         renderBitmap.Render(rect);
 
         // Create a file stream for saving image
-        using (FileStream fs = new FileStream(filename, FileMode.Create))
+        using (FileStream fs = new(filename, FileMode.Create))
         {
             BitmapEncoder encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(renderBitmap));

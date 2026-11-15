@@ -65,7 +65,7 @@ public static class SelfTrackingEntitiesContextExtensions
             context.ContextOptions.LazyLoadingEnabled = false;
 
             EntityIndex entityIndex = AddHelper.AddAllEntities(context, entitySetName, entity);
-            RelationshipSet allRelationships = new RelationshipSet(context, entityIndex.AllEntities);
+            RelationshipSet allRelationships = new(context, entityIndex.AllEntities);
 
             #region Handle Initial Entity State
 
@@ -531,7 +531,7 @@ public static class SelfTrackingEntitiesContextExtensions
         EntitySet entitySet =
             ((AssociationSet) reference.RelationshipSet).AssociationSetEnds[reference.TargetRoleName].EntitySet;
 
-        List<EntityKeyMember> foundKeyMembers = new List<EntityKeyMember>(1);
+        List<EntityKeyMember> foundKeyMembers = new(1);
         bool foundNone = true;
         bool missingSome = false;
         foreach (var keyMember in entitySet.ElementType.KeyMembers)
@@ -964,7 +964,7 @@ public static class SelfTrackingEntitiesContextExtensions
         public static EntityIndex AddAllEntities(ObjectContext context, string entitySetName,
                                                  IObjectWithChangeTracker entity)
         {
-            AddHelper addHelper = new AddHelper(context);
+            AddHelper addHelper = new(context);
 
             try
             {
@@ -1195,7 +1195,7 @@ public static class SelfTrackingEntitiesContextExtensions
         // Adds an entry to the index based on a IRelatedEnd
         public void Add(IRelatedEnd relatedEnd, object sourceEntity, object targetEntity, EntityState state)
         {
-            RelationshipWrapper wrapper = new RelationshipWrapper(
+            RelationshipWrapper wrapper = new(
                 (AssociationSet) relatedEnd.RelationshipSet,
                 relatedEnd.SourceRoleName,
                 sourceEntity,
@@ -1225,7 +1225,7 @@ public static class SelfTrackingEntitiesContextExtensions
 
             if (fromEntity != null && toEntity != null)
             {
-                RelationshipWrapper wrapper = new RelationshipWrapper(
+                RelationshipWrapper wrapper = new(
                     associationSet,
                     associationSet.ElementType.AssociationEndMembers[0].Name,
                     fromEntity,

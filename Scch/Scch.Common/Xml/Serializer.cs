@@ -165,7 +165,7 @@ public static class Serializer
         if (encoding == null)
             encoding = DefaultEncoding;
 
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new();
         using (var sw = new EncodingStringWriter(builder, encoding))
         {
             SerializeToTextWriter(sw, obj);

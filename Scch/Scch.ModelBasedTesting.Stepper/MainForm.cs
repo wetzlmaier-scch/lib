@@ -18,7 +18,7 @@ public partial class MainForm : Form
     private readonly StringWriter _consoleOutput;
     private const int MaxRows = 20;
 
-    private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+    private static readonly IntPtr HWND_TOPMOST = new(-1);
     private const uint SWP_NOSIZE = 0x0001;
     private const uint SWP_NOMOVE = 0x0002;
     private const uint TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
@@ -166,7 +166,7 @@ public partial class MainForm : Form
 
     private static List<Button> CreateButtons(ICollection<string> actions, EventHandler clickHandler)
     {
-        List<Button> buttons = new List<Button>();
+        List<Button> buttons = new();
 
         foreach (var action in actions)
         {

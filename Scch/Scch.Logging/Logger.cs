@@ -26,7 +26,7 @@ public static class Logger
 
         IConfigurationSource configurationSource = fileConfigSource == null ? ConfigurationSourceFactory.Create() : new FileConfigurationSource(fileConfigSource);
 
-        LogWriterFactory logWriterFactory = new LogWriterFactory(configurationSource);
+        LogWriterFactory logWriterFactory = new(configurationSource);
         Microsoft.Practices.EnterpriseLibrary.Logging.Logger.SetLogWriter(logWriterFactory.Create());
         initialized = true;
     }

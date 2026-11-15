@@ -16,7 +16,7 @@ public static class BatchOperation
         if (cancellation == null)
             cancellation = () => false;
 
-        CancellationTokenSource source = new CancellationTokenSource();
+        CancellationTokenSource source = new();
 
         do
         {

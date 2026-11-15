@@ -40,7 +40,7 @@ public static class ConsoleApplication
 
     public static int MainAsync(MainAsyncMethod mainAsync, string[] args)
     {
-        CancellationTokenSource cts = new CancellationTokenSource();
+        CancellationTokenSource cts = new();
 
         Console.CancelKeyPress += (s, e) =>
         {

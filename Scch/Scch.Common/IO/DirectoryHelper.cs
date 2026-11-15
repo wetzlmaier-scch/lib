@@ -76,8 +76,8 @@ public static class DirectoryHelper
         if (!relativeTo.EndsWith(Path.DirectorySeparatorChar.ToString()))
             relativeTo += Path.DirectorySeparatorChar;
 
-        Uri fromUri = new Uri(relativeTo);
-        Uri toUri = new Uri(path);
+        Uri fromUri = new(relativeTo);
+        Uri toUri = new(path);
 
         if (fromUri.Scheme != toUri.Scheme) // path can't be made relative.
             return path;

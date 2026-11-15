@@ -39,7 +39,7 @@ public class Program
 
             IContext context = new VelocityContext(new Hashtable { { "testClass", testClass } });
 
-            using (StreamWriter writer = new StreamWriter(new FileStream(Path.Combine(outputDirectory, testClass.Name + new FileInfo(template).Extension), FileMode.Create)))
+            using (StreamWriter writer = new(new FileStream(Path.Combine(outputDirectory, testClass.Name + new FileInfo(template).Extension), FileMode.Create)))
             {
                 engine.MergeTemplate(template, "UTF-8", context, writer);
             }

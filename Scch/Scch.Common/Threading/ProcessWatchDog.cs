@@ -30,7 +30,7 @@ public class ProcessWatchDog
         if (Monitor == null)
             throw new InvalidOperationException("Monitor event not set.");
 
-        List<Task> tasks = new List<Task>();
+        List<Task> tasks = new();
         _monitoredProcesses = new HashSet<int>();
 
         ConsoleApplication.Run(source =>
